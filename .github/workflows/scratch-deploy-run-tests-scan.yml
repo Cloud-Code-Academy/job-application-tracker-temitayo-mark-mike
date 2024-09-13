@@ -1,0 +1,14 @@
+name: Run Deploy to Scratch and Run Code Scan and Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      sfdx_auth_url:
+        description: 'SFDX Auth URL'
+        required: false
+
+jobs:
+  reuse-apex-tests:
+    if: github.triggering_actor != 'github-classroom[bot]'
+    uses: Cloud-Code-Academy/developer-kickstart-materials/.github/workflows/salesforce-apex-tests.yml@main
+    secrets: inherit
