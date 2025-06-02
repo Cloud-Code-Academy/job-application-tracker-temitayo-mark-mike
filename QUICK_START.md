@@ -13,7 +13,7 @@ npm install
 
 # 4. Authorize your capstone org (will open browser)
 sf org login web --alias myCapstoneOrg --instance-url https://login.salesforce.com
-# Login with: capstone@taju.com / Olusammy11
+# Login with: capstone@taju.com / Olusammy1!
 
 # 5. Set as default org
 sf config set target-org=myCapstoneOrg

@@ -3,7 +3,7 @@
 ## Your Capstone Org Details
 
 **Username**: `capstone@taju.com`  
-**Password**: `Olusammy11`  
+**Password**: `Olusammy1!`  
 **Alias**: `myCapstoneOrg`  
 **Type**: Developer Edition / Production Org  
 
@@ -20,7 +20,7 @@ npm install
 
 # 3. Authorize your capstone org
 sf org login web --alias myCapstoneOrg --instance-url https://login.salesforce.com
-# This will open browser - use: capstone@taju.com / Olusammy11
+# This will open browser - use: capstone@taju.com / Olusammy1!
 
 # 4. Set as default org for this project
 sf config set target-org=myCapstoneOrg
@@ -53,7 +53,7 @@ If the web login doesn't work, you can use manual username/password login:
 ```bash
 # Alternative login method
 sf org login --username capstone@taju.com --alias myCapstoneOrg
-# When prompted, enter password: Olusammy11
+# When prompted, enter password: Olusammy1!
 ```
 
 ## Verification Steps
@@ -154,7 +154,7 @@ sf org assign permset --name Job_Application_Manager --target-org myCapstoneOrg
 
 **Issue**: "INVALID_LOGIN: Invalid username, password, security token; or user locked out"
 **Solution**: 
-- Verify credentials: capstone@taju.com / Olusammy11
+- Verify credentials: capstone@taju.com / Olusammy1!
 - Check if org is locked/suspended
 - Try resetting password in Salesforce
 
