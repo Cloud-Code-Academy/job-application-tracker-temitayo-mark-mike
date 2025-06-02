@@ -1,4 +1,4 @@
-# Quick Start Commands for Temitayo's Capstone Project
+# Quick Start Commands for Capstone Project
 
 # Copy and paste these commands one by one in Command Prompt or VS Code Terminal
 
@@ -13,7 +13,7 @@ npm install
 
 # 4. Authorize your capstone org (will open browser)
 sf org login web --alias myCapstoneOrg --instance-url https://login.salesforce.com
-# Login with: capstone@taju.com / Olusammy1!
+# Use credentials from private-learning/org-configuration/capstone-org-credentials.md
 
 # 5. Set as default org
 sf config set target-org=myCapstoneOrg
@@ -39,3 +39,6 @@ git commit -m "feat: initial capstone org setup with Job Application object"
 git push origin feature/temitayo-data-model
 
 # SUCCESS! 🎉 Your capstone project is ready for development!
+
+# Note: All org credentials are stored privately in private-learning/org-configuration/
+# This directory is excluded from Git commits for security

@@ -1,11 +1,10 @@
 # Capstone Org Setup Guide 🎯
 
-## Your Capstone Org Details
+## Setup Overview
 
-**Username**: `capstone@taju.com`  
-**Password**: `Olusammy1!`  
-**Alias**: `myCapstoneOrg`  
-**Type**: Developer Edition / Production Org  
+This guide helps you connect your Salesforce Developer Org for the Job Application Tracker capstone project.
+
+**Note**: Org credentials are stored in `private-learning/org-configuration/` (local only, never committed to Git)
 
 ## Quick Setup Commands
 
@@ -20,7 +19,7 @@ npm install
 
 # 3. Authorize your capstone org
 sf org login web --alias myCapstoneOrg --instance-url https://login.salesforce.com
-# This will open browser - use: capstone@taju.com / Olusammy1!
+# Use your Developer Org credentials (stored in private-learning/org-configuration/)
 
 # 4. Set as default org for this project
 sf config set target-org=myCapstoneOrg
@@ -52,8 +51,8 @@ If the web login doesn't work, you can use manual username/password login:
 
 ```bash
 # Alternative login method
-sf org login --username capstone@taju.com --alias myCapstoneOrg
-# When prompted, enter password: Olusammy1!
+sf org login --username [your-username] --alias myCapstoneOrg
+# When prompted, enter your password
 ```
 
 ## Verification Steps
@@ -85,7 +84,7 @@ In Salesforce Setup:
 1. Go to Setup → Users → Permission Sets
 2. Click "Job Application Manager"
 3. Click "Manage Assignments"
-4. Verify your user (capstone@taju.com) is assigned
+4. Verify your user is assigned
 
 ## Development Workflow
 
@@ -154,7 +153,7 @@ sf org assign permset --name Job_Application_Manager --target-org myCapstoneOrg
 
 **Issue**: "INVALID_LOGIN: Invalid username, password, security token; or user locked out"
 **Solution**: 
-- Verify credentials: capstone@taju.com / Olusammy1!
+- Verify credentials in your private org configuration file
 - Check if org is locked/suspended
 - Try resetting password in Salesforce
 
@@ -166,21 +165,32 @@ git merge main
 git push origin feature/temitayo-data-model
 ```
 
-## Team Coordination
+## Solo Learning Approach
 
-Share these details with Mark and Mike:
+For comprehensive understanding:
+1. **Document everything** in `private-learning/` directory
+2. **Build each component yourself** before moving to next
+3. **Test thoroughly** with sample data
+4. **Ask questions** and research answers
+5. **Master troubleshooting** common issues
 
-**Repository Location**: `C:\Users\tayof\Documents\job-application-tracker-temitayo-mark-mike`  
-**Org Alias**: `myCapstoneOrg`  
-**Your Branch**: `feature/temitayo-data-model`  
-**Main Object**: `Job_Application__c` (ready for automation and LWC development)
+## Team Coordination (Future)
+
+When ready to collaborate, share:
+- Repository structure and progress
+- Technical architecture decisions
+- Code review standards
+- Development workflow processes
+
+**Note**: Never share private learning materials or org credentials
 
 ## Next Week's Goals
 
 With your capstone org setup complete:
-- ✅ **Week 1**: Data model complete (YOU - DONE!)
-- 🔄 **Week 2**: Mark builds automation triggers
-- 🔄 **Week 2**: Mike starts LWC components
-- 🔄 **Week 2**: Team integration testing
+- ✅ **Week 1**: Data model complete
+- 🔄 **Week 2**: Build automation triggers and flows
+- 🔄 **Week 3**: Create Lightning Web Components  
+- 🔄 **Week 4**: Implement API integrations
+- 🔄 **Week 5**: Complete testing and deployment
 
 **You're ready to build amazing Salesforce solutions! 🚀**
