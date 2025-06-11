@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status_Progress_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  NOT($Setup.ValidationControl__c.Bypass_Validations__c),
+  ISCHANGED(Status__c),
+  OR(
+    AND(
+      ISPICKVAL(PRIORVALUE(Status__c), &quot;Closed&quot;),
+      NOT(ISPICKVAL(Status__c, &quot;Applied&quot;))
+    ),
+    AND(
+      ISPICKVAL(PRIORVALUE(Status__c), &quot;Accepted&quot;),
+      NOT(ISPICKVAL(Status__c, &quot;Closed&quot;))
+    ),
+    AND(
+      ISPICKVAL(Status__c, &quot;Negotiating&quot;),
+      NOT(ISPICKVAL(PRIORVALUE(Status__c), &quot;Interviewing&quot;))
+    )
+  )
+)</errorConditionFormula>
+    <errorDisplayField>Status__c</errorDisplayField>
+    <errorMessage>Invalid status change. Please follow proper progression: Applied →
+Interviewing → Negotiating → Accepted/Closed. Closed applications can only be
+reopened to Applied status.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Salary_Range_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  NOT($Setup.ValidationControl__c.Bypass_Validations__c),
+  NOT(ISBLANK(Salary__c)),
+  OR(
+    Salary__c &lt; 20000,
+    Salary__c &gt; 1000000,
+    AND(
+      ISPICKVAL(Status__c, &quot;Applied&quot;),
+      Salary__c &gt; 500000
+    )
+  )
+)</errorConditionFormula>
+    <errorMessage>Salary must be between $20,000 and $1,000,000. For Applied status, salary cannot exceed $500,000 without approval.&quot;</errorMessage>
+</ValidationRule>

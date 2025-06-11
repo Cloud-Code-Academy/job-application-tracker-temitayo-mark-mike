@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Application_Date_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  NOT($Setup.ValidationControl__c.Bypass_Validations__c),
+  NOT(ISBLANK(Application_Date__c)),
+  OR(
+    Application_Date__c &gt; TODAY(),
+    Application_Date__c &lt; TODAY() - 365
+  )
+)</errorConditionFormula>
+    <errorDisplayField>Application_Date__c</errorDisplayField>
+    <errorMessage>Application date cannot be in the future or more than 1 year in
+the past.</errorMessage>
+</ValidationRule>
