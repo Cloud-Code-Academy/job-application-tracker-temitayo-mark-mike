@@ -1,5 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
-import { getRecord } from 'lightning/uiRecordApi';
+import { getRecord, updateRecord } from 'lightning/uiRecordApi';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 const FIELDS = ['Job__c.Salary__c'];
 
@@ -78,5 +79,41 @@ export default class TakeHomePayEstimator extends LightningElement {
     }
 
     return tax;
+  }
+
+  handleStampValues() {
+    const fields = {
+      Id: this.recordId,
+      Salary__c: this.salary,
+      Federal_Tax__c: parseFloat(this.federalTax),
+      Medicare_Tax__c: parseFloat(this.medicare),
+      Social_Security_Tax__c: parseFloat(this.socialSecurity),
+      Take_Home_Pay_Yearly__c: parseFloat(this.takeHome),
+      Take_Home_Pay_Monthly__c: parseFloat(this.monthly),
+      Take_Home_Pay_Bi_Weekly__c: parseFloat(this.biWeekly),
+      Take_Home_Pay_6_Month__c: parseFloat(this.sixMonth)
+    };
+
+    const recordInput = { fields };
+
+    updateRecord(recordInput)
+      .then(() => {
+        this.dispatchEvent(
+          new ShowToastEvent({
+            title: 'Success',
+            message: 'Values stamped to Job record successfully.',
+            variant: 'success'
+          })
+        );
+      })
+      .catch(error => {
+        this.dispatchEvent(
+          new ShowToastEvent({
+            title: 'Error updating record',
+            message: error.body.message,
+            variant: 'error'
+          })
+        );
+      });
   }
 }
