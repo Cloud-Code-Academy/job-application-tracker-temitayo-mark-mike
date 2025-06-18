@@ -1,0 +1,283 @@
+<template>
+    <lightning-card title="🔒 Security & Governance Dashboard" icon-name="utility:shield" class="security-dashboard-card">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+            
+            <!-- Security Overview Cards -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="security-card security-score-card">
+                        <div class="security-header">
+                            <div class="security-icon">🛡️</div>
+                            <div class="security-badge" data-level={securityLevel}>
+                                {securityLevel}
+                            </div>
+                        </div>
+                        <div class="security-value">{securityScore}</div>
+                        <div class="security-label">Security Score</div>
+                        <div class="security-subtitle">Overall security rating</div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="security-card compliance-card">
+                        <div class="security-header">
+                            <div class="security-icon">📋</div>
+                            <div class="security-badge" data-level={complianceLevel}>
+                                {complianceScore}%
+                            </div>
+                        </div>
+                        <div class="security-value">{complianceChecks}</div>
+                        <div class="security-label">Compliance Checks</div>
+                        <div class="security-subtitle">Passed compliance tests</div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="security-card access-card">
+                        <div class="security-header">
+                            <div class="security-icon">🔑</div>
+                            <div class="security-badge good">
+                                {accessPercentage}%
+                            </div>
+                        </div>
+                        <div class="security-value">{accessibleFields}</div>
+                        <div class="security-label">Field Access</div>
+                        <div class="security-subtitle">Accessible data fields</div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="security-card audit-card">
+                        <div class="security-header">
+                            <div class="security-icon">📊</div>
+                            <div class="security-badge neutral">
+                                {auditRetentionDays}d
+                            </div>
+                        </div>
+                        <div class="security-value">{totalAuditEntries}</div>
+                        <div class="security-label">Audit Entries</div>
+                        <div class="security-subtitle">Tracked activities</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Security Profile -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="profile-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">👤 User Security Profile</h3>
+                        <div class="profile-details">
+                            <div class="profile-item">
+                                <div class="profile-label">User Name:</div>
+                                <div class="profile-value">{userName}</div>
+                            </div>
+                            <div class="profile-item">
+                                <div class="profile-label">Profile:</div>
+                                <div class="profile-value">{profileName}</div>
+                            </div>
+                            <div class="profile-item">
+                                <div class="profile-label">Role:</div>
+                                <div class="profile-value">{roleName}</div>
+                            </div>
+                            <div class="profile-item">
+                                <div class="profile-label">Last Login:</div>
+                                <div class="profile-value">{formattedLastLogin}</div>
+                            </div>
+                            <div class="profile-item">
+                                <div class="profile-label">Account Age:</div>
+                                <div class="profile-value">{accountAge} days</div>
+                            </div>
+                            <div class="profile-item">
+                                <div class="profile-label">Status:</div>
+                                <div class="profile-value status-active" if:true={isActive}>Active</div>
+                                <div class="profile-value status-inactive" if:false={isActive}>Inactive</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Compliance Status -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="compliance-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">✅ Compliance Status</h3>
+                        <div class="compliance-checks">
+                            <div class="compliance-item">
+                                <div class="compliance-check" data-status={gdprStatus}>
+                                    <span class="check-icon">{gdprIcon}</span>
+                                    <span class="check-label">GDPR Compliance</span>
+                                </div>
+                            </div>
+                            <div class="compliance-item">
+                                <div class="compliance-check" data-status={soxStatus}>
+                                    <span class="check-icon">{soxIcon}</span>
+                                    <span class="check-label">SOX Compliance</span>
+                                </div>
+                            </div>
+                            <div class="compliance-item">
+                                <div class="compliance-check" data-status={encryptionStatus}>
+                                    <span class="check-icon">{encryptionIcon}</span>
+                                    <span class="check-label">Data Encryption</span>
+                                </div>
+                            </div>
+                            <div class="compliance-item">
+                                <div class="compliance-check" data-status={auditStatus}>
+                                    <span class="check-icon">{auditIcon}</span>
+                                    <span class="check-label">Audit Trail</span>
+                                </div>
+                            </div>
+                            <div class="compliance-item">
+                                <div class="compliance-check" data-status={accessControlStatus}>
+                                    <span class="check-icon">{accessControlIcon}</span>
+                                    <span class="check-label">Access Controls</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Recommendations -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">💡 Security Recommendations</h3>
+                <div class="recommendations-container">
+                    <template for:each={recommendations} for:item="recommendation">
+                        <div key={recommendation.type} class="recommendation-item" data-priority={recommendation.priority}>
+                            <div class="recommendation-header">
+                                <div class="recommendation-priority">{recommendation.priority}</div>
+                                <div class="recommendation-title">{recommendation.title}</div>
+                            </div>
+                            <div class="recommendation-description">{recommendation.description}</div>
+                            <div class="recommendation-impact">Impact: {recommendation.impact}</div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Data Access Analysis -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="access-analysis-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">🔍 Data Access Analysis</h3>
+                        <div class="access-metrics">
+                            <div class="access-metric">
+                                <div class="metric-icon">📁</div>
+                                <div class="metric-content">
+                                    <div class="metric-value">{ownedRecords}</div>
+                                    <div class="metric-label">Owned Records</div>
+                                </div>
+                            </div>
+                            <div class="access-metric">
+                                <div class="metric-icon">🕒</div>
+                                <div class="metric-content">
+                                    <div class="metric-value">{recentAccess}</div>
+                                    <div class="metric-label">Recent Access</div>
+                                </div>
+                            </div>
+                            <div class="access-metric">
+                                <div class="metric-icon">📅</div>
+                                <div class="metric-content">
+                                    <div class="metric-value">{dataRetention}</div>
+                                    <div class="metric-label">Data Retention (days)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Audit Trail Summary -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="audit-summary-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">📋 Audit Trail Summary</h3>
+                        <div class="audit-metrics">
+                            <div class="audit-metric">
+                                <div class="audit-label">Total Entries:</div>
+                                <div class="audit-value">{totalAuditEntries}</div>
+                            </div>
+                            <div class="audit-metric">
+                                <div class="audit-label">Recent Entries:</div>
+                                <div class="audit-value">{recentEntries}</div>
+                            </div>
+                            <div class="audit-metric">
+                                <div class="audit-label">Critical Events:</div>
+                                <div class="audit-value critical">{criticalEvents}</div>
+                            </div>
+                            <div class="audit-metric">
+                                <div class="audit-label">Last Audit:</div>
+                                <div class="audit-value">{formattedLastAudit}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <lightning-button
+                        variant="brand"
+                        label="Generate Compliance Report"
+                        onclick={handleGenerateReport}
+                        disabled={isLoading}
+                        class="action-button">
+                    </lightning-button>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <lightning-button
+                        variant="neutral"
+                        label="Validate Data Access"
+                        onclick={handleValidateAccess}
+                        disabled={isLoading}
+                        class="action-button">
+                    </lightning-button>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <lightning-button
+                        variant="neutral"
+                        label="Create Audit Log"
+                        onclick={handleCreateAuditLog}
+                        disabled={isLoading}
+                        class="action-button">
+                    </lightning-button>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <lightning-button
+                        variant="neutral"
+                        label="Refresh Assessment"
+                        onclick={handleRefreshAssessment}
+                        disabled={isLoading}
+                        class="action-button">
+                    </lightning-button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div if:true={isLoading} class="slds-text-align_center slds-m-top_medium">
+                <lightning-spinner alternative-text="Loading security assessment..." size="medium"></lightning-spinner>
+                <p class="slds-text-body_small slds-text-color_weak">Analyzing security and compliance...</p>
+            </div>
+
+            <!-- Error State -->
+            <div if:true={errorMessage} class="slds-m-top_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>❌ {errorMessage}</h2>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div if:true={showEmptyState} class="empty-state slds-text-align_center slds-m-top_large">
+                <div class="empty-state-icon">🔒</div>
+                <h3 class="slds-text-heading_medium">No Security Data</h3>
+                <p class="slds-text-body_regular slds-text-color_weak">
+                    Security assessment data is not available. Please refresh or contact your administrator.
+                </p>
+                <lightning-button
+                    variant="brand"
+                    label="Refresh Assessment"
+                    onclick={handleRefreshAssessment}
+                    class="slds-m-top_medium">
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

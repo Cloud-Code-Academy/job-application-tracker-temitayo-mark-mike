@@ -1,0 +1,172 @@
+<template>
+    <lightning-card title="📅 Interview Scheduler" icon-name="utility:event" class="calendar-integration-card">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+            
+            <!-- Job Application Info -->
+            <div if:true={jobApplicationData} class="slds-m-bottom_medium">
+                <div class="job-info-banner">
+                    <div class="job-info-content">
+                        <h3 class="slds-text-heading_small">
+                            🏢 {jobApplicationData.Company_Name__c} - {jobApplicationData.Position_Title__c}
+                        </h3>
+                        <p class="slds-text-body_small slds-text-color_weak">
+                            Status: {jobApplicationData.Status__c}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Creation Form -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning-input
+                        type="text"
+                        label="Interview Subject"
+                        value={eventSubject}
+                        onchange={handleSubjectChange}
+                        placeholder="e.g., Technical Interview with John Doe"
+                        required>
+                    </lightning-input>
+                </div>
+            </div>
+
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <lightning-input
+                        type="datetime-local"
+                        label="Start Date & Time"
+                        value={startDateTime}
+                        onchange={handleStartDateTimeChange}
+                        required>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <lightning-input
+                        type="datetime-local"
+                        label="End Date & Time"
+                        value={endDateTime}
+                        onchange={handleEndDateTimeChange}
+                        required>
+                    </lightning-input>
+                </div>
+            </div>
+
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <lightning-combobox
+                        name="interviewType"
+                        label="Interview Type"
+                        value={interviewType}
+                        placeholder="Select interview type..."
+                        options={interviewTypeOptions}
+                        onchange={handleInterviewTypeChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <lightning-combobox
+                        name="location"
+                        label="Location/Platform"
+                        value={location}
+                        placeholder="Select location or platform..."
+                        options={locationOptions}
+                        onchange={handleLocationChange}>
+                    </lightning-combobox>
+                </div>
+            </div>
+
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning-textarea
+                        label="Interview Notes"
+                        value={description}
+                        onchange={handleDescriptionChange}
+                        placeholder="Add any additional notes, preparation items, or special instructions..."
+                        rows="3">
+                    </lightning-textarea>
+                </div>
+            </div>
+
+            <!-- Validation Messages -->
+            <div if:true={validationMessages.length} class="slds-m-bottom_medium">
+                <template for:each={validationMessages} for:item="message">
+                    <div key={message.id} class={message.cssClass}>
+                        <span class="slds-assistive-text">{message.type}</span>
+                        <h2>{message.text}</h2>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Quick Time Suggestions -->
+            <div class="slds-m-bottom_medium">
+                <div class="slds-text-heading_small slds-m-bottom_small">⚡ Quick Time Suggestions</div>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <template for:each={timeSuggestions} for:item="suggestion">
+                        <div key={suggestion.id} class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                            <lightning-button
+                                variant="neutral"
+                                label={suggestion.label}
+                                onclick={handleTimeSuggestionClick}
+                                data-start={suggestion.startDateTime}
+                                data-end={suggestion.endDateTime}
+                                class="time-suggestion-button">
+                            </lightning-button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Conflict Check Results -->
+            <div if:true={conflictCheckResults.length} class="slds-m-bottom_medium">
+                <div class="conflict-check-container">
+                    <div class="slds-text-heading_small slds-m-bottom_small">⚠️ Schedule Conflicts</div>
+                    <template for:each={conflictCheckResults} for:item="conflict">
+                        <div key={conflict.id} class="conflict-item">
+                            <div class="conflict-time">
+                                {conflict.startTime} - {conflict.endTime}
+                            </div>
+                            <div class="conflict-subject">{conflict.subject}</div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="slds-text-align_center">
+                <lightning-button
+                    variant="neutral"
+                    label="Check Availability"
+                    onclick={handleCheckAvailability}
+                    disabled={isProcessing}
+                    class="slds-m-right_small">
+                </lightning-button>
+                <lightning-button
+                    variant="neutral"
+                    label="Clear Form"
+                    onclick={handleClearForm}
+                    disabled={isProcessing}
+                    class="slds-m-right_small">
+                </lightning-button>
+                <lightning-button
+                    variant="brand"
+                    label="Schedule Interview"
+                    onclick={handleScheduleInterview}
+                    disabled={isProcessing}>
+                </lightning-button>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div if:true={isProcessing} class="slds-text-align_center slds-m-top_medium">
+                <lightning-spinner alternative-text="Processing..." size="small"></lightning-spinner>
+                <p class="slds-text-body_small slds-text-color_weak">Creating your interview...</p>
+            </div>
+
+            <!-- Success Message -->
+            <div if:true={showSuccessMessage} class="slds-m-top_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_success" role="alert">
+                    <span class="slds-assistive-text">Success</span>
+                    <h2>✅ Interview scheduled successfully! Check your calendar for details.</h2>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

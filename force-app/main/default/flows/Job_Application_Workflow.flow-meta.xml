@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <description>Automated workflow for job application lifecycle management with intelligent routing and task creation</description>
+    <label>Job Application Workflow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Application_Status</targetReference>
+        </connector>
+        <object>Job_Application__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    
+    <!-- Decision: Check Application Status -->
+    <decisions>
+        <name>Check_Application_Status</name>
+        <label>Check Application Status</label>
+        <locationX>50</locationX>
+        <locationY>150</locationY>
+        <defaultConnector>
+            <targetReference>End_Flow</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Other Status</defaultConnectorLabel>
+        <rules>
+            <name>Status_Applied</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Applied</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Follow_Up_Task</targetReference>
+            </connector>
+            <label>Status is Applied</label>
+        </rules>
+        <rules>
+            <name>Status_Interviewing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Interviewing</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Interview_Prep_Task</targetReference>
+            </connector>
+            <label>Status is Interviewing</label>
+        </rules>
+        <rules>
+            <name>Status_Negotiating</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Negotiating</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Negotiation_Task</targetReference>
+            </connector>
+            <label>Status is Negotiating</label>
+        </rules>
+        <rules>
+            <name>Status_Accepted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Accepted</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Onboarding_Task</targetReference>
+            </connector>
+            <label>Status is Accepted</label>
+        </rules>
+    </decisions>
+    
+    <!-- Create Follow-up Task for Applied Status -->
+    <recordCreates>
+        <name>Create_Follow_Up_Task</name>
+        <label>Create Follow-up Task</label>
+        <locationX>50</locationX>
+        <locationY>300</locationY>
+        <connector>
+            <targetReference>Send_Application_Confirmation</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Follow up on application: {!$Record.Position_Title__c} at {!$Record.Company_Name__c}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>Follow up on your job application. Consider reaching out to the hiring manager or checking the company's career portal for updates.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>Follow_Up_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>Normal</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    
+    <!-- Create Interview Prep Task -->
+    <recordCreates>
+        <name>Create_Interview_Prep_Task</name>
+        <label>Create Interview Prep Task</label>
+        <locationX>200</locationX>
+        <locationY>300</locationY>
+        <connector>
+            <targetReference>Send_Interview_Tips</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Prepare for interview: {!$Record.Position_Title__c} at {!$Record.Company_Name__c}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>Prepare for your upcoming interview:
+1. Research the company and role
+2. Practice common interview questions
+3. Prepare questions to ask the interviewer
+4. Review your resume and portfolio
+5. Plan your outfit and route</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>Interview_Prep_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    
+    <!-- Create Negotiation Task -->
+    <recordCreates>
+        <name>Create_Negotiation_Task</name>
+        <label>Create Negotiation Task</label>
+        <locationX>350</locationX>
+        <locationY>300</locationY>
+        <connector>
+            <targetReference>Send_Negotiation_Tips</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Negotiate offer: {!$Record.Position_Title__c} at {!$Record.Company_Name__c}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>Negotiate your job offer:
+1. Research market salary data
+2. Consider total compensation package
+3. Prepare your negotiation points
+4. Practice your negotiation conversation
+5. Set your minimum acceptable terms</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>Negotiation_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    
+    <!-- Create Onboarding Task -->
+    <recordCreates>
+        <name>Create_Onboarding_Task</name>
+        <label>Create Onboarding Task</label>
+        <locationX>500</locationX>
+        <locationY>300</locationY>
+        <connector>
+            <targetReference>Send_Congratulations</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Prepare for onboarding: {!$Record.Position_Title__c} at {!$Record.Company_Name__c}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>Prepare for your new role:
+1. Complete required paperwork
+2. Set up direct deposit and benefits
+3. Prepare for first day orientation
+4. Connect with your new team
+5. Plan your transition from current role</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>Onboarding_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    
+    <!-- Email Actions -->
+    <actionCalls>
+        <name>Send_Application_Confirmation</name>
+        <label>Send Application Confirmation</label>
+        <locationX>50</locationX>
+        <locationY>450</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>End_Flow</targetReference>
+        </connector>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Owner:User.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Application Submitted: {!$Record.Position_Title__c} at {!$Record.Company_Name__c}</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <stringValue>Your job application has been successfully submitted! 
+
+Position: {!$Record.Position_Title__c}
+Company: {!$Record.Company_Name__c}
+Status: {!$Record.Status__c}
+
+A follow-up task has been created to remind you to check on your application status.
+
+Good luck with your application!</stringValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    
+    <actionCalls>
+        <name>Send_Interview_Tips</name>
+        <label>Send Interview Tips</label>
+        <locationX>200</locationX>
+        <locationY>450</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>End_Flow</targetReference>
+        </connector>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Owner:User.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Interview Preparation: {!$Record.Position_Title__c} at {!$Record.Company_Name__c}</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <stringValue>Congratulations on moving to the interview stage!
+
+Position: {!$Record.Position_Title__c}
+Company: {!$Record.Company_Name__c}
+
+Interview Preparation Tips:
+• Research the company's mission, values, and recent news
+• Practice answering behavioral questions using the STAR method
+• Prepare thoughtful questions about the role and company culture
+• Review your resume and be ready to discuss your experience
+• Plan your interview outfit and arrival time
+
+An interview preparation task has been created to help you stay organized.
+
+You've got this!</stringValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    
+    <actionCalls>
+        <name>Send_Negotiation_Tips</name>
+        <label>Send Negotiation Tips</label>
+        <locationX>350</locationX>
+        <locationY>450</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>End_Flow</targetReference>
+        </connector>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Owner:User.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Offer Negotiation: {!$Record.Position_Title__c} at {!$Record.Company_Name__c}</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <stringValue>Congratulations on receiving an offer!
+
+Position: {!$Record.Position_Title__c}
+Company: {!$Record.Company_Name__c}
+
+Negotiation Tips:
+• Research market salary data for your role and location
+• Consider the entire compensation package (benefits, PTO, etc.)
+• Be prepared to justify your requests with data and experience
+• Maintain a positive and collaborative tone
+• Know your walk-away point before entering negotiations
+
+A negotiation task has been created to help you prepare.
+
+Best of luck with your negotiations!</stringValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    
+    <actionCalls>
+        <name>Send_Congratulations</name>
+        <label>Send Congratulations</label>
+        <locationX>500</locationX>
+        <locationY>450</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>End_Flow</targetReference>
+        </connector>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Owner:User.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Congratulations! Offer Accepted: {!$Record.Position_Title__c} at {!$Record.Company_Name__c}</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <stringValue>🎉 Congratulations on accepting your new position!
+
+Position: {!$Record.Position_Title__c}
+Company: {!$Record.Company_Name__c}
+
+Next Steps:
+• Complete any required onboarding paperwork
+• Set up your benefits and direct deposit
+• Prepare for your first day
+• Connect with your new team members
+• Plan your transition from your current role
+
+An onboarding task has been created to help you prepare for your new role.
+
+Wishing you great success in your new position!</stringValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    
+    <!-- Formula Fields for Date Calculations -->
+    <formulas>
+        <name>Follow_Up_Date</name>
+        <dataType>Date</dataType>
+        <expression>TODAY() + 7</expression>
+    </formulas>
+    
+    <formulas>
+        <name>Interview_Prep_Date</name>
+        <dataType>Date</dataType>
+        <expression>TODAY() + 2</expression>
+    </formulas>
+    
+    <formulas>
+        <name>Negotiation_Date</name>
+        <dataType>Date</dataType>
+        <expression>TODAY() + 1</expression>
+    </formulas>
+    
+    <formulas>
+        <name>Onboarding_Date</name>
+        <dataType>Date</dataType>
+        <expression>TODAY() + 3</expression>
+    </formulas>
+    
+    <!-- End Flow -->
+    <actionCalls>
+        <name>End_Flow</name>
+        <label>End Flow</label>
+        <locationX>300</locationX>
+        <locationY>600</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <stringValue>noreply@example.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Workflow Complete</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <stringValue>Job application workflow completed.</stringValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+</Flow>
