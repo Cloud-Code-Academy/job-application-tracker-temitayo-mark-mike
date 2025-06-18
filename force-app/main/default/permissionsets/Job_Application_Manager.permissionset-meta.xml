@@ -17,11 +17,7 @@
         <field>Job_Application__c.Application_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Job_Application__c.Company_Name__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
+
     <fieldPermissions>
         <editable>true</editable>
         <field>Job_Application__c.Description__c</field>
@@ -47,11 +43,7 @@
         <field>Job_Application__c.Notes__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Job_Application__c.Position_Title__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
+
     <fieldPermissions>
         <editable>true</editable>
         <field>Job_Application__c.Primary_Contact__c</field>
@@ -68,12 +60,39 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
-        <field>Job_Application__c.Status__c</field>
+        <editable>false</editable>
+        <field>Job_Application__c.Federal_Tax__c</field>
         <readable>true</readable>
     </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Job_Application__c.Social_Security_Tax__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Job_Application__c.Medicare_Tax__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Job_Application__c.Take_Home_Pay_Yearly__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Job_Application__c.Take_Home_Pay_Monthly__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+
     <tabSettings>
         <tab>Job_Application__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
+
+    <applicationVisibilities>
+        <application>Job_Application_Tracker</application>
+        <default>false</default>
+        <visible>true</visible>
+    </applicationVisibilities>
 </PermissionSet>

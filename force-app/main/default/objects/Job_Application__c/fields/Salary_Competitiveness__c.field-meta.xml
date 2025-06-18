@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Salary_Competitiveness__c</fullName>
+    <label>Salary Competitiveness</label>
+    <description>Rating of how competitive the offered salary is compared to market rates</description>
+    <inlineHelpText>Competitiveness rating: Excellent (75th+ percentile), Good (median+), Fair (minimum+), Below Market (under minimum).</inlineHelpText>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Excellent</fullName>
+                <default>false</default>
+                <label>Excellent</label>
+            </value>
+            <value>
+                <fullName>Good</fullName>
+                <default>false</default>
+                <label>Good</label>
+            </value>
+            <value>
+                <fullName>Fair</fullName>
+                <default>false</default>
+                <label>Fair</label>
+            </value>
+            <value>
+                <fullName>Below Market</fullName>
+                <default>false</default>
+                <label>Below Market</label>
+            </value>
+            <value>
+                <fullName>Unknown</fullName>
+                <default>false</default>
+                <label>Unknown</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <externalId>false</externalId>
+    <unique>false</unique>
+</CustomField>

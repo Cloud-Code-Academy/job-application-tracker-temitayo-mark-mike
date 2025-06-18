@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interviewing</fullName>
+    <columns>NAME</columns>
+    <columns>Company_Name__c</columns>
+    <columns>Position_Title__c</columns>
+    <columns>Application_Date__c</columns>
+    <columns>Follow_Up_Date__c</columns>
+    <columns>Salary__c</columns>
+    <columns>Location__c</columns>
+    <columns>Rating__c</columns>
+    <columns>LAST_UPDATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Interviewing</value>
+    </filters>
+    <label>Interviewing</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

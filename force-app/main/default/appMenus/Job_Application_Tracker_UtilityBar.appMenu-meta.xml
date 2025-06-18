@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AppMenu xmlns="http://soap.sforce.com/2006/04/metadata">
+    <appMenuItems>
+        <name>Notes</name>
+        <type>Utility</type>
+    </appMenuItems>
+    <appMenuItems>
+        <name>History</name>
+        <type>Utility</type>
+    </appMenuItems>
+    <appMenuItems>
+        <name>Rich_Text_Notes</name>
+        <type>Utility</type>
+    </appMenuItems>
+</AppMenu>

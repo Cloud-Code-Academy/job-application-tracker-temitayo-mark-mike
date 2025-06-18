@@ -1,0 +1,304 @@
+<template>
+    <lightning-card title="⚡ Performance & Optimization Dashboard" icon-name="utility:metrics" class="performance-dashboard-card">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+            
+            <!-- Performance Status Overview -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="performance-card cpu-card">
+                        <div class="performance-header">
+                            <div class="performance-icon">🖥️</div>
+                            <div class="performance-status" data-status={cpuStatus}>
+                                {cpuUsagePercent}%
+                            </div>
+                        </div>
+                        <div class="performance-value">{currentCpuTime}ms</div>
+                        <div class="performance-label">CPU Usage</div>
+                        <div class="performance-subtitle">of {maxCpuTime}ms limit</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style={cpuProgressStyle}></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="performance-card memory-card">
+                        <div class="performance-header">
+                            <div class="performance-icon">💾</div>
+                            <div class="performance-status" data-status={memoryStatus}>
+                                {heapUsagePercent}%
+                            </div>
+                        </div>
+                        <div class="performance-value">{formattedCurrentHeapSize}</div>
+                        <div class="performance-label">Memory Usage</div>
+                        <div class="performance-subtitle">of {formattedMaxHeapSize} limit</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style={memoryProgressStyle}></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="performance-card query-card">
+                        <div class="performance-header">
+                            <div class="performance-icon">🔍</div>
+                            <div class="performance-status" data-status={queryStatus}>
+                                {queryUsagePercent}%
+                            </div>
+                        </div>
+                        <div class="performance-value">{currentQueries}</div>
+                        <div class="performance-label">SOQL Queries</div>
+                        <div class="performance-subtitle">of {maxQueries} limit</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style={queryProgressStyle}></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="performance-card cache-card">
+                        <div class="performance-header">
+                            <div class="performance-icon">⚡</div>
+                            <div class="performance-status good">
+                                {cacheHitRate}%
+                            </div>
+                        </div>
+                        <div class="performance-value">{averageCacheResponseTime}ms</div>
+                        <div class="performance-label">Cache Performance</div>
+                        <div class="performance-subtitle">Hit Rate & Response Time</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill cache-fill" style={cacheProgressStyle}></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Query Performance Analysis -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="query-analysis-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">🔍 Query Performance Analysis</h3>
+                        <div class="query-metrics">
+                            <div class="query-metric">
+                                <div class="metric-icon">⚡</div>
+                                <div class="metric-content">
+                                    <div class="metric-value">{averageQueryTime}ms</div>
+                                    <div class="metric-label">Average Query Time</div>
+                                </div>
+                            </div>
+                            <div class="query-metric">
+                                <div class="metric-icon">🐌</div>
+                                <div class="metric-content">
+                                    <div class="metric-value">{slowestQueryTime}ms</div>
+                                    <div class="metric-label">Slowest Query</div>
+                                </div>
+                            </div>
+                            <div class="query-metric">
+                                <div class="metric-icon">🚀</div>
+                                <div class="metric-content">
+                                    <div class="metric-value">{fastestQueryTime}ms</div>
+                                    <div class="metric-label">Fastest Query</div>
+                                </div>
+                            </div>
+                            <div class="query-metric">
+                                <div class="metric-icon">📊</div>
+                                <div class="metric-content">
+                                    <div class="metric-value">{queryOptimizationRate}%</div>
+                                    <div class="metric-label">Optimization Rate</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Data Volume Metrics -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="data-volume-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">📊 Data Volume Metrics</h3>
+                        <div class="volume-metrics">
+                            <div class="volume-metric">
+                                <div class="volume-label">Total Records:</div>
+                                <div class="volume-value">{totalJobApplications}</div>
+                            </div>
+                            <div class="volume-metric">
+                                <div class="volume-label">Data Growth Rate:</div>
+                                <div class="volume-value">{dataGrowthRate}% /month</div>
+                            </div>
+                            <div class="volume-metric">
+                                <div class="volume-label">Average Record Size:</div>
+                                <div class="volume-value">{averageRecordSize} KB</div>
+                            </div>
+                            <div class="volume-metric">
+                                <div class="volume-label">Total Data Size:</div>
+                                <div class="volume-value">{formattedTotalDataSize}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Recommendations -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">💡 Performance Recommendations</h3>
+                <div class="recommendations-container">
+                    <template for:each={recommendations} for:item="recommendation">
+                        <div key={recommendation.type} class="recommendation-item" data-priority={recommendation.priority}>
+                            <div class="recommendation-header">
+                                <div class="recommendation-priority">{recommendation.priority}</div>
+                                <div class="recommendation-title">{recommendation.title}</div>
+                                <div class="recommendation-effort">{recommendation.effort} Effort</div>
+                            </div>
+                            <div class="recommendation-description">{recommendation.description}</div>
+                            <div class="recommendation-impact">Impact: {recommendation.impact}</div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Resource Utilization -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="resource-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">📈 Resource Utilization</h3>
+                        <div class="resource-metrics">
+                            <div class="resource-item">
+                                <div class="resource-header">
+                                    <span class="resource-label">API Calls</span>
+                                    <span class="resource-percentage">{apiUsagePercent}%</span>
+                                </div>
+                                <div class="resource-bar">
+                                    <div class="resource-fill" style={apiProgressStyle}></div>
+                                </div>
+                                <div class="resource-details">{apiCallsUsed} of {apiCallsLimit}</div>
+                            </div>
+                            
+                            <div class="resource-item">
+                                <div class="resource-header">
+                                    <span class="resource-label">Storage</span>
+                                    <span class="resource-percentage">{storageUsagePercent}%</span>
+                                </div>
+                                <div class="resource-bar">
+                                    <div class="resource-fill" style={storageProgressStyle}></div>
+                                </div>
+                                <div class="resource-details">{storageUsed} GB of {storageLimit} GB</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Performance Tools -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="tools-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">🛠️ Performance Tools</h3>
+                        <div class="tools-grid">
+                            <lightning-button
+                                variant="brand"
+                                label="Monitor Performance"
+                                onclick={handleMonitorPerformance}
+                                disabled={isLoading}
+                                class="tool-button">
+                            </lightning-button>
+                            
+                            <lightning-button
+                                variant="neutral"
+                                label="Optimize Queries"
+                                onclick={handleOptimizeQueries}
+                                disabled={isLoading}
+                                class="tool-button">
+                            </lightning-button>
+                            
+                            <lightning-button
+                                variant="neutral"
+                                label="Bulk Processing"
+                                onclick={handleBulkProcessing}
+                                disabled={isLoading}
+                                class="tool-button">
+                            </lightning-button>
+                            
+                            <lightning-button
+                                variant="neutral"
+                                label="Clear Cache"
+                                onclick={handleClearCache}
+                                disabled={isLoading}
+                                class="tool-button">
+                            </lightning-button>
+                            
+                            <lightning-button
+                                variant="neutral"
+                                label="Export Report"
+                                onclick={handleExportReport}
+                                disabled={isLoading}
+                                class="tool-button">
+                            </lightning-button>
+                            
+                            <lightning-button
+                                variant="neutral"
+                                label="Refresh Metrics"
+                                onclick={handleRefreshMetrics}
+                                disabled={isLoading}
+                                class="tool-button">
+                            </lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Performance Monitor -->
+            <div class="slds-m-bottom_large" if:true={showRealTimeMonitor}>
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">📊 Real-time Performance Monitor</h3>
+                <div class="monitor-container">
+                    <div class="monitor-status" data-status={performanceStatus}>
+                        <div class="status-icon">{statusIcon}</div>
+                        <div class="status-text">System Status: {performanceStatus}</div>
+                        <div class="status-timestamp">Last Updated: {formattedTimestamp}</div>
+                    </div>
+                    
+                    <div class="monitor-warnings" if:true={hasWarnings}>
+                        <h4 class="slds-text-heading_small">⚠️ Performance Warnings:</h4>
+                        <ul class="warning-list">
+                            <template for:each={performanceWarnings} for:item="warning">
+                                <li key={warning} class="warning-item">{warning}</li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Source Indicator -->
+            <div class="data-source-indicator">
+                <span class="source-label">Data Source:</span>
+                <span class="source-value" data-source={dataSource}>{dataSourceText}</span>
+                <span class="source-timestamp">Generated: {formattedGeneratedAt}</span>
+            </div>
+
+            <!-- Loading State -->
+            <div if:true={isLoading} class="slds-text-align_center slds-m-top_medium">
+                <lightning-spinner alternative-text="Loading performance metrics..." size="medium"></lightning-spinner>
+                <p class="slds-text-body_small slds-text-color_weak">Analyzing system performance...</p>
+            </div>
+
+            <!-- Error State -->
+            <div if:true={errorMessage} class="slds-m-top_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>❌ {errorMessage}</h2>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div if:true={showEmptyState} class="empty-state slds-text-align_center slds-m-top_large">
+                <div class="empty-state-icon">⚡</div>
+                <h3 class="slds-text-heading_medium">No Performance Data</h3>
+                <p class="slds-text-body_regular slds-text-color_weak">
+                    Performance metrics are not available. Please refresh or check system status.
+                </p>
+                <lightning-button
+                    variant="brand"
+                    label="Refresh Metrics"
+                    onclick={handleRefreshMetrics}
+                    class="slds-m-top_medium">
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>
