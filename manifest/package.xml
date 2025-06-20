@@ -28,6 +28,10 @@
         <members>Job_Application_Status</members>
         <name>GlobalValueSet</name>
     </types>
+    <types>
+        <members>*</members>
+        <name>RecordType</name>
+     </types>
      <types>
         <members>*</members>
         <name>ApexClass</name>
