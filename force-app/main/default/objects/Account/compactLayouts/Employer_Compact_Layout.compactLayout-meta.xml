@@ -6,5 +6,6 @@
     <fields>Phone</fields>
     <fields>Website</fields>
     <fields>Open_Jobs__c</fields>
+    <fields>Total_Jobs__c</fields>
     <label>Employer Compact Layout</label>
 </CompactLayout>
