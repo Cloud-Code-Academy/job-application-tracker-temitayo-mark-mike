@@ -1,7 +1,9 @@
 public inherited sharing class Utilities {
     
-    public static Cache.OrgPartition orgPart = Cache.Org.getPartition('local.CCA');
+    // Create instance of org cache partition.
+    public static Cache.OrgPartition orgPart = Cache.Org.getPartition('local.JobApplTracker');
     
+    // Adds working/business days to a date.  
     public static Date addWorkingDays (Date startingDate, Integer daysToAdd) {
         Integer count = 0;
         if(daysToAdd > 0) {
@@ -22,16 +24,19 @@ public inherited sharing class Utilities {
         return startingDate;
     }
 
+    // Accesses the Holiday sObj data for the org, used in addworkingdays().
     public static Boolean isHolidayOrWeekend(Date d) {
         List<Date> holidayDates = (List<Date>) orgPart.get('HolidayList');
         if(holidayDates == null) {
-            List<Holiday> holidays = [SELECT Id, ActivityDate FROM Holiday];
+            List<Holiday> holidays = [SELECT Id, Name, ActivityDate FROM Holiday];
             holidayDates  = new List<Date>();
             for(Holiday h : holidays){
                 holidayDates.add(h.ActivityDate);
             }
             orgPart.put('HolidayList', holidayDates, 86400);
         }
+
+        System.debug('Holidays List: ' + JSON.serializePretty(holidayDates));
 
         if (d.toStartOfWeek() == d) { // Sunday
             return true;
@@ -46,11 +51,13 @@ public inherited sharing class Utilities {
         }
     }
 
+    // Returns a Salesforce date based on various string formats.
     public static Date convertStringToDate (String dateString) {
         Date result = convertStringToDatetime(dateString).date();
         return result;
     }
 
+    // Returns a Salesforce datetime based on various string formats. 
     public static Datetime convertStringToDatetime (String datetimeString) {
         String originalValue = datetimeString;
         Datetime result;
@@ -115,5 +122,31 @@ public inherited sharing class Utilities {
         }
         return result;
     }
+
+    // Returns a List<> of SendEmailResults from sending single email.    
+    public static Messaging.SendEmailResult [] sendEmail(List<String> toAddresses, String fromAddress, String subject, String body) {
     
+        Messaging.SingleEmailMessage emailMessage = new Messaging.SingleEmailMessage();
+
+        if(fromAddress != null) {
+            List<OrgWideEmailAddress> addresses = [SELECT Id FROM OrgWideEmailAddress WHERE Address = :fromAddress LIMIT 1];
+            if(addresses.size() > 0) {
+                email.setOrgWideEmailAddressId(addresses[0].Id);
+            } else {
+                throw new IllegalArgumentException('Failed to find OrgWideEmailAddress: ' + fromAddress);
+            }
+        }
+
+        emailMessage.setSubject(subject);
+        emailMessage.setPlainTextBody(body);
+        emailMessage.setFileAttachments(attachments);
+        emailMessage.setToAddresses( toAddresses );
+
+        Messaging.SendEmailResult [] r;
+    
+        if(toAddresses.size() > 0){
+            r = Messaging.sendEmail(new Messaging.SingleEmailMessage[] {emailMessage});
+        }
+        return r;
+    }
 }
