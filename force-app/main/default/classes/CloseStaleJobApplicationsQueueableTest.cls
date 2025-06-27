@@ -1,4 +1,4 @@
-@isTest
+@IsTest
 private class CloseStaleJobApplicationsQueueableTest {
 
     @testSetup
@@ -11,7 +11,7 @@ private class CloseStaleJobApplicationsQueueableTest {
         insert settings;
     }
 
-    @isTest
+    @IsTest
     static void testStaleJobAppIsClosed() {
         Job_Application__c staleApp = new Job_Application__c(
             Status__c = 'Applied',
@@ -31,7 +31,7 @@ private class CloseStaleJobApplicationsQueueableTest {
         System.assert(result.Notes__c.contains('Closed automatically'));
     }
 
-    @isTest
+    @IsTest
     static void testFreshJobAppIsNotClosed() {
         Job_Application__c freshApp = new Job_Application__c(
             Status__c = 'Applied',
@@ -50,7 +50,7 @@ private class CloseStaleJobApplicationsQueueableTest {
         System.assertEquals('Applied', result.Status__c, 'This application should not be changed'); // Should NOT be changed
     }
 
-    @isTest
+    @IsTest
     static void testClosedJobAppIsNotTouched() {
         Job_Application__c closedApp = new Job_Application__c(
             Status__c = 'Closed',
@@ -69,4 +69,5 @@ private class CloseStaleJobApplicationsQueueableTest {
         System.assertEquals('Closed', result.Status__c, 'Should remain unchanged'); // Should remain unchanged
     }
 }
+
 
