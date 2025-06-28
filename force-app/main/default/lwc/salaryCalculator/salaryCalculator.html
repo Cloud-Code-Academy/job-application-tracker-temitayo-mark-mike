@@ -1,0 +1,157 @@
+<template>
+    <lightning-card title="💰 Salary Calculator" icon-name="utility:money" class="salary-calculator-card">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+            
+            <!-- Input Section -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <lightning-input
+                        type="number"
+                        label="Annual Salary"
+                        value={salary}
+                        onchange={handleSalaryChange}
+                        formatter="currency"
+                        step="1000"
+                        min="0"
+                        max="10000000"
+                        placeholder="Enter annual salary..."
+                        class="salary-input">
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Calculation Method</label>
+                        <div class="slds-form-element__control">
+                            <lightning-radio-group
+                                name="calculationMethod"
+                                label="Calculation Method"
+                                options={calculationMethods}
+                                value={selectedMethod}
+                                onchange={handleMethodChange}
+                                type="radio"
+                                variant="label-hidden">
+                            </lightning-radio-group>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div if:true={isCalculating} class="slds-text-align_center slds-m-bottom_medium">
+                <lightning-spinner alternative-text="Calculating..." size="small"></lightning-spinner>
+                <p class="slds-text-body_small slds-text-color_weak">Calculating your take-home pay...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div if:true={calculationError} class="slds-m-bottom_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>{calculationError}</h2>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div if:false={calculationError} class="results-container">
+                <div class="slds-text-heading_medium slds-m-bottom_small slds-text-align_center">
+                    Take-Home Pay Breakdown
+                </div>
+                
+                <!-- Tax Breakdown -->
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="calculation-result tax-result">
+                            <div class="result-icon">🏛️</div>
+                            <div class="result-label">Federal Tax</div>
+                            <div class="result-value">{formattedFederalTax}</div>
+                            <div class="result-percentage">({federalTaxPercentage}%)</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="calculation-result tax-result">
+                            <div class="result-icon">👥</div>
+                            <div class="result-label">Social Security</div>
+                            <div class="result-value">{formattedSocialSecurityTax}</div>
+                            <div class="result-percentage">({socialSecurityPercentage}%)</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="calculation-result tax-result">
+                            <div class="result-icon">🏥</div>
+                            <div class="result-label">Medicare</div>
+                            <div class="result-value">{formattedMedicareTax}</div>
+                            <div class="result-percentage">({medicarePercentage}%)</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="calculation-result total-tax-result">
+                            <div class="result-icon">📊</div>
+                            <div class="result-label">Total Taxes</div>
+                            <div class="result-value">{formattedTotalTax}</div>
+                            <div class="result-percentage">({totalTaxPercentage}%)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Take-Home Pay Results -->
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="calculation-result take-home-result">
+                            <div class="result-icon">📅</div>
+                            <div class="result-label">Yearly</div>
+                            <div class="result-value">{formattedYearlyTakeHome}</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="calculation-result take-home-result">
+                            <div class="result-icon">📆</div>
+                            <div class="result-label">Monthly</div>
+                            <div class="result-value">{formattedMonthlyTakeHome}</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="calculation-result take-home-result">
+                            <div class="result-icon">📋</div>
+                            <div class="result-label">Bi-Weekly</div>
+                            <div class="result-value">{formattedBiWeeklyTakeHome}</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="calculation-result take-home-result">
+                            <div class="result-icon">📄</div>
+                            <div class="result-label">Weekly</div>
+                            <div class="result-value">{formattedWeeklyTakeHome}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculation Method Info -->
+                <div class="slds-m-top_medium">
+                    <div class="slds-text-body_small slds-text-color_weak slds-text-align_center">
+                        <template if:true={isClientSideCalculation}>
+                            ⚡ Real-time estimate • For precise calculations, save the record
+                        </template>
+                        <template if:false={isClientSideCalculation}>
+                            ✅ Precise calculation using 2023 tax brackets
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="slds-m-top_medium slds-text-align_center">
+                <lightning-button
+                    variant="neutral"
+                    label="Reset"
+                    onclick={handleReset}
+                    class="slds-m-right_small">
+                </lightning-button>
+                <lightning-button
+                    variant="brand"
+                    label="Save to Record"
+                    onclick={handleSaveToRecord}
+                    disabled={isCalculating}>
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

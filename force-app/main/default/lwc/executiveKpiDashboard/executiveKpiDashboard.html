@@ -1,0 +1,278 @@
+<template>
+    <lightning-card title="📊 Executive KPI Dashboard" icon-name="utility:dashboard" class="executive-dashboard-card">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+            
+            <!-- Time Period Selector -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                    <lightning-combobox
+                        name="timePeriod"
+                        label="Time Period"
+                        value={selectedTimePeriod}
+                        placeholder="Select time period"
+                        options={timePeriodOptions}
+                        onchange={handleTimePeriodChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                    <lightning-button
+                        variant="brand"
+                        label="Generate Report"
+                        onclick={handleGenerateReport}
+                        disabled={isLoading}
+                        class="slds-m-top_large">
+                    </lightning-button>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                    <lightning-button
+                        variant="neutral"
+                        label="Export Dashboard"
+                        onclick={handleExportDashboard}
+                        disabled={isLoading}
+                        class="slds-m-top_large">
+                    </lightning-button>
+                </div>
+            </div>
+
+            <!-- Executive KPI Cards -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="kpi-card growth-card">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">📈</div>
+                            <div class="kpi-trend" data-trend={weekOverWeekTrend}>
+                                {weekOverWeekGrowth}%
+                            </div>
+                        </div>
+                        <div class="kpi-value">{thisWeekApplications}</div>
+                        <div class="kpi-label">This Week Applications</div>
+                        <div class="kpi-subtitle">Week over Week Growth</div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="kpi-card conversion-card">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">🎯</div>
+                            <div class="kpi-trend positive">
+                                {applicationToInterview}%
+                            </div>
+                        </div>
+                        <div class="kpi-value">{interviewingCount}</div>
+                        <div class="kpi-label">Interview Conversion</div>
+                        <div class="kpi-subtitle">Application to Interview Rate</div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="kpi-card success-card">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">🏆</div>
+                            <div class="kpi-trend positive">
+                                {overallSuccessRate}%
+                            </div>
+                        </div>
+                        <div class="kpi-value">{acceptedCount}</div>
+                        <div class="kpi-label">Offers Received</div>
+                        <div class="kpi-subtitle">Overall Success Rate</div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="kpi-card velocity-card">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">⚡</div>
+                            <div class="kpi-trend neutral">
+                                {averageResponseTime} days
+                            </div>
+                        </div>
+                        <div class="kpi-value">{formattedAppsPerWeek}</div>
+                        <div class="kpi-label">Weekly Velocity</div>
+                        <div class="kpi-subtitle">Applications per Week</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversion Funnel -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1">
+                    <div class="funnel-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">🔄 Conversion Funnel</h3>
+                        <div class="funnel-stages">
+                            <div class="funnel-stage applied-stage">
+                                <div class="stage-bar" style={appliedBarStyle}></div>
+                                <div class="stage-info">
+                                    <div class="stage-count">{appliedCount}</div>
+                                    <div class="stage-label">Applied</div>
+                                    <div class="stage-percentage">100%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="funnel-arrow">→</div>
+                            
+                            <div class="funnel-stage interviewing-stage">
+                                <div class="stage-bar" style={interviewingBarStyle}></div>
+                                <div class="stage-info">
+                                    <div class="stage-count">{interviewingCount}</div>
+                                    <div class="stage-label">Interviewing</div>
+                                    <div class="stage-percentage">{applicationToInterview}%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="funnel-arrow">→</div>
+                            
+                            <div class="funnel-stage negotiating-stage">
+                                <div class="stage-bar" style={negotiatingBarStyle}></div>
+                                <div class="stage-info">
+                                    <div class="stage-count">{negotiatingCount}</div>
+                                    <div class="stage-label">Negotiating</div>
+                                    <div class="stage-percentage">{interviewToNegotiation}%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="funnel-arrow">→</div>
+                            
+                            <div class="funnel-stage accepted-stage">
+                                <div class="stage-bar" style={acceptedBarStyle}></div>
+                                <div class="stage-info">
+                                    <div class="stage-count">{acceptedCount}</div>
+                                    <div class="stage-label">Accepted</div>
+                                    <div class="stage-percentage">{negotiationToAcceptance}%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market Insights -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="insights-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">🏢 Top Companies</h3>
+                        <div class="insights-list">
+                            <template for:each={topCompanies} for:item="company">
+                                <div key={company.name} class="insight-item">
+                                    <div class="insight-name">{company.name}</div>
+                                    <div class="insight-bar">
+                                        <div class="insight-fill" style={company.fillStyle}></div>
+                                    </div>
+                                    <div class="insight-count">{company.count}</div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="insights-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">💼 Top Positions</h3>
+                        <div class="insights-list">
+                            <template for:each={topPositions} for:item="position">
+                                <div key={position.name} class="insight-item">
+                                    <div class="insight-name">{position.name}</div>
+                                    <div class="insight-bar">
+                                        <div class="insight-fill" style={position.fillStyle}></div>
+                                    </div>
+                                    <div class="insight-count">{position.count}</div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forecasting -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1">
+                    <div class="forecast-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">🔮 Forecasting & Projections</h3>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <div class="forecast-metric">
+                                    <div class="forecast-icon">📅</div>
+                                    <div class="forecast-value">{projectedMonthlyApplications}</div>
+                                    <div class="forecast-label">Projected Monthly Applications</div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <div class="forecast-metric">
+                                    <div class="forecast-icon">📊</div>
+                                    <div class="forecast-value">{projectedQuarterlyApplications}</div>
+                                    <div class="forecast-label">Projected Quarterly Applications</div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <div class="forecast-metric">
+                                    <div class="forecast-icon">🎯</div>
+                                    <div class="forecast-value">{projectedMonthlyOffers}</div>
+                                    <div class="forecast-label">Projected Monthly Offers</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Indicators -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1">
+                    <div class="performance-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">⚡ Performance Indicators</h3>
+                        <div class="performance-grid">
+                            <div class="performance-item">
+                                <div class="performance-label">Market Diversification</div>
+                                <div class="performance-value">{marketDiversification} companies</div>
+                                <div class="performance-indicator good">Excellent</div>
+                            </div>
+                            <div class="performance-item">
+                                <div class="performance-label">Position Diversification</div>
+                                <div class="performance-value">{positionDiversification} roles</div>
+                                <div class="performance-indicator good">Strong</div>
+                            </div>
+                            <div class="performance-item">
+                                <div class="performance-label">Application Velocity</div>
+                                <div class="performance-value">{applicationsPerDay} per day</div>
+                                <div class="performance-indicator neutral">Steady</div>
+                            </div>
+                            <div class="performance-item">
+                                <div class="performance-label">Response Rate</div>
+                                <div class="performance-value">{applicationToInterview}%</div>
+                                <div class="performance-indicator" data-indicator={responseRateIndicator}>{responseRateText}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div if:true={isLoading} class="slds-text-align_center slds-m-top_medium">
+                <lightning-spinner alternative-text="Loading executive dashboard..." size="medium"></lightning-spinner>
+                <p class="slds-text-body_small slds-text-color_weak">Analyzing performance data...</p>
+            </div>
+
+            <!-- Error State -->
+            <div if:true={errorMessage} class="slds-m-top_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>❌ {errorMessage}</h2>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div if:true={showEmptyState} class="empty-state slds-text-align_center slds-m-top_large">
+                <div class="empty-state-icon">📊</div>
+                <h3 class="slds-text-heading_medium">No Performance Data</h3>
+                <p class="slds-text-body_regular slds-text-color_weak">
+                    Start tracking job applications to see executive-level insights and KPIs.
+                </p>
+                <lightning-button
+                    variant="brand"
+                    label="Add Applications"
+                    onclick={handleAddApplications}
+                    class="slds-m-top_medium">
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

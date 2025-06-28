@@ -1,0 +1,286 @@
+/* Salary Calculator Component Styles */
+
+.salary-calculator-card {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Input Styling */
+.salary-input {
+    font-size: 1.125rem;
+}
+
+.salary-input lightning-input {
+    --slds-c-input-text-font-size: 1.125rem;
+    --slds-c-input-text-font-weight: 500;
+}
+
+/* Results Container */
+.results-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid #dee2e6;
+}
+
+/* Calculation Result Cards */
+.calculation-result {
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #e5e5e5;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.calculation-result:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Result Icons */
+.result-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Result Labels */
+.result-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+/* Result Values */
+.result-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 0.25rem;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+}
+
+/* Result Percentages */
+.result-percentage {
+    font-size: 0.75rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Tax Result Styling */
+.tax-result {
+    border-left: 4px solid #dc3545;
+}
+
+.tax-result .result-value {
+    color: #dc3545;
+}
+
+.tax-result::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #dc3545, #fd7e14);
+}
+
+/* Total Tax Result */
+.total-tax-result {
+    border-left: 4px solid #fd7e14;
+}
+
+.total-tax-result .result-value {
+    color: #fd7e14;
+}
+
+.total-tax-result::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #fd7e14, #ffc107);
+}
+
+/* Take-Home Result Styling */
+.take-home-result {
+    border-left: 4px solid #28a745;
+}
+
+.take-home-result .result-value {
+    color: #28a745;
+    font-size: 1.75rem;
+}
+
+.take-home-result::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #28a745, #20c997);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .calculation-result {
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+    
+    .result-value {
+        font-size: 1.25rem;
+    }
+    
+    .take-home-result .result-value {
+        font-size: 1.5rem;
+    }
+    
+    .result-icon {
+        font-size: 1.5rem;
+    }
+    
+    .results-container {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .calculation-result {
+        padding: 0.75rem;
+    }
+    
+    .result-value {
+        font-size: 1.125rem;
+    }
+    
+    .take-home-result .result-value {
+        font-size: 1.25rem;
+    }
+    
+    .result-icon {
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .result-label {
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+}
+
+/* Animation for loading states */
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.calculation-result.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Focus and accessibility improvements */
+.calculation-result:focus-within {
+    outline: 2px solid #0176d3;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .calculation-result {
+        border: 2px solid #000;
+    }
+    
+    .result-value {
+        color: #000;
+        font-weight: 900;
+    }
+    
+    .tax-result .result-value {
+        color: #000;
+    }
+    
+    .take-home-result .result-value {
+        color: #000;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .calculation-result {
+        transition: none;
+    }
+    
+    .calculation-result:hover {
+        transform: none;
+    }
+    
+    .calculation-result.loading {
+        animation: none;
+    }
+}
+
+/* Dark mode support (if enabled in org) */
+@media (prefers-color-scheme: dark) {
+    .results-container {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        border-color: #4a5568;
+    }
+    
+    .calculation-result {
+        background: #1a202c;
+        border-color: #4a5568;
+        color: #e2e8f0;
+    }
+    
+    .result-value {
+        color: #e2e8f0;
+    }
+    
+    .result-label {
+        color: #a0aec0;
+    }
+    
+    .result-percentage {
+        color: #a0aec0;
+    }
+}
+
+/* Print styles */
+@media print {
+    .salary-calculator-card {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .calculation-result {
+        box-shadow: none;
+        border: 1px solid #000;
+        break-inside: avoid;
+    }
+    
+    .results-container {
+        background: white;
+        border: 1px solid #000;
+    }
+}

@@ -39,6 +39,9 @@ $RECYCLE.BIN/
 # Local environment variables
 .env
 
+# Private learning materials and credentials (NEVER COMMIT)
+private-learning/
+
 # Python Salesforce Functions
 **/__pycache__/
 **/.venv/

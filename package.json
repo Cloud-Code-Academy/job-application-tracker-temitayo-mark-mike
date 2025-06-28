@@ -13,7 +13,13 @@
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "postinstall": "husky install",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "org:setup": "sf config set target-org=myCapstoneOrg",
+    "org:deploy": "sf project deploy start --source-dir force-app/main/default",
+    "org:open": "sf org open --target-org myCapstoneOrg",
+    "org:status": "sf org display --target-org myCapstoneOrg",
+    "org:assign-permset": "sf org assign permset --name Job_Application_Manager",
+    "setup:complete": "npm run org:setup && npm run org:deploy && npm run org:assign-permset"
   },
   "devDependencies": {
     "@lwc/eslint-plugin-lwc": "^1.1.2",

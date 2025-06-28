@@ -1,0 +1,184 @@
+<template>
+    <lightning-card title="📊 Application Analytics Dashboard" icon-name="utility:chart" class="analytics-dashboard-card">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+            
+            <!-- Summary Statistics -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="metric-card total-applications">
+                        <div class="metric-icon">📋</div>
+                        <div class="metric-value">{totalApplications}</div>
+                        <div class="metric-label">Total Applications</div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="metric-card active-applications">
+                        <div class="metric-icon">🔄</div>
+                        <div class="metric-value">{activeApplications}</div>
+                        <div class="metric-label">Active Applications</div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="metric-card interview-rate">
+                        <div class="metric-icon">🎯</div>
+                        <div class="metric-value">{interviewRate}%</div>
+                        <div class="metric-label">Interview Rate</div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="metric-card success-rate">
+                        <div class="metric-icon">🏆</div>
+                        <div class="metric-value">{successRate}%</div>
+                        <div class="metric-label">Success Rate</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Breakdown Chart -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="chart-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">Application Status Breakdown</h3>
+                        <div class="status-chart">
+                            <template for:each={statusBreakdown} for:item="status">
+                                <div key={status.label} class="status-bar-container">
+                                    <div class="status-label">
+                                        <span class="status-dot" style={status.colorStyle}></span>
+                                        {status.label}
+                                    </div>
+                                    <div class="status-bar">
+                                        <div class="status-fill" style={status.fillStyle}></div>
+                                    </div>
+                                    <div class="status-count">{status.count}</div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="activity-container">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">Recent Activity</h3>
+                        <div class="activity-list">
+                            <template for:each={recentActivity} for:item="activity">
+                                <div key={activity.id} class="activity-item">
+                                    <div class="activity-icon" style={activity.iconStyle}>
+                                        {activity.icon}
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">{activity.title}</div>
+                                        <div class="activity-subtitle">{activity.subtitle}</div>
+                                        <div class="activity-time">{activity.timeAgo}</div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application Pipeline -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">Application Pipeline</h3>
+                <div class="pipeline-container">
+                    <template for:each={pipelineStages} for:item="stage">
+                        <div key={stage.name} class="pipeline-stage">
+                            <div class="stage-header">
+                                <div class="stage-name">{stage.name}</div>
+                                <div class="stage-count">{stage.count}</div>
+                            </div>
+                            <div class="stage-applications">
+                                <template for:each={stage.applications} for:item="app">
+                                    <div key={app.id} class="pipeline-application" onclick={handleApplicationClick} data-id={app.id}>
+                                        <div class="app-company">{app.company}</div>
+                                        <div class="app-position">{app.position}</div>
+                                        <div class="app-date">{app.dateFormatted}</div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Salary Analysis -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">Salary Analysis</h3>
+                <div class="salary-analysis-container">
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                            <div class="salary-metric">
+                                <div class="salary-value">{averageSalary}</div>
+                                <div class="salary-label">Average Salary</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                            <div class="salary-metric">
+                                <div class="salary-value">{highestSalary}</div>
+                                <div class="salary-label">Highest Offer</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                            <div class="salary-metric">
+                                <div class="salary-value">{salaryRange}</div>
+                                <div class="salary-label">Salary Range</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="slds-text-align_center">
+                <lightning-button
+                    variant="brand"
+                    label="Add New Application"
+                    onclick={handleNewApplication}
+                    class="slds-m-right_small">
+                </lightning-button>
+                <lightning-button
+                    variant="neutral"
+                    label="Export Data"
+                    onclick={handleExportData}
+                    class="slds-m-right_small">
+                </lightning-button>
+                <lightning-button
+                    variant="neutral"
+                    label="Refresh Analytics"
+                    onclick={handleRefresh}
+                    disabled={isLoading}>
+                </lightning-button>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div if:true={isLoading} class="slds-text-align_center slds-m-top_medium">
+                <lightning-spinner alternative-text="Loading analytics..." size="small"></lightning-spinner>
+                <p class="slds-text-body_small slds-text-color_weak">Analyzing your applications...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div if:true={errorMessage} class="slds-m-top_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>❌ {errorMessage}</h2>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div if:true={showEmptyState} class="empty-state slds-text-align_center slds-m-top_large">
+                <div class="empty-state-icon">📊</div>
+                <h3 class="slds-text-heading_medium">No Application Data</h3>
+                <p class="slds-text-body_regular slds-text-color_weak">
+                    Start tracking your job applications to see analytics and insights.
+                </p>
+                <lightning-button
+                    variant="brand"
+                    label="Add Your First Application"
+                    onclick={handleNewApplication}
+                    class="slds-m-top_medium">
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>
