@@ -47,3 +47,6 @@ $RECYCLE.BIN/
 .vscode/
 .husky/
 diagnostic-files/
+
+# IlluminationCloud
+*.ts
