@@ -27,7 +27,7 @@ public inherited sharing class Utilities {
 
     // Sends 'Error' email to Sys Admins and Users with IsErrorEmailRecipient__c = true.
     public static void sendErrorEmail(String errorSubject, String errorBody) {
-        Messaging.SendEmailResult listErrorEmailResult = sendEmail(getErrorEmailRecipients(), null, errorSubject, errorBody);
+        List<Messaging.SendEmailResult> listErrorEmailResult = sendEmail(getErrorEmailRecipients(), null, errorSubject, errorBody);
     }
 
     // Returns a List<> of SendEmailResults from sending single email.    
@@ -57,7 +57,7 @@ public inherited sharing class Utilities {
         if(toAddresses.size() > 0){
             listEmailResult = Messaging.sendEmail(new Messaging.SingleEmailMessage[] {emailMessage});
         } else {
-            System.debug('Warning: No email recipients were provided. No email was sent')
+            System.debug('Warning: No email recipients were provided. No email was sent');
         }
         return listEmailResult;
     }

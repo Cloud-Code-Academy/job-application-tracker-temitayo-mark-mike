@@ -9,5 +9,7 @@
 // System.debug('Hello World!');
 // System.debug('My name is ' + tempvar);
 
-Date todayDate = Utilities.addWorkingDays(Date.today(), 4);
-System.debug('todayDate: ' + todayDate.toString());
+// Date todayDate = Utilities.addWorkingDays(Date.today(), 4);
+// System.debug('todayDate: ' + todayDate.toString());
+
+Utilities.sendErrorEmail('test error email subject', 'test error email body');
