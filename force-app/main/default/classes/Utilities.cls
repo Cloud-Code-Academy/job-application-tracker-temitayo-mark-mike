@@ -1,9 +1,69 @@
 public inherited sharing class Utilities {
     
+    // Local declarations
     // Create instance of org cache partition.
     public static Cache.OrgPartition orgPart = Cache.Org.getPartition('local.JobApplTracker');
     
-    // Adds working/business days to a date.  
+    // Returns a List<String> of email addresses of Sys Admins and Users with IsErrorEmailRecipient__c = true.  
+    public static List<String> getErrorEmailRecipients() {
+        // Get the List<String> of email addresses from the Org Cache
+        List<String> listEmailString = (List<String>) orgPart.get('ErrorEmailAddressString');
+        // If the Cache is null, 'refill' it
+        if (listEmailString == null) {
+            List<String> listRefreshEmailString = new List<String>(); 
+            List<User> listErrorUsers = [SELECT Email FROM User WHERE Profile.Name = 'System Administrator' OR IsErrorEmailRecipient__c = true LIMIT 150]; 
+            for (User usr : listErrorUsers) {
+                if (usr.Email != null) { 
+                    listRefreshEmailString.add(usr.Email);
+                }
+            }
+            // Refresh the Org Cache 
+            orgPart.put('ErrorEmailAddressString', listRefreshEmailString, 86400);
+            return listRefreshEmailString;
+        } else {
+            return listEmailString;
+        }
+    }
+
+    // Sends 'Error' email to Sys Admins and Users with IsErrorEmailRecipient__c = true.
+    public static void sendErrorEmail(String errorSubject, String errorBody) {
+        Messaging.SendEmailResult listErrorEmailResult = sendEmail(getErrorEmailRecipients(), null, errorSubject, errorBody);
+    }
+
+    // Returns a List<> of SendEmailResults from sending single email.    
+    public static List<Messaging.SendEmailResult> sendEmail(List<String> toAddresses, String fromAddress, String subject, String body) {
+    
+        // Create instance of Single Email message
+        Messaging.SingleEmailMessage emailMessage = new Messaging.SingleEmailMessage();
+
+        // If the fromAddress is not provided (=null), then use the Org Wide Email Address (assumes only one (1)).
+        if(fromAddress == null) {
+            List<OrgWideEmailAddress> listAddr = [SELECT Id FROM OrgWideEmailAddress LIMIT 1];
+            if (listAddr.size() > 0) {
+                emailMessage.setOrgWideEmailAddressId(listAddr[0].Id);
+            } else {
+                throw new IllegalArgumentException('Failed to find OrgWideEmailAddress: ' + JSON.serializePretty(listAddr));
+            }
+        }
+
+        // Set parts of email message
+        emailMessage.setSubject(subject);
+        emailMessage.setPlainTextBody(body);
+        emailMessage.setToAddresses(toAddresses);
+
+        // Intantiate a List<> to hold the results of the email sent (one result per recipient)
+        List<Messaging.SendEmailResult> listEmailResult = new List<Messaging.SendEmailResult>();
+    
+        if(toAddresses.size() > 0){
+            listEmailResult = Messaging.sendEmail(new Messaging.SingleEmailMessage[] {emailMessage});
+        } else {
+            System.debug('Warning: No email recipients were provided. No email was sent')
+        }
+        return listEmailResult;
+    }
+
+    
+    // Adds working/business days to a date and returns the later (daysToAdd > 0) or earlier (daysToAdd < 0) date.
     public static Date addWorkingDays (Date startingDate, Integer daysToAdd) {
         Integer count = 0;
         if(daysToAdd > 0) {
@@ -123,30 +183,4 @@ public inherited sharing class Utilities {
         return result;
     }
 
-    // Returns a List<> of SendEmailResults from sending single email.    
-    public static Messaging.SendEmailResult [] sendEmail(List<String> toAddresses, String fromAddress, String subject, String body) {
-    
-        Messaging.SingleEmailMessage emailMessage = new Messaging.SingleEmailMessage();
-
-        if(fromAddress != null) {
-            List<OrgWideEmailAddress> addresses = [SELECT Id FROM OrgWideEmailAddress WHERE Address = :fromAddress LIMIT 1];
-            if(addresses.size() > 0) {
-                email.setOrgWideEmailAddressId(addresses[0].Id);
-            } else {
-                throw new IllegalArgumentException('Failed to find OrgWideEmailAddress: ' + fromAddress);
-            }
-        }
-
-        emailMessage.setSubject(subject);
-        emailMessage.setPlainTextBody(body);
-        emailMessage.setFileAttachments(attachments);
-        emailMessage.setToAddresses( toAddresses );
-
-        Messaging.SendEmailResult [] r;
-    
-        if(toAddresses.size() > 0){
-            r = Messaging.sendEmail(new Messaging.SingleEmailMessage[] {emailMessage});
-        }
-        return r;
-    }
 }
