@@ -1,15 +1,21 @@
 public inherited sharing class Utilities {
     
+    // **********************************************************************************************************
     // Local declarations
     // Create instance of org cache partition.
     public static Cache.OrgPartition orgPart = Cache.Org.getPartition('local.JobApplTracker');
     
+    // **********************************************************************************************************
     // Returns a List<String> of email addresses of Sys Admins and Users with IsErrorEmailRecipient__c = true.  
     public static List<String> getErrorEmailRecipients() {
         // Get the List<String> of email addresses from the Org Cache
         List<String> listEmailString = (List<String>) orgPart.get('ErrorEmailAddressString');
         // If the Cache is null, 'refill' it
         if (listEmailString == null) {
+        
+            
+            // TO DO - combine lines 17(18?) -> 25 into new method, can be used elsewhere
+            // List<User> listErrorUsers = updateErrorEmailInOrgPart()
             List<String> listRefreshEmailString = new List<String>(); 
             List<User> listErrorUsers = [SELECT Email FROM User WHERE Profile.Name = 'System Administrator' OR IsErrorEmailRecipient__c = true LIMIT 150]; 
             for (User usr : listErrorUsers) {
@@ -19,17 +25,31 @@ public inherited sharing class Utilities {
             }
             // Refresh the Org Cache 
             orgPart.put('ErrorEmailAddressString', listRefreshEmailString, 86400);
+            // *********************************************************************|
+
             return listRefreshEmailString;
+
         } else {
+
             return listEmailString;
+
         }
     }
 
+    // **********************************************************************************************************
+    public static List<String> updateErrorEmailInOrgPart(List<User> listEmailErrorUsers) {
+        // Parse the List<User> and populate a List<String> of email addresses, then update the OrgPart
+        List<String> tempStringList = new List<String>();
+        return tempStringList;
+    }
+
+    // **********************************************************************************************************
     // Sends 'Error' email to Sys Admins and Users with IsErrorEmailRecipient__c = true.
     public static void sendErrorEmail(String errorSubject, String errorBody) {
         List<Messaging.SendEmailResult> listErrorEmailResult = sendEmail(getErrorEmailRecipients(), null, errorSubject, errorBody);
     }
 
+    // **********************************************************************************************************
     // Returns a List<> of SendEmailResults from sending single email.    
     public static List<Messaging.SendEmailResult> sendEmail(List<String> toAddresses, String fromAddress, String subject, String body) {
     
@@ -63,6 +83,7 @@ public inherited sharing class Utilities {
     }
 
     
+    // **********************************************************************************************************
     // Adds working/business days to a date and returns the later (daysToAdd > 0) or earlier (daysToAdd < 0) date.
     public static Date addWorkingDays (Date startingDate, Integer daysToAdd) {
         Integer count = 0;
@@ -84,6 +105,7 @@ public inherited sharing class Utilities {
         return startingDate;
     }
 
+    // **********************************************************************************************************
     // Accesses the Holiday sObj data for the org, used in addworkingdays().
     public static Boolean isHolidayOrWeekend(Date d) {
         List<Date> holidayDates = (List<Date>) orgPart.get('HolidayList');
@@ -111,12 +133,14 @@ public inherited sharing class Utilities {
         }
     }
 
+    // **********************************************************************************************************
     // Returns a Salesforce date based on various string formats.
     public static Date convertStringToDate (String dateString) {
         Date result = convertStringToDatetime(dateString).date();
         return result;
     }
 
+    // **********************************************************************************************************
     // Returns a Salesforce datetime based on various string formats. 
     public static Datetime convertStringToDatetime (String datetimeString) {
         String originalValue = datetimeString;
