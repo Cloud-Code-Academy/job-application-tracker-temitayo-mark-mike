@@ -1,30 +1,30 @@
 <template>
   <lightning-card title="Take-Home Pay Estimator">
-    <div class="slds-p-horizontal_medium slds-p-vertical_medium">
+    <div class="slds-var-p-horizontal_medium slds-var-p-vertical_medium">
       <lightning-slider label="Salary ($)" min="50000" max="200000" step="10000" value={salary} onchange={handleSalaryChange}></lightning-slider>
-      <div class="slds-text-body_regular slds-m-top_small colored-text">Selected Salary: {formattedSalary}</div>
-      <div class="slds-m-top_medium slds-box slds-theme_default slds-p-around_medium">
-        <div class="slds-m-bottom_medium">
+      <div class="slds-text-body_regular slds-var-m-top_small colored-text">Selected Salary: {formattedSalary}</div>
+      <div class="slds-var-m-top_medium slds-box slds-theme_default slds-var-p-around_medium">
+        <div class="slds-var-m-bottom_medium">
           <strong>Federal Tax:</strong>
           <div class="slds-text-body_regular">${federalTax}</div>
         </div>
-        <div class="slds-m-bottom_medium">
+        <div class="slds-var-m-bottom_medium">
           <strong>Social Security:</strong>
           <div class="slds-text-body_regular">${socialSecurity}</div>
         </div>
-        <div class="slds-m-bottom_medium">
+        <div class="slds-var-m-bottom_medium">
           <strong>Medicare:</strong>
           <div class="slds-text-body_regular">${medicare}</div>
         </div>
-        <div class="slds-m-bottom_medium">
+        <div class="slds-var-m-bottom_medium">
           <strong>Yearly Take-Home:</strong>
           <div class="slds-text-body_regular">${takeHome}</div>
         </div>
-        <div class="slds-m-bottom_medium">
+        <div class="slds-var-m-bottom_medium">
           <strong>6-Month Take-Home:</strong>
           <div class="slds-text-body_regular">${sixMonth}</div>
         </div>
-        <div class="slds-m-bottom_medium">
+        <div class="slds-var-m-bottom_medium">
           <strong>Monthly Take-Home:</strong>
           <div class="slds-text-body_regular">${monthly}</div>
         </div>
