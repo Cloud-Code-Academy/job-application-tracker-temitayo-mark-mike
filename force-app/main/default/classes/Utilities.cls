@@ -6,14 +6,27 @@ public inherited sharing class Utilities {
     public static Cache.OrgPartition orgPart = Cache.Org.getPartition('local.JobApplTracker');
     
     // **********************************************************************************************************
+    // Returns a List<Job_> of email addresses of Sys Admins and Users with IsErrorEmailRecipient__c = true.  
+    public static List<Job_Application_Task__c> getJobAppTasks() {
+        // Get the Job Appl. Tasks from the Org Cache
+        List<Job_Application_Task__c> listJobApplTasks = (List<Job_Application_Task__c>) orgPart.get('JobApplTasks');
+        // If the Cache is null, 'refill' it
+        if (listJobApplTasks == null) {
+            List<Job_Application_Task__c> jobApplTasks = [SELECT Id, Job_Appl_Status__c, Task_Comment__c, Task_Priority__c, Task_Subject__c FROM Job_Application_Task__c ];
+            orgPart.put('JobApplTasks', jobApplTasks, 86400);
+            return jobApplTasks;
+        } else {
+            return listJobApplTasks;
+        }
+    }
+    
+    // **********************************************************************************************************
     // Returns a List<String> of email addresses of Sys Admins and Users with IsErrorEmailRecipient__c = true.  
     public static List<String> getErrorEmailRecipients() {
         // Get the List<String> of email addresses from the Org Cache
         List<String> listEmailString = (List<String>) orgPart.get('ErrorEmailAddressString');
         // If the Cache is null, 'refill' it
         if (listEmailString == null) {
-        
-            
             // TO DO - combine lines 17(18?) -> 25 into new method, can be used elsewhere
             // List<User> listErrorUsers = updateErrorEmailInOrgPart()
             List<String> listRefreshEmailString = new List<String>(); 

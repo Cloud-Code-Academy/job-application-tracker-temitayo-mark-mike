@@ -32,7 +32,7 @@ private class UtilitiesTest {
             LastName = 'testUserLast',
             Alias = 'testU',
             ProfileId= testProfile.Id,
-            Email = 'testUser@ccatest.com',
+            Email = 'testuser@ccatest.com',
             IsErrorEmailRecipient__c = true,
             TimeZoneSidKey = 'America/Chicago',
             LocaleSidKey = 'en_US',
