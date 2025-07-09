@@ -1,5 +1,6 @@
 <template>
   <lightning-card title="Take-Home Pay Estimator">
+<<<<<<< HEAD
     <div class="slds-var-p-horizontal_medium slds-var-p-vertical_medium">
       <lightning-slider label="Salary ($)" min="50000" max="200000" step="10000" value={salary} onchange={handleSalaryChange}></lightning-slider>
       <div class="slds-text-body_regular slds-var-m-top_small colored-text">Selected Salary: {formattedSalary}</div>
@@ -38,3 +39,55 @@
     </div>
   </lightning-card>
 </template>
+=======
+    <div class="slds-p-horizontal_medium slds-p-vertical_medium">
+      <!-- Salary Slider for user input -->
+      <lightning-slider label="Salary ($)" min="50000" max="200000" step="1000" value={salary} onchange={handleSalaryChange}></lightning-slider>
+      <!-- Display selected salary -->
+      <div class="slds-text-body_regular slds-m-top_small">Selected Salary: <span class="colored-text">{formattedSalary}</span></div>
+      <!-- Display calculated tax and take-home pay details -->
+      <div class="slds-m-top_medium slds-box slds-theme_default slds-p-around_medium">
+        <!-- Display Federal Tax -->
+        <div class="slds-m-bottom_medium">
+          <strong>Federal Tax:</strong>
+          <div class="slds-text-body_regular">${federalTax}</div>
+        </div>
+        <!-- Display Social Security deduction -->
+        <div class="slds-m-bottom_medium">
+          <strong>Social Security:</strong>
+          <div class="slds-text-body_regular">${socialSecurity}</div>
+        </div>
+        <!-- Display Medicare deduction -->
+        <div class="slds-m-bottom_medium">
+          <strong>Medicare:</strong>
+          <div class="slds-text-body_regular">${medicare}</div>
+        </div>
+        <!-- Display Yearly Take-Home Pay -->
+        <div class="slds-m-bottom_medium">
+          <strong>Yearly Take-Home:</strong>
+          <div class="slds-text-body_regular">${takeHome}</div>
+        </div>
+        <!-- Display 6-Month Take-Home Pay -->
+        <div class="slds-m-bottom_medium">
+          <strong>6-Month Take-Home:</strong>
+          <div class="slds-text-body_regular">${sixMonth}</div>
+        </div>
+        <!-- Display Monthly Take-Home Pay -->
+        <div class="slds-m-bottom_medium">
+          <strong>Monthly Take-Home:</strong>
+          <div class="slds-text-body_regular">${monthly}</div>
+        </div>
+        <!-- Display Bi-Weekly Take-Home Pay -->
+        <div>
+          <strong>Bi-Weekly Take-Home:</strong>
+          <div class="slds-text-body_regular">${biWeekly}</div>
+        </div>
+      </div>
+      <!-- Button to stamp values to Job Record -->
+      <div class="slds-m-top_medium">
+        <lightning-button variant="brand" label="Stamp Values to Job Record" onclick={handleStampValues}></lightning-button>
+      </div>
+    </div>
+  </lightning-card>
+</template>
+>>>>>>> mark_branch

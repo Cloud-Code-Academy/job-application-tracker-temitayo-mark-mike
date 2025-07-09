@@ -1,5 +1,10 @@
 import { LightningElement, api, wire } from 'lwc';
+<<<<<<< HEAD
 import { getRecord } from 'lightning/uiRecordApi';
+=======
+import { getRecord, updateRecord } from 'lightning/uiRecordApi';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+>>>>>>> mark_branch
 
 const FIELDS = ['Job__c.Salary__c'];
 
@@ -7,6 +12,10 @@ export default class TakeHomePayEstimator extends LightningElement {
   @api recordId;
   salary = 50000;
 
+<<<<<<< HEAD
+=======
+  // Wire adapter to fetch the job record
+>>>>>>> mark_branch
   @wire(getRecord, { recordId: '$recordId', fields: FIELDS })
   job({ data, error }) {
     if (data && data.fields.Salary__c && data.fields.Salary__c.value) {
@@ -14,26 +23,50 @@ export default class TakeHomePayEstimator extends LightningElement {
     }
   }
 
+<<<<<<< HEAD
+=======
+  // Handler for salary change event
+>>>>>>> mark_branch
   handleSalaryChange(event) {
     this.salary = Number(event.target.value);
   }
 
+<<<<<<< HEAD
+=======
+  // Getter for formatted salary
+>>>>>>> mark_branch
   get formattedSalary() {
     return this.salary.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
+<<<<<<< HEAD
+=======
+  // Getter for federal tax
+>>>>>>> mark_branch
   get federalTax() {
     return parseFloat(this.calculateFederalTax(this.salary)).toFixed(2);
   }
 
+<<<<<<< HEAD
+=======
+  // Getter for social security tax
+>>>>>>> mark_branch
   get socialSecurity() {
     return (this.salary * 0.062).toFixed(2);
   }
 
+<<<<<<< HEAD
+=======
+  // Getter for medicare tax
+>>>>>>> mark_branch
   get medicare() {
     return (this.salary * 0.0145).toFixed(2);
   }
 
+<<<<<<< HEAD
+=======
+  // Getter for take-home pay
+>>>>>>> mark_branch
   get takeHome() {
     const tax = parseFloat(this.calculateFederalTax(this.salary));
     const ss = this.salary * 0.062;
@@ -41,18 +74,34 @@ export default class TakeHomePayEstimator extends LightningElement {
     return (this.salary - tax - ss - medicare).toFixed(2);
   }
 
+<<<<<<< HEAD
+=======
+  // Getter for 6-month take-home pay
+>>>>>>> mark_branch
   get sixMonth() {
     return (parseFloat(this.takeHome) / 2).toFixed(2);
   }
 
+<<<<<<< HEAD
+=======
+  // Getter for monthly take-home pay
+>>>>>>> mark_branch
   get monthly() {
     return (parseFloat(this.takeHome) / 12).toFixed(2);
   }
 
+<<<<<<< HEAD
+=======
+  // Getter for bi-weekly take-home pay
+>>>>>>> mark_branch
   get biWeekly() {
     return (parseFloat(this.takeHome) / 26).toFixed(2);
   }
 
+<<<<<<< HEAD
+=======
+  // Method to calculate federal tax based on income
+>>>>>>> mark_branch
   calculateFederalTax(income) {
     const brackets = [
       { limit: 11000, rate: 0.10 },
@@ -79,4 +128,46 @@ export default class TakeHomePayEstimator extends LightningElement {
 
     return tax;
   }
+<<<<<<< HEAD
 }
+=======
+
+  // Method to handle stamping values to the job record
+  handleStampValues() {
+    const fields = {
+      Id: this.recordId,
+      Salary__c: this.salary,
+      Federal_Tax__c: parseFloat(this.federalTax),
+      Medicare_Tax__c: parseFloat(this.medicare),
+      Social_Security_Tax__c: parseFloat(this.socialSecurity),
+      Take_Home_Pay_Yearly__c: parseFloat(this.takeHome),
+      Take_Home_Pay_Monthly__c: parseFloat(this.monthly),
+      Take_Home_Pay_Bi_Weekly__c: parseFloat(this.biWeekly),
+      Take_Home_Pay_6_Month__c: parseFloat(this.sixMonth)
+    };
+
+    const recordInput = { fields };
+
+    updateRecord(recordInput)
+      .then(() => {
+        this.dispatchEvent(
+          new ShowToastEvent({
+            title: 'Success',
+            message: 'Values stamped to Job record successfully.',
+            variant: 'success'
+          })
+        );
+      })
+      .catch(error => {
+        this.dispatchEvent(
+          new ShowToastEvent({
+            title: 'Error updating record',
+            message: error.body.message,
+            variant: 'error'
+          })
+        );
+      });
+  }
+}
+
+>>>>>>> mark_branch

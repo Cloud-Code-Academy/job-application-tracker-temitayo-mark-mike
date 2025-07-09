@@ -130,7 +130,11 @@
         <actionName>View</actionName>
         <comment>Action override created by Lightning App Builder during activation.</comment>
         <content>Job_Record_Page</content>
+<<<<<<< HEAD
         <formFactor>Small</formFactor>
+=======
+        <formFactor>Large</formFactor>
+>>>>>>> mark_branch
         <skipRecordTypeSelect>false</skipRecordTypeSelect>
         <type>Flexipage</type>
     </actionOverrides>
@@ -138,7 +142,11 @@
         <actionName>View</actionName>
         <comment>Action override created by Lightning App Builder during activation.</comment>
         <content>Job_Record_Page</content>
+<<<<<<< HEAD
         <formFactor>Large</formFactor>
+=======
+        <formFactor>Small</formFactor>
+>>>>>>> mark_branch
         <skipRecordTypeSelect>false</skipRecordTypeSelect>
         <type>Flexipage</type>
     </actionOverrides>
@@ -158,7 +166,11 @@
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
+<<<<<<< HEAD
     <externalSharingModel>ControlledByParent</externalSharingModel>
+=======
+    <externalSharingModel>Private</externalSharingModel>
+>>>>>>> mark_branch
     <label>Job</label>
     <nameField>
         <label>Job Name</label>
@@ -167,6 +179,10 @@
     </nameField>
     <pluralLabel>Jobs</pluralLabel>
     <searchLayouts></searchLayouts>
+<<<<<<< HEAD
     <sharingModel>ControlledByParent</sharingModel>
+=======
+    <sharingModel>ReadWrite</sharingModel>
+>>>>>>> mark_branch
     <visibility>Public</visibility>
 </CustomObject>

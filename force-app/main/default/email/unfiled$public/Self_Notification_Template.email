@@ -1,0 +1,17 @@
+<messaging:emailTemplate subject="Action Required: Candidate Follow-Up" recipientType="User" relatedToType="Event">
+    <messaging:htmlEmailBody >
+        <p>Hello {!User.FirstName},</p>
+
+        <p>This is a system-generated reminder regarding an interview event:</p>
+
+        <ul>
+            <li><strong>Subject:</strong> {!Event.Subject}</li>
+            <li><strong>Scheduled At:</strong> {!Event.StartDateTime}</li>
+        </ul>
+
+        <p>Please follow up with the candidate as needed.</p>
+
+        <p>Thanks,<br/>
+        TalentOps Automation</p>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>

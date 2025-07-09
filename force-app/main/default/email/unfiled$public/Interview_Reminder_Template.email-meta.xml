@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Interview Reminder Template</name>
+    <style>none</style>
+    <subject>Reminder: Upcoming Interview Scheduled</subject>
+    <textOnly>Hi {!Contact.FirstName},
+
+This is a friendly reminder that you have an upcoming interview scheduled:
+
+Subject: {!Event.Subject}
+Date &amp; Time: {!Event.StartDateTime}
+
+Please ensure you&apos;re prepared and available at the scheduled time. Let us know if you need to reschedule.
+
+Best regards,
+The Talent Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>
