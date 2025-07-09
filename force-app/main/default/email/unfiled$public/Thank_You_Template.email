@@ -1,0 +1,12 @@
+<messaging:emailTemplate subject="Thank You for Interviewing with Us" recipientType="Contact" relatedToType="Event">
+    <messaging:htmlEmailBody >
+        <p>Hi {!Contact.FirstName},</p>
+
+        <p>Thank you for taking the time to interview with us regarding <strong>{!Event.Subject}</strong>.</p>
+
+        <p>We truly appreciate your interest and the insights you shared. Our team will be in touch soon regarding next steps.</p>
+
+        <p>Best wishes,<br/>
+        The Hiring Team</p>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>

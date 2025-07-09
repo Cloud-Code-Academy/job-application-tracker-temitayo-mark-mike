@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Self Notification Template</name>
+    <style>none</style>
+    <subject>Action Required: Candidate Follow-Up</subject>
+    <textOnly>Hello {!User.FirstName},
+
+This is a system-generated reminder regarding an interview event:
+
+Subject: {!Event.Subject}
+Scheduled At: {!Event.StartDateTime}
+
+Please follow up with the candidate as needed.
+
+Thanks,
+TalentOps Automation</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

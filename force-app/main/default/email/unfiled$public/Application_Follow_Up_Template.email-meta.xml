@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Application Follow Up Template</name>
+    <style>none</style>
+    <subject>Follow-Up on Your Application</subject>
+    <textOnly>Hi {!Contact.FirstName},
+
+We wanted to follow up on your application related to {!Event.Subject}.
+
+We’re continuing our review and will reach out soon with any updates. In the meantime, feel free to contact us if you have any questions.
+
+Thanks again for your interest in joining our team!
+
+Sincerely,
+The Recruiting Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Thank You Template</name>
+    <style>none</style>
+    <subject>Thank You for Interviewing with Us</subject>
+    <textOnly>Hi {!Contact.FirstName},
+
+Thank you for taking the time to interview with us regarding {!Event.Subject}.
+
+We truly appreciate your interest and the insights you shared. Our team will be in touch soon regarding next steps.
+
+Best wishes,
+The Hiring Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

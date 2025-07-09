@@ -1,0 +1,14 @@
+<messaging:emailTemplate subject="Follow-Up on Your Application" recipientType="Contact" relatedToType="Event">
+    <messaging:htmlEmailBody >
+        <p>Hi {!Contact.FirstName},</p>
+
+        <p>We wanted to follow up on your application related to <strong>{!Event.Subject}</strong>.</p>
+
+        <p>We’re continuing our review and will reach out soon with any updates. In the meantime, feel free to contact us if you have any questions.</p>
+
+        <p>Thanks again for your interest in joining our team!</p>
+
+        <p>Sincerely,<br/>
+        The Recruiting Team</p>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>
