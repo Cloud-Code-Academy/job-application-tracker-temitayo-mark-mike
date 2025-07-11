@@ -1,9 +1,12 @@
 public class JobApplicationTriggerHandler extends TriggerHandler {
+    
+    // Local declarations
     private List<Job_Application__c> jobApplTriggerNew;
     private List<Job_Application__c> jobApplTriggerOld;
     private Map<Id,Job_Application__c> jobApplTriggerNewMap;
     private Map<Id,Job_Application__c> jobApplTriggerOldMap;
 
+    // Constructor
     public JobApplicationTriggerHandler() {
         this.jobApplTriggerNew = (List<Job_Application__c>) Trigger.new;
         this.jobApplTriggerOld = (List<Job_Application__c>) Trigger.old;
@@ -12,14 +15,20 @@ public class JobApplicationTriggerHandler extends TriggerHandler {
     }
  
     public override void beforeInsert() {
-        //Job_Application__cHelper.testJob_Application__cMethod(acctTriggerNew);
+       
     }
 
     public override void afterInsert() {
+        // Needs to be *after* context so Id's are established.  These are in Trigger.new
+        JobApplicationHelper.createJobAppTasksAfterInsert(jobApplTriggerNew);
     }
 
     public override void beforeUpdate() {
-        //Job_Application__cHelper.testJob_Application__cMethod(acctTriggerNew);
+        //JobApplicationHelper.createJobAppTasksBeforeUpdate(jobApplTriggerOld, jobApplTriggerNew);
+    }
+    
+    public override void afterUpdate() {
+        
     }
 
     public override void beforeDelete() {

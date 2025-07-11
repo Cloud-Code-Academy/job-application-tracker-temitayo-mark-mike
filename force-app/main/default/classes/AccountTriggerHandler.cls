@@ -13,14 +13,14 @@ public class AccountTriggerHandler extends TriggerHandler {
     }
  
     public override void beforeInsert() {
-        AccountHelper.testAccountMethod(acctTriggerNew);
+        //AccountHelper.testAccountMethod(acctTriggerNew);
     }
 
     public override void afterInsert() {
     }
 
     public override void beforeUpdate() {
-        AccountHelper.testAccountMethod(acctTriggerNew);
+       //AccountHelper.testAccountMethod(acctTriggerNew);
     }
 
     public override void beforeDelete() {

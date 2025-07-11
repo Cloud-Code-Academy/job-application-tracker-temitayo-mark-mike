@@ -13,22 +13,27 @@ public with sharing class JobApplicationTaskTriggerHandler extends TriggerHandle
     }
  
     public override void beforeInsert() {
-        //Job_Application_Task__cHelper.testJob_Application_Task__cMethod(acctTriggerNew);
     }
 
     public override void afterInsert() {
+        Utilities.updateJobApplTasks();
     }
 
     public override void beforeUpdate() {
-        //Job_Application_Task__cHelper.testJob_Application_Task__cMethod(acctTriggerNew);
+    }
+    
+    public override void afterUpdate() {
+        Utilities.updateJobApplTasks();
     }
 
     public override void beforeDelete() {
     }
 
     public override void afterDelete() {
+        Utilities.updateJobApplTasks();
     }
 
     public override void afterUndelete() {     
+        Utilities.updateJobApplTasks();
     }
 }

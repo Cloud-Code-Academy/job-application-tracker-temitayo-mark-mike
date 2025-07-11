@@ -13,16 +13,19 @@ public class UserTriggerHandler extends TriggerHandler {
     }
  
     public override void beforeInsert() {
-        userHelper.processInsertedUserForErrorEmail(userTriggerNew);
     }
 
     public override void afterInsert() {
+        userHelper.processInsertedUserForErrorEmail(userTriggerNew);
     }
 
-    public override void beforeUpdate() {
-        //UserHelper.testUserMethod(acctTriggerNew);
+    public override void beforeUpdate() { 
     }
-
+    
+    public override void afterUpdate() {
+        //userHelper.processUpdatedUserForErrorEmail(userTriggerOld, userTriggerNewMap);        
+    }
+    
     public override void beforeDelete() {
     }
 

@@ -6,19 +6,28 @@ public inherited sharing class Utilities {
     public static Cache.OrgPartition orgPart = Cache.Org.getPartition('local.JobApplTracker');
     
     // **********************************************************************************************************
-    // Returns a List<Job_> of email addresses of Sys Admins and Users with IsErrorEmailRecipient__c = true.  
+    // Returns a List<ob_Application_Task__c> of email addresses of Sys Admins and Users with IsErrorEmailRecipient__c = true.  
     public static List<Job_Application_Task__c> getJobAppTasks() {
         // Get the Job Appl. Tasks from the Org Cache
         List<Job_Application_Task__c> listJobApplTasks = (List<Job_Application_Task__c>) orgPart.get('JobApplTasks');
         // If the Cache is null, 'refill' it
         if (listJobApplTasks == null) {
-            List<Job_Application_Task__c> jobApplTasks = [SELECT Id, Job_Appl_Status__c, Task_Comment__c, Task_Priority__c, Task_Subject__c FROM Job_Application_Task__c ];
-            orgPart.put('JobApplTasks', jobApplTasks, 86400);
+            // Initialize a List<> and execute query for refill
+            updateJobApplTasks();
+            List<Job_Application_Task__c> JobApplTasks = (List<Job_Application_Task__c>) orgPart.get('JobApplTasks');
             return jobApplTasks;
         } else {
             return listJobApplTasks;
         }
     }
+
+    // **********************************************************************************************************
+    // Refreshes the Job_Application_Task__c in Cache.org()
+    public static void updateJobApplTasks() {
+        List<Job_Application_Task__c> jobApplTasks = [SELECT Id, Active, Job_Appl_Status__c, Task_Comment__c, Task_Priority__c, Task_Subject__c, Due_Date_Adjust__c FROM Job_Application_Task__c ];
+        orgPart.put('JobApplTasks', jobApplTasks, 86400);
+    }
+    
     
     // **********************************************************************************************************
     // Returns a List<String> of email addresses of Sys Admins and Users with IsErrorEmailRecipient__c = true.  
@@ -38,14 +47,9 @@ public inherited sharing class Utilities {
             }
             // Refresh the Org Cache 
             orgPart.put('ErrorEmailAddressString', listRefreshEmailString, 86400);
-            // *********************************************************************|
-
             return listRefreshEmailString;
-
         } else {
-
             return listEmailString;
-
         }
     }
 
