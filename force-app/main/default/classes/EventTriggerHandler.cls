@@ -1,4 +1,4 @@
-public class EventTriggerHandler {
+public with sharing class EventTriggerHandler {
     public static void checkForDuplicateStartTimes(List<Event> newEvents) {
         Set<Datetime> startTimes = new Set<Datetime>();
         Map<Id, Event> newEventMap = new Map<Id, Event>();
