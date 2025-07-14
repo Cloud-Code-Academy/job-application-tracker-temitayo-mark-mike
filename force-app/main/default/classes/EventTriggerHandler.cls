@@ -20,7 +20,7 @@ public with sharing class EventTriggerHandler {
         enqueueInterviewReminders(updatedEvents);
     }
 
-    // DUPLICATE CHECKER
+    // Duplicate checker - Why: to ensure duplicate events are not created on the same day/time
     private static void checkForDuplicateStartTimes(List<Event> events) {
         Set<Datetime> startTimes = new Set<Datetime>();
         Map<Id, Event> newEventMap = new Map<Id, Event>();
@@ -53,7 +53,7 @@ public with sharing class EventTriggerHandler {
         }
     }
 
-    // REMINDER QUEUEING
+    // Email Reminder Queueing- Why: to invoke the EmailNotificationQueueable and trigger the email to be sent
     private static void enqueueInterviewReminders(List<Event> events) {
         List<Id> eventIdsToNotify = new List<Id>();
 
