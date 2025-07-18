@@ -39,7 +39,7 @@ private class EmailNotificationQueueableTest {
         ));
         Test.stopTest();
 
-        System.assert(true, 'Queueable should handle empty list gracefully');
+        System.assert(true, 'Queueable should handle an empty list gracefully');
     }
 
     @isTest
