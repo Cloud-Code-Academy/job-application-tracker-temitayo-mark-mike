@@ -25,4 +25,36 @@ public with sharing class JobHelper {
         
     }
 
+    @future(callout=true)
+	public static void JoobleCallout(String strKeywordJSON) {
+		
+		Http joobleHttp = new Http();										
+
+		HttpRequest joobleRequest = new HttpRequest();
+		   
+        JoobleAPIKey__mdt APIKeyMDT = JoobleAPIKey__mdt.getInstance('Jooble_API_Key');
+
+        joobleRequest.setEndpoint('callout:JoobleNamedCred' + '/' + APIKeyMDT.API_KEY__c);                
+        joobleRequest.setHeader('Content-Type', 'application/json');
+        joobleRequest.setMethod('POST');										
+        
+        joobleRequest.setbody(strKeywordJSON);
+
+		HttpResponse joobleResponse = joobleHttp.send(joobleRequest);			
+
+		if (joobleResponse.getStatusCode() == 200) {	
+			
+            String joobleResponseBody = joobleResponse.getBody().replaceAll('\"','"');
+            
+            System.debug('Clean String joobleResponse: ' + joobleResponseBody);
+            //System.debug('Length of Cleaned String: ' + String.valueOf(joobleResponseBody.length()));
+      
+		} else {
+			System.debug('Response error code: ' + joobleResponse.getStatusCode());
+		}
+
+	}
+
+
+
 }
