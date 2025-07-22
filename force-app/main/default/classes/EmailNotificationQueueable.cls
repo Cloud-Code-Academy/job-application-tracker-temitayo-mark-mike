@@ -1,6 +1,6 @@
 public with sharing class EmailNotificationQueueable implements Queueable, Database.AllowsCallouts {
-    public List<Id> recordIds;
-    public EmailType emailType;
+    private List<Id> recordIds;
+    private EmailType emailType;
 
     // Enum declaration for each email type
     public enum EmailType {
@@ -10,13 +10,16 @@ public with sharing class EmailNotificationQueueable implements Queueable, Datab
         SELF_NOTIFICATION
     }
 
-    // Constructor takes in the record Ids and the type of email to send
     public EmailNotificationQueueable(List<Id> recordIds, EmailType emailType) {
-        this.recordIds = recordIds;
-        this.emailType = emailType;
+        this(recordIds, emailType, null);
     }
 
-    // Execute method for the queueable
+    public EmailNotificationQueueable(List<Id> recordIds, EmailType emailType, Id overrideTemplateId) {
+        this.recordIds = recordIds;
+        this.emailType = emailType;
+        this.overrideTemplateId = overrideTemplateId;
+    }
+
     public void execute(QueueableContext context) {
         switch on emailType {
             when INTERVIEW_REMINDER {
@@ -35,31 +38,71 @@ public with sharing class EmailNotificationQueueable implements Queueable, Datab
     }
 
     // Shared method to send email templates
-    public void sendTemplatedEmails(String templateDeveloperName) {
+    private void sendTemplatedEmails(String templateDeveloperName) {
         List<Event> events = [
-            SELECT Id, Subject, StartDateTime, WhoId, WhatId
+            SELECT Id, Subject, StartDateTime, WhoId, Reminder_Sent__c
             FROM Event
             WHERE Id IN :recordIds
+            AND (Reminder_Sent__c = false OR Reminder_Sent__c = null)
         ];
 
-        EmailTemplate template = [
-            SELECT Id FROM EmailTemplate WHERE DeveloperName = :templateDeveloperName LIMIT 1
-        ];
+        if (events.isEmpty()) {
+            return;
+        }
+
+        EmailTemplate template;
+        if (overrideTemplateId != null) {
+            template = new EmailTemplate(Id = overrideTemplateId);
+        } else {
+            template = [
+                SELECT Id FROM EmailTemplate
+                WHERE DeveloperName = :templateDeveloperName
+                LIMIT 1
+            ];
+        }
 
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+        List<Event> eventsToUpdate = new List<Event>();
 
         for (Event e : events) {
             if (e.WhoId != null) {
                 Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-                email.setTargetObjectId(e.WhoId);  // Must be Contact or Lead           // Do we want to set the related 'What'?
+                email.setTargetObjectId(e.WhoId);  // Must be Contact or Lead
+                email.setWhatId(e.Id);             // Do we want to set the related 'What'?
                 email.setTemplateId(template.Id);
                 email.setSaveAsActivity(false);
                 emails.add(email);
+
+                eventsToUpdate.add(new Event(
+                    Id = e.Id,
+                    Reminder_Sent__c = true
+                ));
             }
         }
 
         if (!emails.isEmpty()) {
-            Messaging.sendEmail(emails);
+            // Final failsafe: prevent emails in test context
+            if (!Test.isRunningTest() && !skipEmailSend) {
+                for (List<Messaging.SingleEmailMessage> batch : splitEmailMessages(emails, 10)) {
+                    Messaging.sendEmail(batch);
+                }
+            }
+            update eventsToUpdate;
         }
+    }
+
+    private static List<List<Messaging.SingleEmailMessage>> splitEmailMessages(List<Messaging.SingleEmailMessage> allEmails, Integer batchSize) {
+        List<List<Messaging.SingleEmailMessage>> batches = new List<List<Messaging.SingleEmailMessage>>();
+        Integer total = allEmails.size();
+
+        for (Integer i = 0; i < total; i += batchSize) {
+            List<Messaging.SingleEmailMessage> batch = new List<Messaging.SingleEmailMessage>();
+            for (Integer j = i; j < Math.min(i + batchSize, total); j++) {
+                batch.add(allEmails[j]);
+            }
+            batches.add(batch);
+        }
+
+        return batches;
     }
 }
