@@ -31,7 +31,7 @@ private class JobTriggerHandlerTest {
                 
         Test.startTest();
         insert job;
-        System.assertEquals(true, job.IsCreated__c);
+        System.assertEquals(true, job.IsCreated__c);  //failing....
         Test.stopTest();    
 
     }
