@@ -1,5 +1,5 @@
 @IsTest
-private class JobApplicationHelperTest {
+private class JobApplicationHelperUpdateTest {
     
     @TestSetup
     static void setupData() {
@@ -42,31 +42,39 @@ private class JobApplicationHelperTest {
         jaTasks.add(jaTask2);  
         insert jaTasks;
 
-        System.debug(JSON.serializePretty(jaTasks));
-    
+        System.debug(JSON.serializePretty(jaTasks)); 
+         
+        Job_Application__c jobApp = new Job_Application__c();
+        jobApp.Job__c = job.Id;
+        insert jobApp;
+
     }
     
     @IsTest
-    static void testCreateJobAppTasksAfterInsert() {
+    static void testProcessJobAppTasksAfterUpdate() {
 
-        Job__c j = [SELECT Id FROM Job__c LIMIT 1];
-
-        Account acc = [SELECT Id FROM Account];
-        Contact con = [SELECT Id FROM Contact];
-
-        Job_Application__c jobApp = new Job_Application__c();
-        jobApp.Job__c = j.Id;
-
-        Test.startTest();
-        insert jobApp;
+        Test.startTest();   
+       
+        Job_Application__c ja = [SELECT Id, Status__c FROM Job_Application__c];
+                
+        List<Task> tasks = [SELECT Id FROM Task WHERE WhatId = :ja.Id];
+        System.debug('Before update: ' + JSON.serializePretty(tasks));
+        Integer createSize = tasks.size();
+        
+        System.debug('ja before update: ' + JSON.serializePretty(ja));
+        ja.Status__c = 'Applying';
+        System.debug('ja after change: ' + JSON.serializePretty(ja));
+        
+        update ja;  
+        
         Test.stopTest();
 
-        Job_Application__c ja = [SELECT Id, Status__c FROM Job_Application__c];
-        List<Task> tasks = [SELECT Id FROM Task WHERE WhatId = :ja.Id];
-        System.debug(JSON.serializePretty(Tasks));
-        Integer createSize = tasks.size();
-        System.assert(tasks.size()>0);
+        System.debug('ja before update: ' + JSON.serializePretty(ja));
+        tasks = [SELECT Id FROM Task WHERE WhatId = :ja.Id];
+        System.debug('After update: ' + JSON.serializePretty(tasks));
+        
+        System.assertNotEquals(createSize, tasks.size());
 
     }
-
+    
 }

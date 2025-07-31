@@ -25,9 +25,9 @@ public with sharing class JobHelper {
             Integer endPos = joobleResponseBody.indexOf('}]}');
             String jobArrayString = joobleResponseBody.substring(startPos+7, joobleResponseBody.length()-1);
             
-            System.debug('joobleResponseBody: ' + joobleResponseBody);
-
             List<JoobleJob> joobleJobList = (List<JoobleJob>) JSON.deserialize(jobArrayString, List<JoobleJob>.class);
+
+            //System.debug('joobleJobList: ' + JSON.serializePretty(joobleJobList));
 
             JoobleJobParser(joobleJobList);
 
@@ -37,18 +37,18 @@ public with sharing class JobHelper {
 
 	}
 
+    @TestVisible
     public static void JoobleJobParser(List<JoobleJob> jjList) {
     
         List<Account> existingAccounts = new List<Account>([SELECT Id, Name FROM Account WHERE RecordType.Name = 'Employer']);
         
-        //System.debug('existingAccount: ' + JSON.serializePretty(existingAccounts));
         Set<String> existingAccountNames = new Set<String>(); // We need a Set<String> of unique Account Names to see if an Employer already exists.
         Map<String, Id> existingAccountNameToIdMap = new Map<String, Id>(); // Initialize a Map<String, Id> to use later to get AccountIds for Employer__c Lookup in Job__c.  
         for (Account acct : existingAccounts) {
             existingAccountNames.add(acct.Name);
             existingAccountNameToIdMap.put(acct.Name, acct.Id);
         }
-        //System.debug('existingAccountNames: ' + JSON.serializePretty(existingAccountNames));
+        
         
         Set<String> newAccountNames = new Set<String>();
         for (JoobleJob jj : jjList) {
@@ -60,8 +60,7 @@ public with sharing class JobHelper {
                 existingAccountNames.add(jj.company);
             }
         }
-        //System.debug('newAccNameSet: ' + JSON.serializePretty(newAccountNames));
-        
+                
         if (newAccountNames.size() > 0) {
             
             List<Account> newAccounts = new List<Account>();
@@ -93,9 +92,7 @@ public with sharing class JobHelper {
         for (AccountContactRelation acr : acrList) {
             acrPrimContacts.put(acr.AccountId, acr.ContactId);
         }
-        //System.debug('acrPrimContacts: ' + JSON.serializePretty(acrPrimContacts));
-
-
+       
         // Build list of Job__c records to upsert based on List<JoobleJob>
         List<Job__c> joobleUpserts = new List<Job__c>();
         for (JoobleJob jJob : jjList) {
@@ -121,16 +118,16 @@ public with sharing class JobHelper {
                        
         }
 
-        // System.debug('joobleUpserts: ' + JSON.serializePretty(joobleUpserts));
-        // System.debug('System.isFuture(): ' + System.isFuture());
-        // System.debug('System.isBatch(): ' + System.isBatch());
-        //Utilities.batchUpsert(joobleUpserts, 200);  //TODO call Utilities.BatchUpsert();
-        upsert joobleUpserts;
-        // System.debug('AFTER UPSERT: joobleUpserts: ' + JSON.serializePretty(joobleUpserts));
+        // There is an issue the Utilities.batchUpsert() method.  This callout is @future so the JoobleParser() is too.  
+        // The Utilities.batchUpsert() detects System.isFuture() and kicks it over to a queueable - which is failing.
+        // Utilities.batchUpsert(joobleUpserts, 200);  //TODO call Utilities.BatchUpsert();
+        upsert joobleUpserts JoobleId__c;  // reference to externalId field 
+        
         return;
 
     }      
 
+    @TestVisible
     public class JoobleJob {
         public String title;
         public String location;

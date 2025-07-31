@@ -1,6 +1,7 @@
 @IsTest
 private class JobApplicationTaskTriggerHandlerTest {
     
+    @IsTest
     static void testGetJpbAppTasks() {
 
         List<Job_Application_Task__c> jaTasks = new List<Job_Application_Task__c>();
@@ -18,11 +19,11 @@ private class JobApplicationTaskTriggerHandlerTest {
 
         jaTaskFromCache[0].Task_Comment__c = 'updated';
         update jaTaskFromCache;
-        jaTaskFromCache = Utilities.getJobAppTasks();
+        jaTaskFromCache = [SELECT Id, Task_Comment__c FROM Job_Application_Task__c];
         System.assert(jaTaskFromCache[0].Task_Comment__c == 'updated');
 
         delete jaTaskFromCache;
-        jaTaskFromCache = Utilities.getJobAppTasks();
+        jaTaskFromCache = [SELECT Id, Task_Comment__c FROM Job_Application_Task__c];
         System.assert(jaTaskFromCache.size() == 0);
 
     }
