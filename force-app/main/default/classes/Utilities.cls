@@ -1,11 +1,11 @@
 public inherited sharing class Utilities {
     
-    // **********************************************************************************************************
     // Local declarations
     // Create instance of org cache partition.
     public static Cache.OrgPartition orgPart = Cache.Org.getPartition('local.JobApplTracker');
     
-    // **********************************************************************************************************
+    
+    
     // Returns a List<ob_Application_Task__c> of email addresses of Sys Admins and Users with IsErrorEmailRecipient__c = true.  
     public static List<Job_Application_Task__c> getJobAppTasks() {
         // Get the Job Appl. Tasks from the Org Cache
@@ -21,52 +21,68 @@ public inherited sharing class Utilities {
         }
     }
 
-    // **********************************************************************************************************
-    // Refreshes the Job_Application_Task__c in Cache.org()
+    // Refreshes the Job_Application_Task__c sObj in Cache.org()
     public static void updateJobApplTasks() {
-        List<Job_Application_Task__c> jobApplTasks = [SELECT Id, Active, Job_Appl_Status__c, Task_Comment__c, Task_Priority__c, Task_Subject__c, Due_Date_Adjust__c FROM Job_Application_Task__c ];
+        List<Job_Application_Task__c> jobApplTasks = [SELECT Id, Active__c, Job_Appl_Status__c, Task_Comment__c, Task_Priority__c, Task_Subject__c, Due_Date_Adjust__c FROM Job_Application_Task__c ];
         orgPart.put('JobApplTasks', jobApplTasks, 86400);
     }
     
     
-    // **********************************************************************************************************
+    
+    // Returns the Contact() that is the Default Primary Contact from the orgPart.
+    @TestVisible
+    public static Contact getDefaultPrimaryContact() {
+        Contact defPrimCont = (Contact) orgPart.get('DefaultPrimaryContact');
+        if (defPrimCont == null) {
+            updateDefaultPrimaryContact();
+            Contact defRefreshedPrimCont = (Contact) orgPart.get('DefaultPrimaryContact');
+            return defRefreshedPrimCont;
+        } else {
+            return defPrimCont;
+        } 
+    }
+
+    // Refreshes the default PrimaryContact() in Cache.Org()
+    @TestVisible
+    public static void updateDefaultPrimaryContact() {
+        Contact defPrimContact = [SELECT LastName FROM Contact WHERE LastName = '<unknown_contact>' LIMIT 1];
+        orgPart.put('DefaultPrimaryContact', defPrimContact, 86400);
+    }
+
+
+
     // Returns a List<String> of email addresses of Sys Admins and Users with IsErrorEmailRecipient__c = true.  
     public static List<String> getErrorEmailRecipients() {
         // Get the List<String> of email addresses from the Org Cache
         List<String> listEmailString = (List<String>) orgPart.get('ErrorEmailAddressString');
         // If the Cache is null, 'refill' it
-        if (listEmailString == null) {
-            // TO DO - combine lines 17(18?) -> 25 into new method, can be used elsewhere
-            // List<User> listErrorUsers = updateErrorEmailInOrgPart()
-            List<String> listRefreshEmailString = new List<String>(); 
-            List<User> listErrorUsers = [SELECT Email FROM User WHERE Profile.Name = 'System Administrator' OR IsErrorEmailRecipient__c = true LIMIT 150]; 
-            for (User usr : listErrorUsers) {
-                if (usr.Email != null) { 
-                    listRefreshEmailString.add(usr.Email);
-                }
-            }
-            // Refresh the Org Cache 
-            orgPart.put('ErrorEmailAddressString', listRefreshEmailString, 86400);
-            return listRefreshEmailString;
+        if (listEmailString == null) {         
+            return updateErrorEmailInOrgPart();
         } else {
             return listEmailString;
         }
     }
 
-    // **********************************************************************************************************
-    public static List<String> updateErrorEmailInOrgPart(List<User> listEmailErrorUsers) {
+    public static List<String> updateErrorEmailInOrgPart() {
         // Parse the List<User> and populate a List<String> of email addresses, then update the OrgPart
-        List<String> tempStringList = new List<String>();
-        return tempStringList;
+        List<String> listRefreshEmailString = new List<String>(); 
+        List<User> listErrorUsers = [SELECT Email FROM User WHERE Profile.Name = 'System Administrator' OR IsErrorEmailRecipient__c = true LIMIT 150]; 
+        for (User usr : listErrorUsers) {
+            if (usr.Email != null) { 
+                listRefreshEmailString.add(usr.Email);
+            }
+        }
+        // Refresh the Org Cache 
+        orgPart.put('ErrorEmailAddressString', listRefreshEmailString, 86400);
+        return listRefreshEmailString;  
     }
 
-    // **********************************************************************************************************
     // Sends 'Error' email to Sys Admins and Users with IsErrorEmailRecipient__c = true.
     public static void sendErrorEmail(String errorSubject, String errorBody) {
         List<Messaging.SendEmailResult> listErrorEmailResult = sendEmail(getErrorEmailRecipients(), null, errorSubject, errorBody);
+        // Could do something with listErrorEmailResult List<>...
     }
 
-    // **********************************************************************************************************
     // Returns a List<> of SendEmailResults from sending single email.    
     public static List<Messaging.SendEmailResult> sendEmail(List<String> toAddresses, String fromAddress, String subject, String body) {
     
@@ -96,11 +112,11 @@ public inherited sharing class Utilities {
         } else {
             System.debug('Warning: No email recipients were provided. No email was sent');
         }
+        
         return listEmailResult;
     }
 
     
-    // **********************************************************************************************************
     // Adds working/business days to a date and returns the later (daysToAdd > 0) or earlier (daysToAdd < 0) date.
     public static Date addWorkingDays (Date startingDate, Integer daysToAdd) {
         Integer count = 0;
@@ -122,9 +138,10 @@ public inherited sharing class Utilities {
         return startingDate;
     }
 
-    // **********************************************************************************************************
+    
     // Accesses the Holiday sObj data for the org, used in addworkingdays().
     public static Boolean isHolidayOrWeekend(Date d) {
+        
         List<Date> holidayDates = (List<Date>) orgPart.get('HolidayList');
         if(holidayDates == null) {
             List<Holiday> holidays = [SELECT Id, Name, ActivityDate FROM Holiday];
@@ -148,16 +165,17 @@ public inherited sharing class Utilities {
         } else {
             return false;
         }
+
     }
 
-    // **********************************************************************************************************
+    
     // Returns a Salesforce date based on various string formats.
     public static Date convertStringToDate (String dateString) {
         Date result = convertStringToDatetime(dateString).date();
         return result;
     }
 
-    // **********************************************************************************************************
+    
     // Returns a Salesforce datetime based on various string formats. 
     public static Datetime convertStringToDatetime (String datetimeString) {
         String originalValue = datetimeString;
@@ -224,4 +242,51 @@ public inherited sharing class Utilities {
         return result;
     }
 
+    @TestVisible
+    public static Id batchUpsert(List<SObject> records, Integer batchSize) {
+        return batchUpsertSObjects(records, batchSize, UserInfo.getUserName() + ' ' + String.valueOf(System.now()), true);
+    }
+
+    @TestVisible
+    public static Id batchUpsertSObjects(List<SObject> records, Integer batchSize, String batchName, Boolean sendEmail) {
+        Id batchId;
+        if(records.size() > 0) {
+            if(System.isFuture() || System.isBatch()) {
+                batchId = System.enqueueJob(new ExecuteBatchQueueableJob(records, batchName, sendEmail, batchSize, 'upsert'));
+            } else {
+                BatchUpsert myBatchObject = new BatchUpsert(records, batchName, sendEmail);
+                batchId = Database.executeBatch(myBatchObject, batchSize);
+            }
+            System.debug('Batch Job ID: ' + batchId);
+        }
+        return batchId;
+    }
+
+    // Queueable Batch Job.
+    @TestVisible
+    public class ExecuteBatchQueueableJob implements Queueable {
+        private List<SObject> records;
+        private Integer batchSize;
+        private Boolean sendEmail; 
+        private String soqlQuery;
+        private String operation;
+        private String batchName;
+
+        // Used in UPSERTS
+        public ExecuteBatchQueueableJob(List<SObject> records, String batchName, Boolean sendEmail, Integer batchSize, String operation) {
+            this.records = records;
+            this.batchSize = batchSize;
+            this.sendEmail = sendEmail;
+            this.operation = operation.toLowerCase();
+            this.batchName = batchName;
+        }
+
+        public void execute(QueueableContext context) {
+            switch on operation {
+                when 'upsert' {
+                    batchUpsertSObjects(records, batchSize, batchName, sendEmail);
+                }
+            }
+        }
+    }  
 }

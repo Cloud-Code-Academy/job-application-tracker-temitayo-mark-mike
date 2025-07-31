@@ -31,6 +31,7 @@ private class JobTriggerHandlerTest {
                 
         Test.startTest();
         insert job;
+        job = [SELECT Id, IsCreated__c FROM Job__c LIMIT 1];
         System.assertEquals(true, job.IsCreated__c);  //failing....
         Test.stopTest();    
 

@@ -1,3 +1,3 @@
-trigger AccountTrigger on Account (before insert, after insert, before update, after update, before delete, after delete, after undelete) {
+trigger AccountTrigger on Account (after insert) {
     new AccountTriggerHandler().run();
 }

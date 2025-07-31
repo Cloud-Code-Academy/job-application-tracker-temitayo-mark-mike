@@ -12,26 +12,12 @@ public class UserTriggerHandler extends TriggerHandler {
         this.userTriggerOldMap = (Map<Id, User>) Trigger.oldMap;
     }
  
-    public override void beforeInsert() {
-    }
-
     public override void afterInsert() {
-        userHelper.processInsertedUserForErrorEmail(userTriggerNew);
+       List<String> userStringAfterInsert = Utilities.updateErrorEmailInOrgPart();
     }
 
-    public override void beforeUpdate() { 
-    }
-    
     public override void afterUpdate() {
-        //userHelper.processUpdatedUserForErrorEmail(userTriggerOld, userTriggerNewMap);        
-    }
-    
-    public override void beforeDelete() {
+        List<String> userStringAfterUpdate = Utilities.updateErrorEmailInOrgPart();  
     }
 
-    public override void afterDelete() {
-    }
-
-    public override void afterUndelete() {     
-    }
 }

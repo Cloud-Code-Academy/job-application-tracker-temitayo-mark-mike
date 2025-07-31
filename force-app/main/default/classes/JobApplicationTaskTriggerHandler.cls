@@ -12,21 +12,12 @@ public with sharing class JobApplicationTaskTriggerHandler extends TriggerHandle
         this.jobApplTaskTriggerOldMap = (Map<Id, Job_Application_Task__c>) Trigger.oldMap;
     }
  
-    public override void beforeInsert() {
-    }
-
     public override void afterInsert() {
         Utilities.updateJobApplTasks();
     }
 
-    public override void beforeUpdate() {
-    }
-    
     public override void afterUpdate() {
         Utilities.updateJobApplTasks();
-    }
-
-    public override void beforeDelete() {
     }
 
     public override void afterDelete() {

@@ -13,9 +13,12 @@ public class JobApplicationTriggerHandler extends TriggerHandler {
         this.jobApplTriggerNewMap = (Map<Id, Job_Application__c>) Trigger.newMap;
         this.jobApplTriggerOldMap = (Map<Id, Job_Application__c>) Trigger.oldMap;
     }
- 
+
     public override void beforeInsert() {
-       
+        for (Job_Application__c jobAppl : (List<Job_Application__c>) Trigger.new) {
+            jobAppl.IsCreated__c = true;
+            jobAppl.Applicant__c = UserInfo.getUserId();
+        }        
     }
 
     public override void afterInsert() {
@@ -23,21 +26,8 @@ public class JobApplicationTriggerHandler extends TriggerHandler {
         JobApplicationHelper.createJobAppTasksAfterInsert(jobApplTriggerNew);
     }
 
-    public override void beforeUpdate() {
-        //JobApplicationHelper.createJobAppTasksBeforeUpdate(jobApplTriggerOld, jobApplTriggerNew);
-    }
-    
     public override void afterUpdate() {
-        
-    }
-
-    public override void beforeDelete() {
-    }
-
-    public override void afterDelete() {
-    }
-
-    public override void afterUndelete() {     
+        JobApplicationHelper.processJobAppTasksAfterUpdate(jobApplTriggerOldMap, jobApplTriggerNew);
     }
 
 }

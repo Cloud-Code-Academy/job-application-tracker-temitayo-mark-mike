@@ -1,34 +1,28 @@
+List<Job__c> listJobs = [SELECT Id, Name FROM Job__c];
+delete listJobs;
 
-// Date todayDate = Utilities.addWorkingDays(Date.today(), 4);
-// System.debug('todayDate: ' + todayDate.toString());
+List<Contact> listContacts = [SELECT Id, FirstName, LastName FROM Contact WHERE Lastname != '<unknown_contact>' AND Id NOT IN (SELECT ContactId FROM Case)];
+delete listContacts;
 
-// Utilities.sendErrorEmail('test error email subject', 'test error email body');
+List<AccountContactRelation> listACR = [SELECT Id FROM AccountContactRelation];
+delete listACR;
 
-// List<Job_Application_Task__c> jobApplTasks = Utilities.getJobAppTasks();
-// System.debug('jobApplTasks: ' + JSON.serializePretty(jobApplTasks));
+List<Account> listAccounts = [SELECT Id, Name, CreatedDate FROM Account WHERE RecordType.Name = 'Employer' AND Id != '001ak00001GGbujAAD'];
+System.debug('listAccounts: ' + JSON.serializePretty(listAccounts));
+delete listAccounts;
 
-// Job_Application__c ja = new Job_Application__c();
-// ja.Job__c = 'a03ak00000Pq0VNAAZ';
-// insert ja;
+List<Task> listTasks = [SELECT Id FROM Task];
+delete listTasks;
 
-// Job__c job = new Job__c();
-// job.Name = 'Job20';
-// job.Employer__c = '001ak00001EMxGzAAL';
-// job.Primary_Contact__c = '003ak00000PGVpRAAX';
-// insert job;
+List<Event> listEvents = [SELECT Id FROM Event];
+delete listEvents;
 
 Map<String, String> JoobleKeywordsMap = new Map<String,String>{
     'keywords' => 'Salesforce developer',
-    'location' => 'Miami, Florida',
-    'salary' => '100000',
-    'datecreatedfrom' => '2025-01-01',
+    'location' => 'Des Moines, Iowa',
+    'salary' => '70000',
+    'datecreatedfrom' => '2023-01-01',
     'companysearch' => 'false'
-    /* 'radius' => '100',
-    'page' => '0',
-    'resultonpage' => '0',
-    'companysearch' => 'false' */
 };
-
 System.debug('******* JoobleKeywordsMap -> JSON: ' + JSON.serializePretty(JoobleKeywordsMap));
-
 JobHelper.JoobleCallout(JSON.serialize(JoobleKeywordsMap));
