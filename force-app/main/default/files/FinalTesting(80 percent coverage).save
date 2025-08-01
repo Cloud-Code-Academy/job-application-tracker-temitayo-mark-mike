@@ -1,0 +1,268 @@
+
+CCA Capstone Project - Mark Deguinse and Mike Vermace
+
+
+15:55:51.964 Starting SFDX: Run Apex Tests
+
+=== Apex Code Coverage for Test Run 707ak00000W11ms
+TEST NAME                                                                 CLASS BEING TESTED                  OUTCOME  PERCENT  MESSAGE  RUNTIME (MS)
+────────────────────────────────────────────────────────────────────────  ──────────────────────────────────  ───────  ───────  ───────  ────────────
+JobHelperTest.getJoobleResponseFromMock                                   Utilities                           Pass     22%               670         
+JobHelperTest.getJoobleResponseFromMock                                   TriggerHandler                      Pass     30%               670         
+JobHelperTest.getJoobleResponseFromMock                                   AccountTrigger                      Pass     100%              670         
+JobHelperTest.getJoobleResponseFromMock                                   JoobleJSONCalloutMockGenerator      Pass     89%               670         
+JobHelperTest.getJoobleResponseFromMock                                   JobTriggerHandler                   Pass     100%              670         
+JobHelperTest.getJoobleResponseFromMock                                   JobTrigger                          Pass     100%              670         
+JobHelperTest.getJoobleResponseFromMock                                   AccountTriggerHandler               Pass     100%              670         
+JobHelperTest.getJoobleResponseFromMock                                   JobHelper                           Pass     93%               670         
+JobHelperTest.getJoobleResponseFromMock                                   BatchUpsert                         Pass     76%               670         
+UtilitiesTest.testAddWorkingDays                                          Utilities                           Pass     20%               63          
+UtilitiesTest.testBatchUpsert                                             Utilities                           Pass     9%                553         
+UtilitiesTest.testBatchUpsert                                             BatchUpsert                         Pass     76%               553         
+UtilitiesTest.testGetDefaultPrimaryContact                                Utilities                           Pass     10%               182         
+UtilitiesTest.testGetDefaultPrimaryContact                                BatchUpsert                         Pass     14%               182         
+UtilitiesTest.testGetErrorEmailRecipients                                 UserTriggerHandler                  Pass     78%               485         
+UtilitiesTest.testGetErrorEmailRecipients                                 UserTrigger                         Pass     100%              485         
+UtilitiesTest.testGetErrorEmailRecipients                                 BatchUpsert                         Pass     14%               485         
+UtilitiesTest.testGetErrorEmailRecipients                                 TriggerHandler                      Pass     27%               485         
+UtilitiesTest.testGetErrorEmailRecipients                                 Utilities                           Pass     13%               485         
+UtilitiesTest.testGetJobApplTasks                                         BatchUpsert                         Pass     14%               28          
+UtilitiesTest.testGetJobApplTasks                                         TriggerHandler                      Pass     8%                28          
+UtilitiesTest.testGetJobApplTasks                                         UserTrigger                         Pass     0%                28          
+UtilitiesTest.testGetJobApplTasks                                         UserTriggerHandler                  Pass     22%               28          
+UtilitiesTest.testGetJobApplTasks                                         Utilities                           Pass     13%               28          
+UtilitiesTest.testSendingEmail                                            UserTriggerHandler                  Pass     22%               159         
+UtilitiesTest.testSendingEmail                                            BatchUpsert                         Pass     14%               159         
+UtilitiesTest.testSendingEmail                                            UserTrigger                         Pass     0%                159         
+UtilitiesTest.testSendingEmail                                            TriggerHandler                      Pass     8%                159         
+UtilitiesTest.testSendingEmail                                            Utilities                           Pass     17%               159         
+UtilitiesTest.testSendingErrorEmail                                       TriggerHandler                      Pass     8%                110         
+UtilitiesTest.testSendingErrorEmail                                       Utilities                           Pass     26%               110         
+UtilitiesTest.testSendingErrorEmail                                       BatchUpsert                         Pass     14%               110         
+UtilitiesTest.testSendingErrorEmail                                       UserTrigger                         Pass     0%                110         
+UtilitiesTest.testSendingErrorEmail                                       UserTriggerHandler                  Pass     22%               110         
+UtilitiesTest.testStringToDateTime                                        UserTriggerHandler                  Pass     22%               12          
+UtilitiesTest.testStringToDateTime                                        BatchUpsert                         Pass     14%               12          
+UtilitiesTest.testStringToDateTime                                        Utilities                           Pass     35%               12          
+UtilitiesTest.testStringToDateTime                                        UserTrigger                         Pass     0%                12          
+UtilitiesTest.testStringToDateTime                                        TriggerHandler                      Pass     8%                12          
+UtilitiesTest.testUpdateDefaultPrimaryContact                             TriggerHandler                      Pass     8%                103         
+UtilitiesTest.testUpdateDefaultPrimaryContact                             UserTrigger                         Pass     0%                103         
+UtilitiesTest.testUpdateDefaultPrimaryContact                             Utilities                           Pass     14%               103         
+UtilitiesTest.testUpdateDefaultPrimaryContact                             BatchUpsert                         Pass     14%               103         
+UtilitiesTest.testUpdateDefaultPrimaryContact                             UserTriggerHandler                  Pass     22%               103         
+UtilitiesTest.testUpdateJobApplTasks                                      JobApplicationTaskTriggerHandler    Pass     54%               346         
+UtilitiesTest.testUpdateJobApplTasks                                      UserTrigger                         Pass     0%                346         
+UtilitiesTest.testUpdateJobApplTasks                                      UserTriggerHandler                  Pass     22%               346         
+UtilitiesTest.testUpdateJobApplTasks                                      Utilities                           Pass     14%               346         
+UtilitiesTest.testUpdateJobApplTasks                                      BatchUpsert                         Pass     14%               346         
+UtilitiesTest.testUpdateJobApplTasks                                      Job_Application_TaskTrigger         Pass     100%              346         
+UtilitiesTest.testUpdateJobApplTasks                                      TriggerHandler                      Pass     27%               346         
+TriggerHandler_Test.testAfterDelete                                       TriggerHandler                      Pass     32%               60          
+TriggerHandler_Test.testAfterInsert                                       TriggerHandler                      Pass     28%               6           
+TriggerHandler_Test.testAfterUndelete                                     TriggerHandler                      Pass     34%               6           
+TriggerHandler_Test.testAfterUpdate                                       TriggerHandler                      Pass     30%               8           
+TriggerHandler_Test.testBeforeDelete                                      TriggerHandler                      Pass     26%               6           
+TriggerHandler_Test.testBeforeInsert                                      TriggerHandler                      Pass     22%               5           
+TriggerHandler_Test.testBeforeUpdate                                      TriggerHandler                      Pass     24%               6           
+TriggerHandler_Test.testBypassAPI                                         TriggerHandler                      Pass     38%               7           
+TriggerHandler_Test.testGetHandlerName                                    TriggerHandler                      Pass     18%               5           
+TriggerHandler_Test.testLoopCount                                         TriggerHandler                      Pass     42%               7           
+TriggerHandler_Test.testLoopCountClass                                    TriggerHandler                      Pass     33%               5           
+TriggerHandler_Test.testNonTriggerContext                                 TriggerHandler                      Pass     28%               9           
+TriggerHandler_Test.testVirtualMethods                                    TriggerHandler                      Pass     33%               5           
+CloseStaleJobApplicationsQueueableTest.testClosedJobAppIsNotTouched       JobApplicationHelper                Pass     17%               192         
+CloseStaleJobApplicationsQueueableTest.testClosedJobAppIsNotTouched       JobTriggerHandler                   Pass     100%              192         
+CloseStaleJobApplicationsQueueableTest.testClosedJobAppIsNotTouched       TriggerHandler                      Pass     39%               192         
+CloseStaleJobApplicationsQueueableTest.testClosedJobAppIsNotTouched       CloseStaleJobApplicationsQueueable  Pass     58%               192         
+CloseStaleJobApplicationsQueueableTest.testClosedJobAppIsNotTouched       AccountTrigger                      Pass     100%              192         
+CloseStaleJobApplicationsQueueableTest.testClosedJobAppIsNotTouched       JobTrigger                          Pass     100%              192         
+CloseStaleJobApplicationsQueueableTest.testClosedJobAppIsNotTouched       JobApplicationTriggerHandler        Pass     85%               192         
+CloseStaleJobApplicationsQueueableTest.testClosedJobAppIsNotTouched       AccountTriggerHandler               Pass     31%               192         
+CloseStaleJobApplicationsQueueableTest.testClosedJobAppIsNotTouched       Job_ApplicationTrigger              Pass     100%              192         
+CloseStaleJobApplicationsQueueableTest.testClosedJobAppIsNotTouched       Utilities                           Pass     11%               192         
+CloseStaleJobApplicationsQueueableTest.testFreshJobAppIsNotClosed         JobTriggerHandler                   Pass     25%               95          
+CloseStaleJobApplicationsQueueableTest.testFreshJobAppIsNotClosed         Job_ApplicationTrigger              Pass     100%              95          
+CloseStaleJobApplicationsQueueableTest.testFreshJobAppIsNotClosed         AccountTrigger                      Pass     0%                95          
+CloseStaleJobApplicationsQueueableTest.testFreshJobAppIsNotClosed         JobTrigger                          Pass     0%                95          
+CloseStaleJobApplicationsQueueableTest.testFreshJobAppIsNotClosed         JobApplicationTriggerHandler        Pass     85%               95          
+CloseStaleJobApplicationsQueueableTest.testFreshJobAppIsNotClosed         Utilities                           Pass     11%               95          
+CloseStaleJobApplicationsQueueableTest.testFreshJobAppIsNotClosed         JobApplicationHelper                Pass     17%               95          
+CloseStaleJobApplicationsQueueableTest.testFreshJobAppIsNotClosed         TriggerHandler                      Pass     37%               95          
+CloseStaleJobApplicationsQueueableTest.testFreshJobAppIsNotClosed         CloseStaleJobApplicationsQueueable  Pass     58%               95          
+CloseStaleJobApplicationsQueueableTest.testFreshJobAppIsNotClosed         AccountTriggerHandler               Pass     6%                95          
+CloseStaleJobApplicationsQueueableTest.testStaleJobAppIsClosed            Job_ApplicationTrigger              Pass     100%              149         
+CloseStaleJobApplicationsQueueableTest.testStaleJobAppIsClosed            JobTrigger                          Pass     0%                149         
+CloseStaleJobApplicationsQueueableTest.testStaleJobAppIsClosed            JobApplicationHelper                Pass     37%               149         
+CloseStaleJobApplicationsQueueableTest.testStaleJobAppIsClosed            AccountTriggerHandler               Pass     6%                149         
+CloseStaleJobApplicationsQueueableTest.testStaleJobAppIsClosed            JobTriggerHandler                   Pass     25%               149         
+CloseStaleJobApplicationsQueueableTest.testStaleJobAppIsClosed            Utilities                           Pass     12%               149         
+CloseStaleJobApplicationsQueueableTest.testStaleJobAppIsClosed            AccountTrigger                      Pass     0%                149         
+CloseStaleJobApplicationsQueueableTest.testStaleJobAppIsClosed            JobApplicationTriggerHandler        Pass     100%              149         
+CloseStaleJobApplicationsQueueableTest.testStaleJobAppIsClosed            TriggerHandler                      Pass     45%               149         
+CloseStaleJobApplicationsQueueableTest.testStaleJobAppIsClosed            CloseStaleJobApplicationsQueueable  Pass     100%              149         
+AccountHelperTest.testCreateACRForPrimaryContact                          Utilities                           Pass     13%               234         
+AccountHelperTest.testCreateACRForPrimaryContact                          AccountTriggerHandler               Pass     31%               234         
+AccountHelperTest.testCreateACRForPrimaryContact                          AccountTrigger                      Pass     100%              234         
+AccountHelperTest.testCreateACRForPrimaryContact                          BatchUpsert                         Pass     76%               234         
+AccountHelperTest.testCreateACRForPrimaryContact                          TriggerHandler                      Pass     26%               234         
+AccountHelperTest.testCreateACRForPrimaryContact                          AccountHelper                       Pass     100%              234         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 TriggerHandler                      Pass     40%               533         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 Job_ApplicationTrigger              Pass     100%              533         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 BatchUpsert                         Pass     76%               533         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 AccountTrigger                      Pass     100%              533         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 AccountTriggerHandler               Pass     31%               533         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 JobTriggerHandler                   Pass     100%              533         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 JobApplicationHelper                Pass     46%               533         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 JobApplicationTriggerHandler        Pass     85%               533         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 Job_Application_TaskTrigger         Pass     100%              533         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 JobApplicationTaskTriggerHandler    Pass     54%               533         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 Utilities                           Pass     12%               533         
+JobApplicationHelperTest.testCreateJobAppTasksAfterInsert                 JobTrigger                          Pass     100%              533         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         JobTrigger                          Pass     100%              409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         AccountTrigger                      Pass     100%              409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         Utilities                           Pass     12%               409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         TriggerHandler                      Pass     31%               409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         Job_ApplicationTrigger              Pass     100%              409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         Job_Application_TaskTrigger         Pass     100%              409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         BatchUpsert                         Pass     76%               409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         JobApplicationHelper                Pass     46%               409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         JobApplicationTriggerHandler        Pass     85%               409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         JobTriggerHandler                   Pass     100%              409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         AccountTriggerHandler               Pass     31%               409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksAfterInsert         JobApplicationTaskTriggerHandler    Pass     54%               409         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        JobApplicationTriggerHandler        Pass     85%               256         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        JobTriggerHandler                   Pass     25%               256         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        BatchUpsert                         Pass     76%               256         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        JobApplicationTaskTriggerHandler    Pass     15%               256         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        Job_Application_TaskTrigger         Pass     0%                256         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        JobApplicationHelper                Pass     46%               256         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        Job_ApplicationTrigger              Pass     100%              256         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        AccountTrigger                      Pass     0%                256         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        AccountTriggerHandler               Pass     6%                256         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        JobTrigger                          Pass     0%                256         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        TriggerHandler                      Pass     29%               256         
+JobApplicationTriggerHandlerTest.testCreateJobAppTasksBeforeInsert        Utilities                           Pass     11%               256         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        TriggerHandler                      Pass     34%               228         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        AccountTriggerHandler               Pass     6%                228         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        BatchUpsert                         Pass     76%               228         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        Job_ApplicationTrigger              Pass     100%              228         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        AccountTrigger                      Pass     0%                228         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        JobTrigger                          Pass     0%                228         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        JobApplicationHelper                Pass     63%               228         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        JobApplicationTaskTriggerHandler    Pass     15%               228         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        JobTriggerHandler                   Pass     25%               228         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        Job_Application_TaskTrigger         Pass     0%                228         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        Utilities                           Pass     11%               228         
+JobApplicationTriggerHandlerTest.testProcessJobAppTasksAfterUpdate        JobApplicationTriggerHandler        Pass     100%              228         
+EventTriggerHandlerTest.testDuplicateStartTimesAreBlocked                 EventTriggerHandler                 Pass     71%               188         
+EventTriggerHandlerTest.testDuplicateStartTimesAreBlocked                 EventTrigger                        Pass     100%              188         
+EventTriggerHandlerTest.testNoReminderForNonTomorrowDates                 EventTrigger                        Pass     100%              92          
+EventTriggerHandlerTest.testNoReminderForNonTomorrowDates                 EventTriggerHandler                 Pass     63%               92          
+EventTriggerHandlerTest.testReminderQueuedForTomorrow                     EmailNotificationQueueable          Pass     67%               358         
+EventTriggerHandlerTest.testReminderQueuedForTomorrow                     EventTriggerHandler                 Pass     92%               358         
+EventTriggerHandlerTest.testReminderQueuedForTomorrow                     EventTrigger                        Pass     100%              358         
+EventTriggerHandlerTest.testUpdateEventStillTomorrow_NoDuplicateReminder  EventTriggerHandler                 Pass     92%               357         
+EventTriggerHandlerTest.testUpdateEventStillTomorrow_NoDuplicateReminder  EmailNotificationQueueable          Pass     67%               357         
+EventTriggerHandlerTest.testUpdateEventStillTomorrow_NoDuplicateReminder  EventTrigger                        Pass     100%              357         
+EventTriggerHandlerTest.testUpdateTriggersReminder                        EventTrigger                        Pass     100%              391         
+EventTriggerHandlerTest.testUpdateTriggersReminder                        EmailNotificationQueueable          Pass     67%               391         
+EventTriggerHandlerTest.testUpdateTriggersReminder                        EventTriggerHandler                 Pass     92%               391         
+JobApplicationTaskTriggerHandlerTest.testGetJpbAppTasks                   TriggerHandler                      Pass     51%               1755        
+JobApplicationTaskTriggerHandlerTest.testGetJpbAppTasks                   Job_Application_TaskTrigger         Pass     100%              1755        
+JobApplicationTaskTriggerHandlerTest.testGetJpbAppTasks                   JobApplicationTaskTriggerHandler    Pass     85%               1755        
+JobApplicationTaskTriggerHandlerTest.testGetJpbAppTasks                   Utilities                           Pass     3%                1755        
+JobTriggerHandlerTest.testJobTriggerHandlerInsert                         TriggerHandler                      Pass     30%               127         
+JobTriggerHandlerTest.testJobTriggerHandlerInsert                         AccountTriggerHandler               Pass     31%               127         
+JobTriggerHandlerTest.testJobTriggerHandlerInsert                         AccountTrigger                      Pass     100%              127         
+JobTriggerHandlerTest.testJobTriggerHandlerInsert                         JobTrigger                          Pass     100%              127         
+JobTriggerHandlerTest.testJobTriggerHandlerInsert                         JobTriggerHandler                   Pass     100%              127         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          JobApplicationHelper                Pass     95%               170         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          BatchUpsert                         Pass     76%               170         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          JobApplicationTaskTriggerHandler    Pass     54%               170         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          Utilities                           Pass     12%               170         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          JobTrigger                          Pass     100%              170         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          JobApplicationTriggerHandler        Pass     100%              170         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          JobTriggerHandler                   Pass     100%              170         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          AccountTrigger                      Pass     100%              170         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          Job_ApplicationTrigger              Pass     100%              170         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          Job_Application_TaskTrigger         Pass     100%              170         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          AccountTriggerHandler               Pass     31%               170         
+JobApplicationHelperUpdateTest.testProcessJobAppTasksAfterUpdate          TriggerHandler                      Pass     48%               170         
+EmailNotificationQueueableTest.testQueueableReminderEmailBulkified        EventTrigger                        Pass     100%              5385        
+EmailNotificationQueueableTest.testQueueableReminderEmailBulkified        EmailNotificationQueueable          Pass     67%               5385        
+EmailNotificationQueueableTest.testQueueableReminderEmailBulkified        EventTriggerHandler                 Pass     92%               5385        
+EmailNotificationQueueableTest.testQueueableReminderEmailPositive         EventTrigger                        Pass     100%              243         
+EmailNotificationQueueableTest.testQueueableReminderEmailPositive         EventTriggerHandler                 Pass     92%               243         
+EmailNotificationQueueableTest.testQueueableReminderEmailPositive         EmailNotificationQueueable          Pass     67%               243         
+EmailNotificationQueueableTest.testQueueableWithEmptyIdList               EventTriggerHandler                 Pass     16%               28          
+EmailNotificationQueueableTest.testQueueableWithEmptyIdList               EmailNotificationQueueable          Pass     33%               28          
+EmailNotificationQueueableTest.testQueueableWithEmptyIdList               EventTrigger                        Pass     0%                28          
+EmailNotificationQueueableTest.testQueueableWithInvalidEventId            EventTrigger                        Pass     0%                25          
+EmailNotificationQueueableTest.testQueueableWithInvalidEventId            EmailNotificationQueueable          Pass     31%               25          
+EmailNotificationQueueableTest.testQueueableWithInvalidEventId            EventTriggerHandler                 Pass     16%               25          
+StaleJobAppSchedulerTest.testSchedulerRuns                                StaleJobAppScheduler                Pass     100%              244         
+StaleJobAppSchedulerTest.testSchedulerRuns                                CloseStaleJobApplicationsQueueable  Pass     58%               244         
+UserTriggerHandlerTest.testUserTriggerHandler                             TriggerHandler                      Pass     44%               826         
+UserTriggerHandlerTest.testUserTriggerHandler                             UserTriggerHandler                  Pass     100%              826         
+UserTriggerHandlerTest.testUserTriggerHandler                             UserTrigger                         Pass     100%              826         
+UserTriggerHandlerTest.testUserTriggerHandler                             Utilities                           Pass     6%                826         
+
+
+=== Apex Code Coverage by Class
+CLASSES                             PERCENT  UNCOVERED LINES       
+──────────────────────────────────  ───────  ──────────────────────
+CloseStaleJobApplicationsQueueable  100%                           
+StaleJobAppScheduler                100%                           
+JobTrigger                          100%                           
+TriggerHandler                      100%                           
+AccountTrigger                      100%                           
+Utilities                           94%      98,207,216,217,218,...
+AccountHelper                       100%                           
+AccountTriggerHandler               100%                           
+UserTriggerHandler                  100%                           
+UserTrigger                         100%                           
+Job_Application_TaskTrigger         100%                           
+JobApplicationTaskTriggerHandler    85%      27,28                 
+JobApplicationTriggerHandler        100%                           
+JobApplicationHelper                95%      32,80                 
+JobTriggerHandler                   100%                           
+EmailNotificationQueueable          78%      32,88,89,96,97,...    
+JobHelper                           93%      60,81,82,93,101       
+Job_ApplicationTrigger              100%                           
+EventTriggerHandler                 100%                           
+EventTrigger                        100%                           
+BatchUpsert                         76%      9,10,13,14,15,...     
+JoobleJSONCalloutMockGenerator      89%      16                    
+
+
+=== Test Setup Time by Test Class for Run 707ak00000W11ms
+TEST SETUP METHOD NAME                        SETUP TIME
+────────────────────────────────────────────  ──────────
+JobHelperTest.setupData                       398       
+CloseStaleJobApplicationsQueueableTest.setup  464       
+AccountHelperTest.setupData                   347       
+JobApplicationHelperTest.setupData            618       
+JobApplicationTriggerHandlerTest.setupData    504       
+EventTriggerHandlerTest.setupData             357       
+JobTriggerHandlerTest.setupData               288       
+JobApplicationHelperUpdateTest.setupData      1115      
+
+
+=== Test Summary
+NAME                 VALUE             
+───────────────────  ──────────────────
+Outcome              Passed            
+Tests Ran            54                
+Pass Rate            100%              
+Fail Rate            0%                
+Skip Rate            0%                
+Test Run Id          707ak00000W11ms   
+Test Setup Time      4091 ms           
+Test Execution Time  15131 ms          
+Test Total Time      19222 ms          
+Org Id               00Dak00000SZc77EAD
+Username             mike@capstone.cca 
+Org Wide Coverage    80%               
+
+15:56:04.188 ended SFDX: Run Apex Tests

@@ -4,4 +4,3 @@ public class StaleJobAppScheduler implements Schedulable {
         System.enqueueJob(new CloseStaleJobApplicationsQueueable());
     }
 }
-

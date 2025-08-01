@@ -35,4 +35,3 @@ public class CloseStaleJobApplicationsQueueable implements Queueable, Database.A
         }
     }
 }
-

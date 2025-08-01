@@ -13,7 +13,7 @@ public class JobApplicationTriggerHandler extends TriggerHandler {
         this.jobApplTriggerNewMap = (Map<Id, Job_Application__c>) Trigger.newMap;
         this.jobApplTriggerOldMap = (Map<Id, Job_Application__c>) Trigger.oldMap;
     }
-
+ 
     public override void beforeInsert() {
         for (Job_Application__c jobAppl : (List<Job_Application__c>) Trigger.new) {
             jobAppl.IsCreated__c = true;

@@ -1,17 +1,15 @@
-<messaging:emailTemplate subject="Reminder: Upcoming Interview Scheduled" recipientType="Contact" relatedToType="Event">
-    <messaging:htmlEmailBody >
-        <p>Hi {!Contact.FirstName},</p>
+<messaging:emailTemplate subject="Interview Reminder" recipientType="Contact" relatedToType="Event">
+    <messaging:plainTextEmailBody >
+        Hi {!recipient.FirstName},
 
-        <p>This is a friendly reminder that you have an upcoming interview scheduled:</p>
+        This is a friendly reminder that you have an upcoming interview scheduled:
 
-        <ul>
-            <li><strong>Subject:</strong> {!Event.Subject}</li>
-            <li><strong>Date & Time:</strong> {!Event.StartDateTime}</li>
-        </ul>
+        Subject: {!relatedTo.Subject}
+        Date and Time: {!relatedTo.StartDateTime}
 
-        <p>Please ensure you're prepared and available at the scheduled time. Let us know if you need to reschedule.</p>
+        Please ensure you are prepared and available at the scheduled time.
 
-        <p>Best regards,<br/>
-        The Talent Team</p>
-    </messaging:htmlEmailBody>
+        Best regards,
+        The Talent Team
+    </messaging:plainTextEmailBody>
 </messaging:emailTemplate>

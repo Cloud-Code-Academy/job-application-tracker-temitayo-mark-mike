@@ -13,4 +13,3 @@ private class StaleJobAppSchedulerTest {
         Test.stopTest();
     }
 }
-

@@ -12,8 +12,20 @@ public class AccountTriggerHandler extends TriggerHandler {
         this.accountTriggerOldMap = (Map<Id, Account>) Trigger.oldMap;
     }
  
-    public override void afterInsert() {     
-        AccountHelper.createACRForPrimaryContact(Trigger.new);
+    public override void afterInsert() {
+        Contact defaultPrimaryContact = Utilities.getDefaultPrimaryContact();
+        List<AccountContactRelation> newACRs = new List<AccountContactRelation>();
+        for (Account acc : (List<Account>) Trigger.new) {
+            AccountContactRelation newACR = new AccountContactRelation();
+            newACR.AccountId = acc.Id;
+            newACR.ContactId = defaultPrimaryContact.Id;
+            newACR.Roles = 'Other';
+            newACR.Primary_Contact__c = true;
+            newACRs.add(newACR);
+        }
+        Id batchId = Utilities.batchUpsert(newACRs, 20);
+        
+        //AccountHelper.createACRForPrimaryContact(Trigger.new);
     }
 
 }

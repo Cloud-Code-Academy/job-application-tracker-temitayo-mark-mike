@@ -1,8 +1,11 @@
 public with sharing class EmailNotificationQueueable implements Queueable, Database.AllowsCallouts {
-    private List<Id> recordIds;
-    private EmailType emailType;
+    public List<Id> recordIds;
+    public EmailType emailType;
+    public Id overrideTemplateId;
 
-    // Enum declaration for each email type
+    // Optional test-only override
+    public static Boolean skipEmailSend = false;
+
     public enum EmailType {
         INTERVIEW_REMINDER,
         POST_INTERVIEW_THANK_YOU,
@@ -37,8 +40,7 @@ public with sharing class EmailNotificationQueueable implements Queueable, Datab
         }
     }
 
-    // Shared method to send email templates
-    private void sendTemplatedEmails(String templateDeveloperName) {
+    public void sendTemplatedEmails(String templateDeveloperName) {
         List<Event> events = [
             SELECT Id, Subject, StartDateTime, WhoId, Reminder_Sent__c
             FROM Event
@@ -67,8 +69,8 @@ public with sharing class EmailNotificationQueueable implements Queueable, Datab
         for (Event e : events) {
             if (e.WhoId != null) {
                 Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-                email.setTargetObjectId(e.WhoId);  // Must be Contact or Lead
-                email.setWhatId(e.Id);             // Do we want to set the related 'What'?
+                email.setTargetObjectId(e.WhoId);
+                email.setWhatId(e.Id);
                 email.setTemplateId(template.Id);
                 email.setSaveAsActivity(false);
                 emails.add(email);

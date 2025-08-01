@@ -13,6 +13,7 @@ public with sharing class AccountHelper {
             newACRs.add(newACR);
         }
         Id batchId = Utilities.batchUpsert(newACRs, 20);
+        System.debug('createACRForPrimaryContact()');
     }
 
 }
