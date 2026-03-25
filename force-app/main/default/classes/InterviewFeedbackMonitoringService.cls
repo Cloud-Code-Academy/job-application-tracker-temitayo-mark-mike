@@ -3,7 +3,7 @@
  * @author Interview Feedback Tracker Team
  * @date 2024
  */
-public with sharing class InterviewFeedbackMonitoringService {
+public inherited sharing class InterviewFeedbackMonitoringService {
     
     private static final String MONITORING_EMAIL = 'admin@company.com';
     private static final Integer ERROR_THRESHOLD = 10;

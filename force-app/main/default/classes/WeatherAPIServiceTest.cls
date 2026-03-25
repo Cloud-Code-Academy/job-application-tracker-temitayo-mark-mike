@@ -5,7 +5,7 @@
  * @date 2025-01-08
  */
 @IsTest
-private class WeatherAPIServiceTest {
+private inherited sharing class WeatherAPIServiceTest {
     
     /**
      * @description Mock HTTP callout class for testing

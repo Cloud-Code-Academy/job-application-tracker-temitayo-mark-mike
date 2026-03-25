@@ -4,7 +4,7 @@
  * @author Salesforce Developer
  * @date 2024
  */
-public with sharing class FeedbackQueryOptimizationService {
+public inherited sharing class FeedbackQueryOptimizationService {
     
     // Cache partition for feedback data
     private static final String CACHE_PARTITION = 'FeedbackCache';

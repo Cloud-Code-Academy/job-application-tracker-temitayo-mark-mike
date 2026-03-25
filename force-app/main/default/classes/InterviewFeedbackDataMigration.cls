@@ -3,7 +3,7 @@
  * @author Interview Feedback Tracker Team
  * @date 2024
  */
-public with sharing class InterviewFeedbackDataMigration {
+public inherited sharing class InterviewFeedbackDataMigration {
     
     /**
      * @description Migrates existing interview notes from Job Applications to structured feedback records

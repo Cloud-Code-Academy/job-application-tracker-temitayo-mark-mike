@@ -4,7 +4,7 @@
  * @author Kiro AI Assistant
  * @date 2025
  */
-public with sharing class FeedbackGDPRComplianceService {
+public inherited sharing class FeedbackGDPRComplianceService {
     
     // GDPR constants
     private static final String GDPR_EXPORT_FORMAT = 'JSON';

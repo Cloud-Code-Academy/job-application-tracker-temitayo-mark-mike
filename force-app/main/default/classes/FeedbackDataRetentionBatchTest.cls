@@ -5,7 +5,7 @@
  * @date 2025
  */
 @IsTest
-private class FeedbackDataRetentionBatchTest {
+private inherited sharing class FeedbackDataRetentionBatchTest {
     
     @TestSetup
     static void setupTestData() {

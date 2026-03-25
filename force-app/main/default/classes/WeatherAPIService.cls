@@ -4,11 +4,10 @@
  * @author Learning Journey
  * @date 2025-01-08
  */
-public with sharing class WeatherAPIService {
+public inherited sharing class WeatherAPIService {
     
-    // API Configuration - In production, use Named Credentials or Custom Settings
-    private static final String BASE_URL = 'https://api.openweathermap.org/data/2.5';
-    private static final String API_KEY = 'demo_key'; // Use Named Credentials in production
+    // API Configuration — uses Named Credential for secure endpoint + auth
+    private static final String NAMED_CREDENTIAL = 'callout:Weather_API';
     private static final Integer TIMEOUT = 10000; // 10 seconds
     private static final Integer RETRY_ATTEMPTS = 3;
     
@@ -103,19 +102,18 @@ public with sharing class WeatherAPIService {
      */
     private static HttpRequest buildWeatherRequest(String cityName, String countryCode) {
         HttpRequest request = new HttpRequest();
-        request.setEndpoint(BASE_URL + '/weather');
+        request.setEndpoint(NAMED_CREDENTIAL + '/weather');
         request.setMethod('GET');
         request.setTimeout(TIMEOUT);
         
-        // Set headers
+        // Headers — auth handled by Named Credential
         request.setHeader('Accept', 'application/json');
         request.setHeader('User-Agent', 'Salesforce-WeatherService/1.0');
         
-        // Build query parameters
+        // Build query parameters (API key handled by Named Credential)
         Map<String, String> params = new Map<String, String>{
             'q' => buildCityQuery(cityName, countryCode),
-            'appid' => API_KEY,
-            'units' => 'metric', // Celsius
+            'units' => 'metric',
             'lang' => 'en'
         };
         
@@ -133,20 +131,19 @@ public with sharing class WeatherAPIService {
      */
     private static HttpRequest buildForecastRequest(String cityName, Integer days) {
         HttpRequest request = new HttpRequest();
-        request.setEndpoint(BASE_URL + '/forecast');
+        request.setEndpoint(NAMED_CREDENTIAL + '/forecast');
         request.setMethod('GET');
         request.setTimeout(TIMEOUT);
         
-        // Set headers
+        // Headers — auth handled by Named Credential
         request.setHeader('Accept', 'application/json');
         request.setHeader('User-Agent', 'Salesforce-WeatherService/1.0');
         
-        // Build query parameters
+        // Build query parameters (API key handled by Named Credential)
         Map<String, String> params = new Map<String, String>{
             'q' => EncodingUtil.urlEncode(cityName, 'UTF-8'),
-            'appid' => API_KEY,
             'units' => 'metric',
-            'cnt' => String.valueOf(days * 8) // 8 forecasts per day (3-hour intervals)
+            'cnt' => String.valueOf(days * 8)
         };
         
         String queryParams = buildQueryParams(params);

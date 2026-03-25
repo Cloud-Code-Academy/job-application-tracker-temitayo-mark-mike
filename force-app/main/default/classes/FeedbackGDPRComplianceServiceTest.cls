@@ -5,7 +5,7 @@
  * @date 2025
  */
 @IsTest
-private class FeedbackGDPRComplianceServiceTest {
+private inherited sharing class FeedbackGDPRComplianceServiceTest {
     
     @TestSetup
     static void setupTestData() {

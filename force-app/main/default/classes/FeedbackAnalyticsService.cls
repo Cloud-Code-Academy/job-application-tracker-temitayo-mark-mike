@@ -3,7 +3,7 @@
  * @author System Generated
  * @date 2025
  */
-public with sharing class FeedbackAnalyticsService {
+public inherited sharing class FeedbackAnalyticsService {
     
     // Constants for analytics calculations
     private static final Integer DEFAULT_TREND_PERIOD_DAYS = 90;

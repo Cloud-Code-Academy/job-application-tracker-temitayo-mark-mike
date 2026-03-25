@@ -22,7 +22,7 @@ Trigger → TriggerHandler → Service classes → LWC (via @AuraEnabled/@wire)
 - **Services:** Domain logic in `*Service.cls` classes (e.g., `SalaryCalculationService`, `InterviewFeedbackService`, `FeedbackAnalyticsService`)
 - **Async:** Batch (`SalaryMarketAnalysisBatch`, `JobApplicationCleanupBatch`, `FeedbackDataRetentionBatch`), Queueable (`EmailNotificationQueue`, `JobApplicationEnrichmentQueue`), Schedulable
 - **Platform Events:** `Job_Application_Event__e` with publisher/subscriber pattern
-- **External APIs:** `SalaryBenchmarkService`, `CompanyDataService` (use Named Credentials: `callout:Salary_Benchmark_API`, `callout:Company_Data_API`)
+- **External APIs:** `SalaryBenchmarkService`, `CompanyDataService`, `SalaryDataAPIService`, `WeatherAPIService` (use Named Credentials: `callout:Salary_Benchmark_API`, `callout:Company_Data_API`, `callout:Salary_Data_API`, `callout:Weather_API`)
 
 ## Key Custom Objects
 

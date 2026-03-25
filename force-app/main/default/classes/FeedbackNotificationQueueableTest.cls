@@ -5,7 +5,7 @@
  * @date 2024
  */
 @isTest
-private class FeedbackNotificationQueueableTest {
+private inherited sharing class FeedbackNotificationQueueableTest {
     
     @TestSetup
     static void setupTestData() {

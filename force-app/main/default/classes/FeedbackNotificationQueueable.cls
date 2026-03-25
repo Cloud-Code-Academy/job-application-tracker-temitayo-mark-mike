@@ -4,7 +4,7 @@
  * @author Temitayo Oluwalade
  * @date 2024
  */
-public class FeedbackNotificationQueueable implements Queueable {
+public inherited sharing class FeedbackNotificationQueueable implements Queueable {
     
     private List<Job_Application__c> jobApplications;
     

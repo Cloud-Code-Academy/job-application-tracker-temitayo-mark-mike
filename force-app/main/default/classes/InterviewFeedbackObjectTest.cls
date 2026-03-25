@@ -8,7 +8,7 @@
  * practices with 100% code coverage and meaningful assertions.
  */
 @IsTest
-private class InterviewFeedbackObjectTest {
+private inherited sharing class InterviewFeedbackObjectTest {
     
     /**
      * @description Test setup method to create common test data

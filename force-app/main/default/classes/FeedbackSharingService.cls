@@ -3,7 +3,7 @@
  * @author System Generated
  * @date 2025
  */
-public with sharing class FeedbackSharingService {
+public inherited sharing class FeedbackSharingService {
     
     // Constants for sharing configuration
     private static final Integer DEFAULT_EXPIRATION_DAYS = 30;

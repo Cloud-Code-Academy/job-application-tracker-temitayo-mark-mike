@@ -454,7 +454,6 @@ export default class IntegrationDeploymentDashboard extends LightningElement {
     // Utility methods
     processHealthData() {
         // Additional processing of health data if needed
-        console.log('Health Data processed:', this.healthData);
     }
     
     async showConfirmationDialog() {

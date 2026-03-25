@@ -5,7 +5,7 @@
  * @date 2024
  */
 @isTest
-private class JobApplicationFeedbackIntegrationServiceTest {
+private inherited sharing class JobApplicationFeedbackIntegrationServiceTest {
     
     @TestSetup
     static void setupTestData() {

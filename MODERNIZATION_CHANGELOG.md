@@ -369,6 +369,7 @@ These were discovered during the full `force-app` deployment attempt and are **n
 ## Git History
 
 ```
+ef612ef fix: add inherited sharing to 41 Apex classes missing sharing keyword
 10c64ac chore: add AI context files and quick-deploy script
 f09c9de docs: enhance MODERNIZATION_CHANGELOG with educational explanations
 3dfd1da chore: reorganize docs, fix deployment issues, update changelog
@@ -387,9 +388,9 @@ f09c9de docs: enhance MODERNIZATION_CHANGELOG with educational explanations
 |----------|--------|--------|
 | API Version | 58.0 → 62.0 across 79 metadata files | Done |
 | `@track` removal | 60 properties across 10 LWCs | Done |
-| Sharing keywords | 41 classes (20 production + 21 test) | Done |
+| Sharing keywords | 56 classes (all Apex classes standardized) | Done |
 | Tax rates | 2023 → 2025, moved to Custom Metadata | Done |
-| Named Credentials | API keys replaced with callout endpoints | Done |
+| Named Credentials | All API services use callout: endpoints | Done |
 | SOQL Injection | Input validation in PerformanceOptimizationService | Done |
 | Custom Metadata | Tax_Configuration__mdt with admin UI | Done |
 | Error Panel | Reusable c-error-panel LWC component | Done |
@@ -402,3 +403,5 @@ f09c9de docs: enhance MODERNIZATION_CHANGELOG with educational explanations
 | AI Context | CLAUDE.md + copilot-instructions.md for AI tools | Done |
 | Deploy Script | quick-deploy.ps1 with dependency ordering | Done |
 | xmlns Fix | sforge → sforce typo in CMDT field metadata | Done |
+| Missing meta.xml | Created 22 .cls-meta.xml files for orphaned classes | Done |
+| Debug cleanup | Removed leftover console.log from LWC dashboards | Done |

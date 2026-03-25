@@ -3,11 +3,10 @@
  * @author Temitayo Oluwalade
  * @date 2024
  */
-public with sharing class SalaryDataAPIService {
+public inherited sharing class SalaryDataAPIService {
     
-    // API Configuration (in production, store in Custom Settings or Custom Metadata)
-    private static final String BASE_URL = 'https://api.salarydata.com/v1';
-    private static final String API_KEY = 'your_api_key_here'; // Use Named Credentials in production
+    // API Configuration — uses Named Credential for secure endpoint + auth
+    private static final String NAMED_CREDENTIAL = 'callout:Salary_Data_API';
     private static final Integer TIMEOUT = 30000; // 30 seconds
     private static final Integer RETRY_ATTEMPTS = 3;
     
@@ -96,12 +95,11 @@ public with sharing class SalaryDataAPIService {
      */
     private static HttpRequest buildSalaryDataRequest(String positionTitle, String location, String experienceLevel) {
         HttpRequest request = new HttpRequest();
-        request.setEndpoint(BASE_URL + '/salary-data');
+        request.setEndpoint(NAMED_CREDENTIAL + '/salary-data');
         request.setMethod('GET');
         request.setTimeout(TIMEOUT);
         
-        // Set headers
-        request.setHeader('Authorization', 'Bearer ' + API_KEY);
+        // Headers — auth handled by Named Credential
         request.setHeader('Content-Type', 'application/json');
         request.setHeader('Accept', 'application/json');
         
@@ -125,12 +123,11 @@ public with sharing class SalaryDataAPIService {
      */
     private static HttpRequest buildBulkSalaryDataRequest(List<SalaryDataRequest> requests) {
         HttpRequest request = new HttpRequest();
-        request.setEndpoint(BASE_URL + '/salary-data/bulk');
+        request.setEndpoint(NAMED_CREDENTIAL + '/salary-data/bulk');
         request.setMethod('POST');
         request.setTimeout(TIMEOUT);
         
-        // Set headers
-        request.setHeader('Authorization', 'Bearer ' + API_KEY);
+        // Headers — auth handled by Named Credential
         request.setHeader('Content-Type', 'application/json');
         request.setHeader('Accept', 'application/json');
         
@@ -152,12 +149,11 @@ public with sharing class SalaryDataAPIService {
      */
     private static HttpRequest buildTrendRequest(String industry, String timeframe) {
         HttpRequest request = new HttpRequest();
-        request.setEndpoint(BASE_URL + '/trends');
+        request.setEndpoint(NAMED_CREDENTIAL + '/trends');
         request.setMethod('GET');
         request.setTimeout(TIMEOUT);
         
-        // Set headers
-        request.setHeader('Authorization', 'Bearer ' + API_KEY);
+        // Headers — auth handled by Named Credential
         request.setHeader('Content-Type', 'application/json');
         
         // Build query parameters

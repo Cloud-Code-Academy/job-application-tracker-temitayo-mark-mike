@@ -254,7 +254,6 @@ export default class ExecutiveKpiDashboard extends NavigationMixin(LightningElem
     // Utility methods
     processKPIData() {
         // Additional processing of KPI data if needed
-        console.log('KPI Data processed:', this.kpiData);
     }
     
     calculateFunnelPercentage(current, total) {
@@ -289,13 +288,11 @@ export default class ExecutiveKpiDashboard extends NavigationMixin(LightningElem
     
     generateQuarterlyReport(data) {
         // Process quarterly report data
-        console.log('Quarterly Report:', data);
         this.showToast('Success', 'Quarterly report generated', 'success');
     }
     
     generateMonthlyReport(data) {
         // Process monthly report data
-        console.log('Monthly Report:', data);
         this.showToast('Success', 'Monthly report generated', 'success');
     }
     

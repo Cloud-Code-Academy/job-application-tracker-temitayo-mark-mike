@@ -4,7 +4,7 @@
  * @date 2025
  */
 @IsTest
-private class FeedbackSharingServiceTest {
+private inherited sharing class FeedbackSharingServiceTest {
     
     @TestSetup
     static void setupTestData() {

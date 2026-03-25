@@ -5,7 +5,7 @@
  * @date 2024
  */
 @isTest
-private class InterviewAnalyticsServiceTest {
+private inherited sharing class InterviewAnalyticsServiceTest {
     
     @TestSetup
     static void setupTestData() {

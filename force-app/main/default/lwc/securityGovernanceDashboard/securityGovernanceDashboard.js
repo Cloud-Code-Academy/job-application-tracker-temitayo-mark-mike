@@ -279,7 +279,6 @@ export default class SecurityGovernanceDashboard extends LightningElement {
     // Utility methods
     processSecurityData() {
         // Additional processing of security data if needed
-        console.log('Security Data processed:', this.securityData);
     }
     
     generateReportFile(reportData) {

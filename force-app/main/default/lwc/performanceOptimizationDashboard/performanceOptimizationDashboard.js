@@ -383,7 +383,6 @@ export default class PerformanceOptimizationDashboard extends LightningElement {
     // Utility methods
     processPerformanceData() {
         // Additional processing of performance data if needed
-        console.log('Performance Data processed:', this.performanceData);
     }
     
     getProgressColor(percent) {

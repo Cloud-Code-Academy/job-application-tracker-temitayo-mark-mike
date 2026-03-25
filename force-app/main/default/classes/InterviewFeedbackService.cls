@@ -3,7 +3,7 @@
  * @author System Generated
  * @date 2025
  */
-public with sharing class InterviewFeedbackService {
+public inherited sharing class InterviewFeedbackService {
     
     // Constants for validation and business rules
     private static final Integer MAX_RATING_VALUE = 5;
