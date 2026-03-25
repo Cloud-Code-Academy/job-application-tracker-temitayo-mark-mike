@@ -280,7 +280,7 @@ export default class JobTrackerHomePage extends NavigationMixin(LightningElement
                 this.navigateToTab('Salary_Calculator');
                 break;
             case 'viewCalendar':
-                this.navigateToTab('Calendar');
+                this.navigateToTab('Interview_Calendar');
                 break;
             default:
                 break;

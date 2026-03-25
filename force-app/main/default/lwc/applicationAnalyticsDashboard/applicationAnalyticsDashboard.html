@@ -1,33 +1,68 @@
 <template>
-    <lightning-card title="📊 Application Analytics Dashboard" icon-name="utility:chart" class="analytics-dashboard-card">
-        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+    <div class="dashboard-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">
+                    <lightning-icon icon-name="utility:chart" size="medium" class="header-icon"></lightning-icon>
+                    Application Analytics
+                </h1>
+                <p class="page-subtitle">Real-time insights into your job search pipeline</p>
+            </div>
+            <div class="header-actions">
+                <lightning-button-icon
+                    icon-name="utility:refresh"
+                    alternative-text="Refresh"
+                    variant="border-filled"
+                    onclick={handleRefresh}
+                    disabled={isLoading}
+                    class="slds-m-right_small">
+                </lightning-button-icon>
+                <lightning-button
+                    variant="brand"
+                    label="New Application"
+                    icon-name="utility:add"
+                    onclick={handleNewApplication}>
+                </lightning-button>
+            </div>
+        </div>
+
+        <div class="dashboard-body">
             
             <!-- Summary Statistics -->
             <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
                     <div class="metric-card total-applications">
-                        <div class="metric-icon">📋</div>
+                        <div class="metric-icon">
+                            <lightning-icon icon-name="utility:layers" size="small" variant="inverse"></lightning-icon>
+                        </div>
                         <div class="metric-value">{totalApplications}</div>
                         <div class="metric-label">Total Applications</div>
                     </div>
                 </div>
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
                     <div class="metric-card active-applications">
-                        <div class="metric-icon">🔄</div>
+                        <div class="metric-icon">
+                            <lightning-icon icon-name="utility:activity" size="small" variant="inverse"></lightning-icon>
+                        </div>
                         <div class="metric-value">{activeApplications}</div>
                         <div class="metric-label">Active Applications</div>
                     </div>
                 </div>
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
                     <div class="metric-card interview-rate">
-                        <div class="metric-icon">🎯</div>
+                        <div class="metric-icon">
+                            <lightning-icon icon-name="utility:people" size="small" variant="inverse"></lightning-icon>
+                        </div>
                         <div class="metric-value">{interviewRate}%</div>
                         <div class="metric-label">Interview Rate</div>
                     </div>
                 </div>
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
                     <div class="metric-card success-rate">
-                        <div class="metric-icon">🏆</div>
+                        <div class="metric-icon">
+                            <lightning-icon icon-name="utility:success" size="small" variant="inverse"></lightning-icon>
+                        </div>
                         <div class="metric-value">{successRate}%</div>
                         <div class="metric-label">Success Rate</div>
                     </div>
@@ -129,25 +164,13 @@
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="slds-text-align_center">
-                <lightning-button
-                    variant="brand"
-                    label="Add New Application"
-                    onclick={handleNewApplication}
-                    class="slds-m-right_small">
-                </lightning-button>
+            <!-- Footer Actions -->
+            <div class="footer-actions">
                 <lightning-button
                     variant="neutral"
                     label="Export Data"
-                    onclick={handleExportData}
-                    class="slds-m-right_small">
-                </lightning-button>
-                <lightning-button
-                    variant="neutral"
-                    label="Refresh Analytics"
-                    onclick={handleRefresh}
-                    disabled={isLoading}>
+                    icon-name="utility:download"
+                    onclick={handleExportData}>
                 </lightning-button>
             </div>
 
@@ -161,13 +184,15 @@
             <div if:true={errorMessage} class="slds-m-top_medium">
                 <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
                     <span class="slds-assistive-text">Error</span>
-                    <h2>❌ {errorMessage}</h2>
+                    <h2>{errorMessage}</h2>
                 </div>
             </div>
 
             <!-- Empty State -->
             <div if:true={showEmptyState} class="empty-state slds-text-align_center slds-m-top_large">
-                <div class="empty-state-icon">📊</div>
+                <div class="empty-state-icon">
+                    <lightning-icon icon-name="utility:chart" size="large"></lightning-icon>
+                </div>
                 <h3 class="slds-text-heading_medium">No Application Data</h3>
                 <p class="slds-text-body_regular slds-text-color_weak">
                     Start tracking your job applications to see analytics and insights.
@@ -180,5 +205,5 @@
                 </lightning-button>
             </div>
         </div>
-    </lightning-card>
+    </div>
 </template>

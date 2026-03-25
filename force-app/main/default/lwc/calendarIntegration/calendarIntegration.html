@@ -1,172 +1,272 @@
 <template>
-    <lightning-card title="📅 Interview Scheduler" icon-name="utility:event" class="calendar-integration-card">
-        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-            
-            <!-- Job Application Info -->
-            <div if:true={jobApplicationData} class="slds-m-bottom_medium">
-                <div class="job-info-banner">
-                    <div class="job-info-content">
-                        <h3 class="slds-text-heading_small">
-                            🏢 {jobApplicationData.Company_Name__c} - {jobApplicationData.Position_Title__c}
-                        </h3>
-                        <p class="slds-text-body_small slds-text-color_weak">
-                            Status: {jobApplicationData.Status__c}
-                        </p>
-                    </div>
-                </div>
+    <div class="scheduler-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">
+                    <lightning-icon icon-name="utility:event" size="medium" class="header-icon"></lightning-icon>
+                    Interview Scheduler
+                </h1>
+                <p class="page-subtitle">Schedule and manage your upcoming interviews</p>
             </div>
-
-            <!-- Event Creation Form -->
-            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
-                <div class="slds-col slds-size_1-of-1">
-                    <lightning-input
-                        type="text"
-                        label="Interview Subject"
-                        value={eventSubject}
-                        onchange={handleSubjectChange}
-                        placeholder="e.g., Technical Interview with John Doe"
-                        required>
-                    </lightning-input>
-                </div>
-            </div>
-
-            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
-                    <lightning-input
-                        type="datetime-local"
-                        label="Start Date & Time"
-                        value={startDateTime}
-                        onchange={handleStartDateTimeChange}
-                        required>
-                    </lightning-input>
-                </div>
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
-                    <lightning-input
-                        type="datetime-local"
-                        label="End Date & Time"
-                        value={endDateTime}
-                        onchange={handleEndDateTimeChange}
-                        required>
-                    </lightning-input>
-                </div>
-            </div>
-
-            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
-                    <lightning-combobox
-                        name="interviewType"
-                        label="Interview Type"
-                        value={interviewType}
-                        placeholder="Select interview type..."
-                        options={interviewTypeOptions}
-                        onchange={handleInterviewTypeChange}>
-                    </lightning-combobox>
-                </div>
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
-                    <lightning-combobox
-                        name="location"
-                        label="Location/Platform"
-                        value={location}
-                        placeholder="Select location or platform..."
-                        options={locationOptions}
-                        onchange={handleLocationChange}>
-                    </lightning-combobox>
-                </div>
-            </div>
-
-            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
-                <div class="slds-col slds-size_1-of-1">
-                    <lightning-textarea
-                        label="Interview Notes"
-                        value={description}
-                        onchange={handleDescriptionChange}
-                        placeholder="Add any additional notes, preparation items, or special instructions..."
-                        rows="3">
-                    </lightning-textarea>
-                </div>
-            </div>
-
-            <!-- Validation Messages -->
-            <div if:true={validationMessages.length} class="slds-m-bottom_medium">
-                <template for:each={validationMessages} for:item="message">
-                    <div key={message.id} class={message.cssClass}>
-                        <span class="slds-assistive-text">{message.type}</span>
-                        <h2>{message.text}</h2>
-                    </div>
-                </template>
-            </div>
-
-            <!-- Quick Time Suggestions -->
-            <div class="slds-m-bottom_medium">
-                <div class="slds-text-heading_small slds-m-bottom_small">⚡ Quick Time Suggestions</div>
-                <div class="slds-grid slds-wrap slds-gutters">
-                    <template for:each={timeSuggestions} for:item="suggestion">
-                        <div key={suggestion.id} class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
-                            <lightning-button
-                                variant="neutral"
-                                label={suggestion.label}
-                                onclick={handleTimeSuggestionClick}
-                                data-start={suggestion.startDateTime}
-                                data-end={suggestion.endDateTime}
-                                class="time-suggestion-button">
-                            </lightning-button>
-                        </div>
-                    </template>
-                </div>
-            </div>
-
-            <!-- Conflict Check Results -->
-            <div if:true={conflictCheckResults.length} class="slds-m-bottom_medium">
-                <div class="conflict-check-container">
-                    <div class="slds-text-heading_small slds-m-bottom_small">⚠️ Schedule Conflicts</div>
-                    <template for:each={conflictCheckResults} for:item="conflict">
-                        <div key={conflict.id} class="conflict-item">
-                            <div class="conflict-time">
-                                {conflict.startTime} - {conflict.endTime}
-                            </div>
-                            <div class="conflict-subject">{conflict.subject}</div>
-                        </div>
-                    </template>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="slds-text-align_center">
-                <lightning-button
-                    variant="neutral"
-                    label="Check Availability"
-                    onclick={handleCheckAvailability}
-                    disabled={isProcessing}
-                    class="slds-m-right_small">
-                </lightning-button>
+            <div class="header-actions">
                 <lightning-button
                     variant="neutral"
                     label="Clear Form"
+                    icon-name="utility:clear"
                     onclick={handleClearForm}
-                    disabled={isProcessing}
-                    class="slds-m-right_small">
+                    disabled={isProcessing}>
                 </lightning-button>
                 <lightning-button
                     variant="brand"
                     label="Schedule Interview"
+                    icon-name="utility:check"
                     onclick={handleScheduleInterview}
+                    disabled={isProcessing}
+                    class="slds-m-left_small">
+                </lightning-button>
+            </div>
+        </div>
+
+        <div class="scheduler-body">
+            <!-- Job Application Context Banner -->
+            <template if:true={jobApplicationData}>
+                <div class="context-banner">
+                    <lightning-icon icon-name="standard:account" size="small" class="banner-icon"></lightning-icon>
+                    <div class="banner-text">
+                        <span class="banner-company">{jobApplicationData.Company_Name__c}</span>
+                        <span class="banner-separator">&mdash;</span>
+                        <span class="banner-position">{jobApplicationData.Position_Title__c}</span>
+                        <span class="banner-status">{jobApplicationData.Status__c}</span>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Form Grid -->
+            <div class="form-section">
+                <div class="form-row">
+                    <div class="form-field full-width">
+                        <lightning-input
+                            type="text"
+                            label="Interview Subject"
+                            value={eventSubject}
+                            onchange={handleSubjectChange}
+                            placeholder="e.g., Technical Interview with John Doe"
+                            required>
+                        </lightning-input>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-field">
+                        <lightning-input
+                            type="datetime-local"
+                            label="Start Date & Time"
+                            value={startDateTime}
+                            onchange={handleStartDateTimeChange}
+                            required>
+                        </lightning-input>
+                    </div>
+                    <div class="form-field">
+                        <lightning-input
+                            type="datetime-local"
+                            label="End Date & Time"
+                            value={endDateTime}
+                            onchange={handleEndDateTimeChange}
+                            required>
+                        </lightning-input>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-field">
+                        <lightning-combobox
+                            name="interviewType"
+                            label="Interview Type"
+                            value={interviewType}
+                            placeholder="Select interview type..."
+                            options={interviewTypeOptions}
+                            onchange={handleInterviewTypeChange}>
+                        </lightning-combobox>
+                    </div>
+                    <div class="form-field">
+                        <lightning-combobox
+                            name="location"
+                            label="Location / Platform"
+                            value={location}
+                            placeholder="Select location or platform..."
+                            options={locationOptions}
+                            onchange={handleLocationChange}>
+                        </lightning-combobox>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field full-width">
+                        <lightning-textarea
+                            label="Interview Notes"
+                            value={description}
+                            onchange={handleDescriptionChange}
+                            placeholder="Add any notes, preparation items, or special instructions..."
+                            rows="3">
+                        </lightning-textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validation Messages -->
+            <template if:true={validationMessages.length}>
+                <div class="validation-list">
+                    <template for:each={validationMessages} for:item="message">
+                        <div key={message.id} class={message.cssClass}>
+                            <span class="slds-assistive-text">{message.type}</span>
+                            <h2>{message.text}</h2>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Quick Time Suggestions -->
+            <div class="suggestions-section">
+                <h2 class="section-title">
+                    <lightning-icon icon-name="utility:clock" size="x-small" class="section-icon"></lightning-icon>
+                    Quick Time Suggestions
+                </h2>
+                <div class="suggestions-grid">
+                    <template for:each={timeSuggestions} for:item="suggestion">
+                        <div key={suggestion.id} class="suggestion-chip"
+                             onclick={handleTimeSuggestionClick}
+                             data-start={suggestion.startDateTime}
+                             data-end={suggestion.endDateTime}>
+                            <lightning-icon icon-name="utility:clock" size="xx-small"></lightning-icon>
+                            <span>{suggestion.label}</span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Conflict Check -->
+            <template if:true={conflictCheckResults.length}>
+                <div class="conflict-section">
+                    <h2 class="section-title conflict-title">
+                        <lightning-icon icon-name="utility:warning" size="x-small" variant="warning"></lightning-icon>
+                        Schedule Conflicts
+                    </h2>
+                    <template for:each={conflictCheckResults} for:item="conflict">
+                        <div key={conflict.id} class="conflict-row">
+                            <span class="conflict-time">{conflict.startTime} – {conflict.endTime}</span>
+                            <span class="conflict-subject">{conflict.subject}</span>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Check Availability -->
+            <div class="footer-bar">
+                <lightning-button
+                    variant="neutral"
+                    label="Check Availability"
+                    icon-name="utility:search"
+                    onclick={handleCheckAvailability}
                     disabled={isProcessing}>
                 </lightning-button>
             </div>
 
-            <!-- Loading Indicator -->
-            <div if:true={isProcessing} class="slds-text-align_center slds-m-top_medium">
-                <lightning-spinner alternative-text="Processing..." size="small"></lightning-spinner>
-                <p class="slds-text-body_small slds-text-color_weak">Creating your interview...</p>
-            </div>
-
-            <!-- Success Message -->
-            <div if:true={showSuccessMessage} class="slds-m-top_medium">
-                <div class="slds-notify slds-notify_alert slds-alert_success" role="alert">
-                    <span class="slds-assistive-text">Success</span>
-                    <h2>✅ Interview scheduled successfully! Check your calendar for details.</h2>
+            <!-- Processing Spinner -->
+            <template if:true={isProcessing}>
+                <div class="processing-overlay">
+                    <lightning-spinner alternative-text="Processing..." size="small"></lightning-spinner>
                 </div>
+            </template>
+
+            <!-- Success Toast -->
+            <template if:true={showSuccessMessage}>
+                <div class="success-banner">
+                    <lightning-icon icon-name="utility:success" size="small" variant="inverse"></lightning-icon>
+                    <span>Interview scheduled successfully! Check your calendar for details.</span>
+                </div>
+            </template>
+
+            <!-- Interview Calendar Timeline -->
+            <div class="calendar-section">
+                <div class="calendar-tabs">
+                    <div class={upcomingTabClass} data-tab="upcoming" onclick={handleCalendarTabClick}>
+                        <lightning-icon icon-name="utility:date_input" size="xx-small"></lightning-icon>
+                        Upcoming
+                        <span class="tab-badge">{upcomingCount}</span>
+                    </div>
+                    <div class={pastTabClass} data-tab="past" onclick={handleCalendarTabClick}>
+                        <lightning-icon icon-name="utility:clock" size="xx-small"></lightning-icon>
+                        Past (30 days)
+                        <span class="tab-badge">{pastCount}</span>
+                    </div>
+                </div>
+
+                <!-- Upcoming Interviews -->
+                <template if:true={showUpcomingTab}>
+                    <div class="event-list">
+                        <template if:true={hasUpcomingInterviews}>
+                            <template for:each={upcomingInterviews} for:item="interview">
+                                <div key={interview.id} class={interview.urgencyClass}>
+                                    <div class="event-date-col">
+                                        <span class="event-date">{interview.dateLabel}</span>
+                                        <span class="event-time">{interview.timeRange}</span>
+                                    </div>
+                                    <div class="event-details-col">
+                                        <span class="event-subject">{interview.subject}</span>
+                                        <span class="event-location">
+                                            <lightning-icon icon-name="utility:location" size="xx-small"></lightning-icon>
+                                            {interview.location}
+                                        </span>
+                                    </div>
+                                    <div class="event-status-col">
+                                        <span class="event-time-label">{interview.timeLabel}</span>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:false={hasUpcomingInterviews}>
+                            <div class="empty-calendar">
+                                <lightning-icon icon-name="utility:event" size="small"></lightning-icon>
+                                <p>No upcoming interviews scheduled</p>
+                                <p class="empty-hint">Use the form above to schedule your next interview</p>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Past Interviews -->
+                <template if:true={showPastTab}>
+                    <div class="event-list">
+                        <template if:true={hasPastInterviews}>
+                            <template for:each={pastInterviews} for:item="interview">
+                                <div key={interview.id} class="event-card event-past">
+                                    <div class="event-date-col">
+                                        <span class="event-date">{interview.dateLabel}</span>
+                                        <span class="event-time">{interview.timeRange}</span>
+                                    </div>
+                                    <div class="event-details-col">
+                                        <span class="event-subject">{interview.subject}</span>
+                                        <span class="event-location">
+                                            <lightning-icon icon-name="utility:location" size="xx-small"></lightning-icon>
+                                            {interview.location}
+                                        </span>
+                                    </div>
+                                    <div class="event-status-col">
+                                        <span class="event-time-label">{interview.timeLabel}</span>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:false={hasPastInterviews}>
+                            <div class="empty-calendar">
+                                <lightning-icon icon-name="utility:clock" size="small"></lightning-icon>
+                                <p>No past interviews in the last 30 days</p>
+                            </div>
+                        </template>
+                    </div>
+                </template>
             </div>
         </div>
-    </lightning-card>
+    </div>
 </template>
