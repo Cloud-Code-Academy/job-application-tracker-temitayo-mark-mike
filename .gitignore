@@ -48,5 +48,6 @@ private-learning/
 **/venv/
 
 .vscode/
+.kiro/
 .husky/
 diagnostic-files/
