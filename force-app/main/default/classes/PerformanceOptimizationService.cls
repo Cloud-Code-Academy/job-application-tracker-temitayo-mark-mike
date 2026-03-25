@@ -67,19 +67,29 @@ public with sharing class PerformanceOptimizationService {
     @AuraEnabled
     public static Map<String, Object> optimizeQuery(String queryString) {
         try {
+            // Input validation — prevent injection and reject malformed input
+            if (String.isBlank(queryString)) {
+                throw new AuraHandledException('Query string cannot be empty');
+            }
+            if (queryString.length() > 10000) {
+                throw new AuraHandledException('Query string exceeds maximum length');
+            }
+            // Sanitize: strip any attempts to inject DML or system commands
+            String sanitized = queryString.replaceAll('(?i)(INSERT|UPDATE|DELETE|UPSERT|MERGE|UNDELETE)\\s', '');
+            
             Map<String, Object> optimization = new Map<String, Object>();
             
             // Analyze query structure
-            optimization.putAll(analyzeQueryStructure(queryString));
+            optimization.putAll(analyzeQueryStructure(sanitized));
             
             // Check for performance anti-patterns
-            optimization.put('antiPatterns', detectAntiPatterns(queryString));
+            optimization.put('antiPatterns', detectAntiPatterns(sanitized));
             
             // Suggest optimizations
-            optimization.put('suggestions', generateOptimizationSuggestions(queryString));
+            optimization.put('suggestions', generateOptimizationSuggestions(sanitized));
             
             // Estimate performance impact
-            optimization.put('performanceImpact', estimatePerformanceImpact(queryString));
+            optimization.put('performanceImpact', estimatePerformanceImpact(sanitized));
             
             return optimization;
             

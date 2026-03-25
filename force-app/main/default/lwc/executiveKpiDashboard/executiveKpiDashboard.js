@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 import { refreshApex } from '@salesforce/apex';
@@ -9,10 +9,10 @@ import getQuarterlyBusinessReview from '@salesforce/apex/ExecutiveReportingServi
 export default class ExecutiveKpiDashboard extends NavigationMixin(LightningElement) {
     
     // Component state
-    @track isLoading = false;
-    @track errorMessage = '';
-    @track kpiData = {};
-    @track selectedTimePeriod = 'current';
+    isLoading = false;
+    errorMessage = '';
+    kpiData = {};
+    selectedTimePeriod = 'current';
     
     // Wired data
     wiredKPIResult;

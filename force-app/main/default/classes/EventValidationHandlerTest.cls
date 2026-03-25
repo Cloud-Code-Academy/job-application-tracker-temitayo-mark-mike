@@ -54,7 +54,7 @@ public class EventValidationHandlerTest {
      */
     @isTest
     static void testBusinessHoursValidation() {
-        Date tomorrow = Date.today().addDays(1);
+        Date tomorrow = getNextBusinessDay();
         
         // Test early morning event (before 8 AM)
         Event earlyEvent = new Event(
@@ -79,7 +79,7 @@ public class EventValidationHandlerTest {
      */
     @isTest
     static void testEventDurationValidation() {
-        Date tomorrow = Date.today().addDays(1);
+        Date tomorrow = getNextBusinessDay();
         
         // Test very short event (less than 15 minutes)
         Event shortEvent = new Event(
@@ -104,9 +104,9 @@ public class EventValidationHandlerTest {
      */
     @isTest
     static void testDoubleBookingValidation() {
-        Date tomorrow = Date.today().addDays(1);
-        Datetime startTime = Datetime.newInstance(tomorrow, Time.newInstance(10, 0, 0, 0));
-        Datetime endTime = Datetime.newInstance(tomorrow, Time.newInstance(11, 0, 0, 0));
+        Date nextBusinessDay = getNextBusinessDay();
+        Datetime startTime = Datetime.newInstance(nextBusinessDay, Time.newInstance(10, 0, 0, 0));
+        Datetime endTime = Datetime.newInstance(nextBusinessDay, Time.newInstance(11, 0, 0, 0));
         
         // Create first event
         Event firstEvent = new Event(
@@ -139,7 +139,7 @@ public class EventValidationHandlerTest {
      */
     @isTest
     static void testValidEventCreation() {
-        Date tomorrow = Date.today().addDays(1);
+        Date tomorrow = getNextBusinessDay();
         
         // Skip weekend
         while (tomorrow.toStartOfWeek().daysBetween(tomorrow) >= 5) {
@@ -166,7 +166,7 @@ public class EventValidationHandlerTest {
      */
     @isTest
     static void testEventUpdateValidation() {
-        Date tomorrow = Date.today().addDays(1);
+        Date tomorrow = getNextBusinessDay();
         
         // Skip weekend
         while (tomorrow.toStartOfWeek().daysBetween(tomorrow) >= 5) {
@@ -203,7 +203,7 @@ public class EventValidationHandlerTest {
     @isTest
     static void testBulkEventProcessing() {
         List<Event> events = new List<Event>();
-        Date tomorrow = Date.today().addDays(1);
+        Date tomorrow = getNextBusinessDay();
         
         // Skip weekend
         while (tomorrow.toStartOfWeek().daysBetween(tomorrow) >= 5) {
@@ -250,7 +250,7 @@ public class EventValidationHandlerTest {
      */
     @isTest
     static void testEventsOverlapLogic() {
-        Date tomorrow = Date.today().addDays(1);
+        Date tomorrow = getNextBusinessDay();
         
         Event event1 = new Event(
             Subject = 'Event 1',
@@ -313,5 +313,30 @@ public class EventValidationHandlerTest {
         // Verify event was created (validation should be skipped for null fields)
         Event insertedEvent = [SELECT Id, Subject FROM Event WHERE Id = :eventWithNullFields.Id];
         System.assertEquals('Event with null fields', insertedEvent.Subject, 'Event with null fields should be created');
+    }
+    
+    /**
+     * @description Helper method to get the next business day (Monday-Friday)
+     * @return Date Next business day
+     */
+    private static Date getNextBusinessDay() {
+        Date testDate = Date.today().addDays(1);
+        
+        // Keep adding days until we get a weekday
+        while (true) {
+            Datetime testDateTime = Datetime.newInstance(testDate, Time.newInstance(0, 0, 0, 0));
+            String dayOfWeek = testDateTime.format('u'); // ISO day of week (1=Monday, 7=Sunday)
+            Integer dayNum = Integer.valueOf(dayOfWeek);
+            
+            // If it's Monday through Friday (1-5), we're good
+            if (dayNum >= 1 && dayNum <= 5) {
+                break;
+            }
+            
+            // Otherwise, move to next day
+            testDate = testDate.addDays(1);
+        }
+        
+        return testDate;
     }
 }

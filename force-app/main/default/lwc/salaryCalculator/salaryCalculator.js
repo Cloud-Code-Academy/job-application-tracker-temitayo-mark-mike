@@ -1,8 +1,9 @@
-import { LightningElement, api, track, wire } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
 import { getRecord, updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 import calculateSalaryBreakdown from '@salesforce/apex/SalaryCalculationService.calculateSalaryBreakdown';
+import getActiveTaxConfiguration from '@salesforce/apex/TaxConfigurationService.getActiveTaxConfiguration';
 
 // Job Application fields
 import SALARY_FIELD from '@salesforce/schema/Job_Application__c.Salary__c';
@@ -21,42 +22,68 @@ const FIELDS = [
     TAKE_HOME_MONTHLY_FIELD
 ];
 
-// Tax calculation constants (2023 rates)
-const TAX_CONSTANTS = {
-    STANDARD_DEDUCTION: 13850,
+// Fallback tax constants — overridden at runtime by Custom Metadata (Tax_Configuration__mdt)
+const DEFAULT_TAX_CONSTANTS = {
+    STANDARD_DEDUCTION: 15000,
     SOCIAL_SECURITY_RATE: 0.062,
-    SOCIAL_SECURITY_WAGE_BASE: 160200,
+    SOCIAL_SECURITY_WAGE_BASE: 176100,
     MEDICARE_RATE: 0.0145,
     TAX_BRACKETS: [
-        { min: 0, max: 11000, rate: 0.10 },
-        { min: 11000, max: 44725, rate: 0.12 },
-        { min: 44725, max: 95375, rate: 0.22 },
-        { min: 95375, max: 182050, rate: 0.24 },
-        { min: 182050, max: 231250, rate: 0.32 },
-        { min: 231250, max: 578125, rate: 0.35 },
-        { min: 578125, max: Infinity, rate: 0.37 }
+        { min: 0, max: 11925, rate: 0.10 },
+        { min: 11925, max: 48475, rate: 0.12 },
+        { min: 48475, max: 103350, rate: 0.22 },
+        { min: 103350, max: 197300, rate: 0.24 },
+        { min: 197300, max: 250525, rate: 0.32 },
+        { min: 250525, max: 626350, rate: 0.35 },
+        { min: 626350, max: Infinity, rate: 0.37 }
     ]
 };
 
 export default class SalaryCalculator extends LightningElement {
     @api recordId; // Job Application record ID
     
+    // Tax configuration — loaded from Custom Metadata at runtime
+    taxConfig = { ...DEFAULT_TAX_CONSTANTS };
+    taxConfigSource = 'Default';
+    
     // Component state
-    @track salary = 0;
-    @track federalTax = 0;
-    @track socialSecurityTax = 0;
-    @track medicareTax = 0;
-    @track takeHomeYearly = 0;
-    @track takeHomeMonthly = 0;
-    @track isCalculating = false;
-    @track calculationError = null;
-    @track selectedMethod = 'client';
+    salary = 0;
+    federalTax = 0;
+    socialSecurityTax = 0;
+    medicareTax = 0;
+    takeHomeYearly = 0;
+    takeHomeMonthly = 0;
+    isCalculating = false;
+    calculationError = null;
+    selectedMethod = 'client';
 
     // Calculation method options
     calculationMethods = [
         { label: 'Real-time (Client)', value: 'client' },
         { label: 'Precise (Server)', value: 'server' }
     ];
+
+    // Wire tax configuration from Custom Metadata
+    @wire(getActiveTaxConfiguration)
+    wiredTaxConfig({ error, data }) {
+        if (data) {
+            this.taxConfig = {
+                STANDARD_DEDUCTION: data.standardDeduction || DEFAULT_TAX_CONSTANTS.STANDARD_DEDUCTION,
+                SOCIAL_SECURITY_RATE: data.socialSecurityRate || DEFAULT_TAX_CONSTANTS.SOCIAL_SECURITY_RATE,
+                SOCIAL_SECURITY_WAGE_BASE: data.socialSecurityWageBase || DEFAULT_TAX_CONSTANTS.SOCIAL_SECURITY_WAGE_BASE,
+                MEDICARE_RATE: data.medicareRate || DEFAULT_TAX_CONSTANTS.MEDICARE_RATE,
+                TAX_BRACKETS: data.taxBrackets || DEFAULT_TAX_CONSTANTS.TAX_BRACKETS
+            };
+            this.taxConfigSource = data.source || 'Custom Metadata';
+            // Recalculate if salary already loaded
+            if (this.salary > 0) {
+                this.calculateTakeHome();
+            }
+        } else if (error) {
+            console.warn('Tax config load failed, using defaults:', error);
+            this.taxConfig = { ...DEFAULT_TAX_CONSTANTS };
+        }
+    }
 
     // Wire to get record data
     @wire(getRecord, { recordId: '$recordId', fields: FIELDS })
@@ -257,16 +284,16 @@ export default class SalaryCalculator extends LightningElement {
         this.takeHomeMonthly = result.takeHomeMonthly || 0;
     }
 
-    // Tax calculation methods (client-side)
+    // Tax calculation methods (client-side) — uses runtime taxConfig from Custom Metadata
     calculateFederalTax(grossSalary) {
-        const taxableIncome = Math.max(0, grossSalary - TAX_CONSTANTS.STANDARD_DEDUCTION);
+        const taxableIncome = Math.max(0, grossSalary - this.taxConfig.STANDARD_DEDUCTION);
         
         if (taxableIncome <= 0) return 0;
         
         let totalTax = 0;
         let remainingIncome = taxableIncome;
         
-        for (const bracket of TAX_CONSTANTS.TAX_BRACKETS) {
+        for (const bracket of this.taxConfig.TAX_BRACKETS) {
             if (remainingIncome <= 0) break;
             
             const bracketWidth = bracket.max - bracket.min;
@@ -282,12 +309,12 @@ export default class SalaryCalculator extends LightningElement {
     }
 
     calculateSocialSecurityTax(grossSalary) {
-        const taxableWages = Math.min(grossSalary, TAX_CONSTANTS.SOCIAL_SECURITY_WAGE_BASE);
-        return Math.round(taxableWages * TAX_CONSTANTS.SOCIAL_SECURITY_RATE * 100) / 100;
+        const taxableWages = Math.min(grossSalary, this.taxConfig.SOCIAL_SECURITY_WAGE_BASE);
+        return Math.round(taxableWages * this.taxConfig.SOCIAL_SECURITY_RATE * 100) / 100;
     }
 
     calculateMedicareTax(grossSalary) {
-        return Math.round(grossSalary * TAX_CONSTANTS.MEDICARE_RATE * 100) / 100;
+        return Math.round(grossSalary * this.taxConfig.MEDICARE_RATE * 100) / 100;
     }
 
     // Utility methods

@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 import getSecurityAssessment from '@salesforce/apex/SecurityGovernanceService.getSecurityAssessment';
@@ -9,9 +9,9 @@ import getComplianceReport from '@salesforce/apex/SecurityGovernanceService.getC
 export default class SecurityGovernanceDashboard extends LightningElement {
     
     // Component state
-    @track isLoading = false;
-    @track errorMessage = '';
-    @track securityData = {};
+    isLoading = false;
+    errorMessage = '';
+    securityData = {};
     
     // Wired data
     wiredSecurityResult;

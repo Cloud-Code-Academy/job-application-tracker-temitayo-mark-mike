@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 import performSystemHealthCheck from '@salesforce/apex/IntegrationDeploymentService.performSystemHealthCheck';
@@ -9,13 +9,13 @@ import generateDeploymentReport from '@salesforce/apex/IntegrationDeploymentServ
 export default class IntegrationDeploymentDashboard extends LightningElement {
     
     // Component state
-    @track isLoading = false;
-    @track errorMessage = '';
-    @track successMessage = '';
-    @track healthData = {};
-    @track testData = {};
-    @track validationData = {};
-    @track reportData = {};
+    isLoading = false;
+    errorMessage = '';
+    successMessage = '';
+    healthData = {};
+    testData = {};
+    validationData = {};
+    reportData = {};
     
     // Wired data
     wiredHealthResult;

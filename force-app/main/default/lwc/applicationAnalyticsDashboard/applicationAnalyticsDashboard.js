@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 import { refreshApex } from '@salesforce/apex';
@@ -7,9 +7,9 @@ import getApplicationAnalytics from '@salesforce/apex/ApplicationAnalyticsServic
 export default class ApplicationAnalyticsDashboard extends NavigationMixin(LightningElement) {
     
     // Component state
-    @track isLoading = false;
-    @track errorMessage = '';
-    @track analyticsData = {};
+    isLoading = false;
+    errorMessage = '';
+    analyticsData = {};
     
     // Wired data
     wiredAnalyticsResult;

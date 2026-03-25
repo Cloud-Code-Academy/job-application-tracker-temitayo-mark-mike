@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>58.0</apiVersion>
+    <apiVersion>62.0</apiVersion>
     <description>Automated workflow for job application lifecycle management with intelligent routing and task creation</description>
     <label>Job Application Workflow</label>
     <processMetadataValues>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Market_Salary_Median__c</fullName>
-    <label>Market Salary Median</label>
     <description>Median salary for this position based on market analysis</description>
-    <inlineHelpText>The median (50th percentile) salary for this position based on current market data analysis.</inlineHelpText>
-    <type>Currency</type>
-    <precision>18</precision>
-    <scale>0</scale>
-    <required>false</required>
-    <trackTrending>false</trackTrending>
     <externalId>false</externalId>
-    <unique>false</unique>
+    <inlineHelpText>The median (50th percentile) salary for this position based on current market data analysis.</inlineHelpText>
+    <label>Market Salary Median</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
 </CustomField>

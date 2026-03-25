@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 import getPerformanceMetrics from '@salesforce/apex/PerformanceOptimizationService.getPerformanceMetrics';
@@ -9,11 +9,11 @@ import monitorPerformance from '@salesforce/apex/PerformanceOptimizationService.
 export default class PerformanceOptimizationDashboard extends LightningElement {
     
     // Component state
-    @track isLoading = false;
-    @track errorMessage = '';
-    @track performanceData = {};
-    @track showRealTimeMonitor = false;
-    @track monitoringData = {};
+    isLoading = false;
+    errorMessage = '';
+    performanceData = {};
+    showRealTimeMonitor = false;
+    monitoringData = {};
     
     // Wired data
     wiredPerformanceResult;

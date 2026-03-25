@@ -1,55 +1,55 @@
 <template>
-    <lightning-card title="🔒 Security & Governance Dashboard" icon-name="utility:shield" class="security-dashboard-card">
-        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+    <lightning-card title="Security &amp; Governance Dashboard" icon-name="utility:shield" class="security-dashboard-card">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium" role="main" aria-label="Security and governance metrics">
             
             <!-- Security Overview Cards -->
-            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large" role="region" aria-label="Security score overview">
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
-                    <div class="security-card security-score-card">
+                    <div class="security-card security-score-card" role="status" aria-label="Security score">
                         <div class="security-header">
-                            <div class="security-icon">🛡️</div>
+                            <lightning-icon icon-name="utility:shield" size="small" alternative-text="Security"></lightning-icon>
                             <div class="security-badge" data-level={securityLevel}>
                                 {securityLevel}
                             </div>
                         </div>
-                        <div class="security-value">{securityScore}</div>
+                        <div class="security-value" aria-live="polite">{securityScore}</div>
                         <div class="security-label">Security Score</div>
                         <div class="security-subtitle">Overall security rating</div>
                     </div>
                 </div>
                 
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
-                    <div class="security-card compliance-card">
+                    <div class="security-card compliance-card" role="status" aria-label="Compliance score">
                         <div class="security-header">
-                            <div class="security-icon">📋</div>
+                            <lightning-icon icon-name="utility:checklist" size="small" alternative-text="Compliance"></lightning-icon>
                             <div class="security-badge" data-level={complianceLevel}>
                                 {complianceScore}%
                             </div>
                         </div>
-                        <div class="security-value">{complianceChecks}</div>
+                        <div class="security-value" aria-live="polite">{complianceChecks}</div>
                         <div class="security-label">Compliance Checks</div>
                         <div class="security-subtitle">Passed compliance tests</div>
                     </div>
                 </div>
                 
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
-                    <div class="security-card access-card">
+                    <div class="security-card access-card" role="status" aria-label="Access control">
                         <div class="security-header">
-                            <div class="security-icon">🔑</div>
+                            <lightning-icon icon-name="utility:lock" size="small" alternative-text="Access"></lightning-icon>
                             <div class="security-badge good">
                                 {accessPercentage}%
                             </div>
                         </div>
-                        <div class="security-value">{accessibleFields}</div>
+                        <div class="security-value" aria-live="polite">{accessibleFields}</div>
                         <div class="security-label">Field Access</div>
                         <div class="security-subtitle">Accessible data fields</div>
                     </div>
                 </div>
                 
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
-                    <div class="security-card audit-card">
+                    <div class="security-card audit-card" role="status" aria-label="Audit entries">
                         <div class="security-header">
-                            <div class="security-icon">📊</div>
+                            <div class="security-icon" aria-hidden="true">📊</div>
                             <div class="security-badge neutral">
                                 {auditRetentionDays}d
                             </div>

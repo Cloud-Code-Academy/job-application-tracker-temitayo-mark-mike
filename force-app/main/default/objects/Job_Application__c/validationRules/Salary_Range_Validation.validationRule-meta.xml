@@ -9,7 +9,7 @@
         Salary__c &lt; 20000,
         Salary__c &gt; 1000000,
         AND(
-            ISPICKVAL(Status__c, "Applied"),
+            ISPICKVAL(Status__c, &quot;Applied&quot;),
             Salary__c &gt; 500000
         )
     )

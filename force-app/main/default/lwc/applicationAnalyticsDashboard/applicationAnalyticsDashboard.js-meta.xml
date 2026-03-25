@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>58.0</apiVersion>
+    <apiVersion>62.0</apiVersion>
     <isExposed>true</isExposed>
     <description>Advanced analytics dashboard for job application tracking with real-time insights and interactive visualizations</description>
     <masterLabel>Application Analytics Dashboard</masterLabel>

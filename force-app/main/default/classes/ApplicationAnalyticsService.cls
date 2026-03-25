@@ -349,4 +349,78 @@ public with sharing class ApplicationAnalyticsService {
         // In a real scenario, you'd track when responses were received
         return 7.5; // Placeholder: 7.5 days average
     }
+
+    /**
+     * @description Gets paginated job applications for dashboard list views.
+     *              Prevents governor limit issues with large data volumes.
+     * @param pageSize Number of records per page (default 10, max 50)
+     * @param pageNumber 1-based page number
+     * @param statusFilter Optional status to filter by
+     * @return Map with keys: records (List), totalRecords (Integer), 
+     *         totalPages (Integer), currentPage (Integer)
+     */
+    @AuraEnabled(cacheable=true)
+    public static Map<String, Object> getApplicationsPaginated(Integer pageSize, Integer pageNumber, String statusFilter) {
+        try {
+            // Enforce safe defaults and limits
+            if (pageSize == null || pageSize < 1) pageSize = 10;
+            if (pageSize > 50) pageSize = 50;
+            if (pageNumber == null || pageNumber < 1) pageNumber = 1;
+            Integer offset = (pageNumber - 1) * pageSize;
+
+            // Get total count for pagination metadata
+            Integer totalRecords;
+            List<Job_Application__c> records;
+
+            if (String.isNotBlank(statusFilter)) {
+                totalRecords = [
+                    SELECT COUNT()
+                    FROM Job_Application__c
+                    WHERE OwnerId = :UserInfo.getUserId()
+                    AND Status__c = :statusFilter
+                ];
+                records = [
+                    SELECT Id, Name, Company_Name__c, Position_Title__c, Status__c,
+                           Application_Date__c, Salary__c, LastModifiedDate
+                    FROM Job_Application__c
+                    WHERE OwnerId = :UserInfo.getUserId()
+                    AND Status__c = :statusFilter
+                    ORDER BY LastModifiedDate DESC
+                    LIMIT :pageSize
+                    OFFSET :offset
+                ];
+            } else {
+                totalRecords = [
+                    SELECT COUNT()
+                    FROM Job_Application__c
+                    WHERE OwnerId = :UserInfo.getUserId()
+                ];
+                records = [
+                    SELECT Id, Name, Company_Name__c, Position_Title__c, Status__c,
+                           Application_Date__c, Salary__c, LastModifiedDate
+                    FROM Job_Application__c
+                    WHERE OwnerId = :UserInfo.getUserId()
+                    ORDER BY LastModifiedDate DESC
+                    LIMIT :pageSize
+                    OFFSET :offset
+                ];
+            }
+
+            Integer totalPages = (Integer) Math.ceil((Decimal) totalRecords / pageSize);
+
+            Map<String, Object> result = new Map<String, Object>();
+            result.put('records', records);
+            result.put('totalRecords', totalRecords);
+            result.put('totalPages', totalPages);
+            result.put('currentPage', pageNumber);
+            result.put('pageSize', pageSize);
+            result.put('hasNext', pageNumber < totalPages);
+            result.put('hasPrevious', pageNumber > 1);
+            return result;
+
+        } catch (Exception e) {
+            System.debug(LoggingLevel.ERROR, 'Error in getApplicationsPaginated: ' + e.getMessage());
+            throw new AuraHandledException('Failed to load applications: ' + e.getMessage());
+        }
+    }
 }

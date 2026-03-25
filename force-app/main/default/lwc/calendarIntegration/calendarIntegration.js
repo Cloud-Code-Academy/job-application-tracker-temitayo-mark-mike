@@ -1,4 +1,4 @@
-import { LightningElement, api, track, wire } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
 import { getRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { createRecord } from 'lightning/uiRecordApi';
@@ -27,17 +27,17 @@ export default class CalendarIntegration extends LightningElement {
     @api recordId; // Job Application record ID
     
     // Component state
-    @track eventSubject = '';
-    @track startDateTime = '';
-    @track endDateTime = '';
-    @track description = '';
-    @track location = '';
-    @track interviewType = '';
-    @track isProcessing = false;
-    @track showSuccessMessage = false;
-    @track validationMessages = [];
-    @track conflictCheckResults = [];
-    @track jobApplicationData = null;
+    eventSubject = '';
+    startDateTime = '';
+    endDateTime = '';
+    description = '';
+    location = '';
+    interviewType = '';
+    isProcessing = false;
+    showSuccessMessage = false;
+    validationMessages = [];
+    conflictCheckResults = [];
+    jobApplicationData = null;
 
     // Interview type options
     interviewTypeOptions = [

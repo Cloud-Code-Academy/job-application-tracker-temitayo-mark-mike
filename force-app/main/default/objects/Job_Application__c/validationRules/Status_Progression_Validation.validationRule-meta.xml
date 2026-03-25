@@ -7,16 +7,16 @@
     ISCHANGED(Status__c),
     OR(
         AND(
-            ISPICKVAL(PRIORVALUE(Status__c), "Closed"),
-            NOT(ISPICKVAL(Status__c, "Applied"))
+            ISPICKVAL(PRIORVALUE(Status__c), &quot;Closed&quot;),
+            NOT(ISPICKVAL(Status__c, &quot;Applied&quot;))
         ),
         AND(
-            ISPICKVAL(PRIORVALUE(Status__c), "Accepted"),
-            NOT(ISPICKVAL(Status__c, "Closed"))
+            ISPICKVAL(PRIORVALUE(Status__c), &quot;Accepted&quot;),
+            NOT(ISPICKVAL(Status__c, &quot;Closed&quot;))
         ),
         AND(
-            ISPICKVAL(Status__c, "Negotiating"),
-            NOT(ISPICKVAL(PRIORVALUE(Status__c), "Interviewing"))
+            ISPICKVAL(Status__c, &quot;Negotiating&quot;),
+            NOT(ISPICKVAL(PRIORVALUE(Status__c), &quot;Interviewing&quot;))
         )
     )
 )</errorConditionFormula>

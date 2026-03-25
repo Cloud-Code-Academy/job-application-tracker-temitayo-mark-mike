@@ -11,11 +11,15 @@ public with sharing class JobApplicationTriggerHandler {
      * @param newRecords List of new Job Application records
      */
     public void beforeInsert(List<Job_Application__c> newRecords) {
+        System.debug('JobApplicationTriggerHandler.beforeInsert: Processing ' + newRecords.size() + ' records');
+        
         // Calculate take-home pay for new records with salary
         SalaryCalculationService.calculateTakeHomePay(newRecords);
+        System.debug('JobApplicationTriggerHandler.beforeInsert: Salary calculations completed');
 
         // Set primary contact if null
         ContactAssignmentService.assignPrimaryContact(newRecords);
+        System.debug('JobApplicationTriggerHandler.beforeInsert: Contact assignment completed');
     }
     
     /**
@@ -55,8 +59,11 @@ public with sharing class JobApplicationTriggerHandler {
      * @param newRecords List of new Job Application records
      */
     public void afterInsert(List<Job_Application__c> newRecords) {
+        System.debug('JobApplicationTriggerHandler.afterInsert: Processing ' + newRecords.size() + ' records');
+        
         // Create tasks for new job applications
         TaskCreationService.createTasksForStatusChange(newRecords, null);
+        System.debug('JobApplicationTriggerHandler.afterInsert: Task creation completed');
     }
     
     /**
