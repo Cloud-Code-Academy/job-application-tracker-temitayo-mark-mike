@@ -3,7 +3,7 @@
  * @author Learning Journey
  * @date 2025-01-08
  */
-public class JobApplicationEnrichmentQueue implements Queueable, Database.AllowsCallouts {
+public inherited sharing class JobApplicationEnrichmentQueue implements Queueable, Database.AllowsCallouts {
     
     // Configuration
     private List<Id> jobApplicationIds;

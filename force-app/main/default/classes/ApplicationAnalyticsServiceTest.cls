@@ -4,7 +4,7 @@
  * @date 2024
  */
 @isTest
-public class ApplicationAnalyticsServiceTest {
+public inherited sharing class ApplicationAnalyticsServiceTest {
     
     /**
      * @description Test data setup

@@ -5,7 +5,7 @@
  * @date 2024
  */
 @IsTest
-public class InterviewFeedbackIntegrationTest {
+public inherited sharing class InterviewFeedbackIntegrationTest {
     
     @TestSetup
     static void setupTestData() {

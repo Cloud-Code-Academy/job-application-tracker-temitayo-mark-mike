@@ -3,7 +3,7 @@
  * @author Learning Journey
  * @date 2025-01-08
  */
-public class JobApplicationEventTriggerHandler {
+public inherited sharing class JobApplicationEventTriggerHandler {
     
     /**
      * @description Publish interview scheduled event (called from external processes)

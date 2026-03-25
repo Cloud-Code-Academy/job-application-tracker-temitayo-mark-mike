@@ -5,7 +5,7 @@
  * @date 2024
  */
 @IsTest
-public class InterviewFeedbackErrorHandlingTest {
+public inherited sharing class InterviewFeedbackErrorHandlingTest {
     
     @TestSetup
     static void setupErrorTestData() {

@@ -3,7 +3,7 @@
  * @author Learning Journey
  * @date 2025-01-08
  */
-public abstract class BaseApiService {
+public abstract inherited sharing class BaseApiService {
     
     // Constants for HTTP methods and status codes
     public static final String HTTP_GET = 'GET';

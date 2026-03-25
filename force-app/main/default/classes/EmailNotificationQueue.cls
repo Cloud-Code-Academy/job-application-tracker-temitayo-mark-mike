@@ -3,7 +3,7 @@
  * @author Temitayo Oluwalade
  * @date 2024
  */
-public class EmailNotificationQueue implements Queueable, Database.AllowsCallouts {
+public inherited sharing class EmailNotificationQueue implements Queueable, Database.AllowsCallouts {
     
     private List<EmailNotification> notifications;
     private static final Integer MAX_EMAILS_PER_EXECUTION = 100;

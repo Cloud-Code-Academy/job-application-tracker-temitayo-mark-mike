@@ -5,7 +5,7 @@
  * @date 2024
  */
 @IsTest
-public class InterviewFeedbackPerformanceTest {
+public inherited sharing class InterviewFeedbackPerformanceTest {
     
     private static final Integer LARGE_DATASET_SIZE = 1000;
     private static final Integer BULK_OPERATION_SIZE = 200;

@@ -3,7 +3,7 @@
  * @author Interview Feedback Tracker Team
  * @date 2024
  */
-public class InterviewFeedbackMonitoringScheduler implements Schedulable {
+public inherited sharing class InterviewFeedbackMonitoringScheduler implements Schedulable {
     
     /**
      * @description Executes scheduled monitoring tasks

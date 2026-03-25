@@ -4,7 +4,7 @@
  * @date 2024
  */
 @isTest
-public class JobApplicationTriggerTest {
+public inherited sharing class JobApplicationTriggerTest {
     
     /**
      * @description Test data setup method

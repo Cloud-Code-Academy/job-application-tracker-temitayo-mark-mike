@@ -3,7 +3,7 @@
  * @author Learning Journey
  * @date 2025-01-08
  */
-public class JobApplicationCleanupScheduler implements Schedulable {
+public inherited sharing class JobApplicationCleanupScheduler implements Schedulable {
     
     private JobApplicationCleanupBatch.CleanupType cleanupType;
     private Integer daysOld;

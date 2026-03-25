@@ -4,7 +4,7 @@
  * @author Kiro AI Assistant
  * @date 2025
  */
-public class FeedbackDataRetentionBatch implements Database.Batchable<sObject>, Database.Stateful {
+public inherited sharing class FeedbackDataRetentionBatch implements Database.Batchable<sObject>, Database.Stateful {
     
     private Integer retentionDays;
     private Integer processedRecords = 0;

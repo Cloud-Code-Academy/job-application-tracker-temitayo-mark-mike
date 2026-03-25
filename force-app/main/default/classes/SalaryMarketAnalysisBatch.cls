@@ -4,7 +4,7 @@
  * @author Temitayo Oluwalade
  * @date 2024
  */
-public class SalaryMarketAnalysisBatch implements Database.Batchable<sObject>, Database.AllowsCallouts, Database.Stateful {
+public inherited sharing class SalaryMarketAnalysisBatch implements Database.Batchable<sObject>, Database.AllowsCallouts, Database.Stateful {
     
     // Batch configuration
     private static final Integer BATCH_SIZE = 200;

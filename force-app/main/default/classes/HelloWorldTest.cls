@@ -3,7 +3,7 @@
  * Demonstrates proper testing practices and deployment verification
  */
 @isTest
-public class HelloWorldTest {
+public inherited sharing class HelloWorldTest {
     
     /**
      * Test the basic greeting method

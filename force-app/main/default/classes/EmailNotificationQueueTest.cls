@@ -5,7 +5,7 @@
  * @date 2025-01-08
  */
 @IsTest
-public class EmailNotificationQueueTest {
+public inherited sharing class EmailNotificationQueueTest {
     
     /**
      * @description Test setup method using TestDataFactory pattern

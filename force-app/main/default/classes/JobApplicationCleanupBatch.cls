@@ -3,7 +3,7 @@
  * @author Learning Journey
  * @date 2025-01-08
  */
-public class JobApplicationCleanupBatch implements Database.Batchable<SObject>, Database.Stateful {
+public inherited sharing class JobApplicationCleanupBatch implements Database.Batchable<SObject>, Database.Stateful {
     
     // Batch configuration
     public enum CleanupType { REMOVE_DUPLICATES, ARCHIVE_OLD, UPDATE_STALE, FULL_CLEANUP }

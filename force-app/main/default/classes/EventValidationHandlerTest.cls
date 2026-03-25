@@ -4,7 +4,7 @@
  * @date 2024
  */
 @isTest
-public class EventValidationHandlerTest {
+public inherited sharing class EventValidationHandlerTest {
     
     /**
      * @description Test data setup method

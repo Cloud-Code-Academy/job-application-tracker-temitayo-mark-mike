@@ -4,7 +4,7 @@
  * @date 2024
  */
 @IsTest
-public class InterviewFeedbackTestDataFactory {
+public inherited sharing class InterviewFeedbackTestDataFactory {
     
     /**
      * @description Create a test Job Application record

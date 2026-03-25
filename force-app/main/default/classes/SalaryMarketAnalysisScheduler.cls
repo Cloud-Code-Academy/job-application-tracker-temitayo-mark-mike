@@ -3,7 +3,7 @@
  * @author Temitayo Oluwalade
  * @date 2024
  */
-public class SalaryMarketAnalysisScheduler implements Schedulable {
+public inherited sharing class SalaryMarketAnalysisScheduler implements Schedulable {
     
     private static final String JOB_NAME = 'Weekly Salary Market Analysis';
     private static final Integer DEFAULT_BATCH_SIZE = 200;

@@ -4,7 +4,7 @@
  * @author Kiro AI Assistant
  * @date 2025
  */
-public class FeedbackDataRetentionScheduler implements Schedulable {
+public inherited sharing class FeedbackDataRetentionScheduler implements Schedulable {
     
     /**
      * @description Execute method called by the scheduler

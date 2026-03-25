@@ -54,9 +54,11 @@ The `import { track } from 'lwc'` was also removed from each file's import state
 
 ---
 
-### 3. Added `inherited sharing` to Apex Service Classes
+### 3. Added `inherited sharing` to All Apex Classes
 
-**Files affected:** `SalaryBenchmarkService.cls`, `CompanyDataService.cls`
+**Files affected:** 41 Apex classes (20 production + 21 test classes)
+
+Initial pass fixed `SalaryBenchmarkService.cls` and `CompanyDataService.cls`. A subsequent audit identified **39 additional classes** missing the sharing keyword — including batch jobs, schedulers, queueable classes, handlers, utility classes, and all test classes. All 41 now declare `inherited sharing`.
 
 **Why this matters:**
 
@@ -320,6 +322,17 @@ docs/
 - Organized 340 changed files into **5 clean, descriptive commits** with conventional commit prefixes (`chore:`, `refactor:`, `feat:`, `docs:`)
 - Fixed `sforge` → `sforce` xmlns typo in `Social_Security_Rate__c.field-meta.xml` (would have caused deployment failure)
 
+### AI Context Files
+
+Created context files that AI coding tools read automatically when opening the project:
+
+- **`CLAUDE.md`** — Project context for Claude Code, Cursor, and Windsurf. Contains tech stack, architecture, object model, commands, conventions, and known issues. Without it, every AI session wastes time re-exploring the project structure.
+- **`.github/copilot-instructions.md`** — GitHub Copilot-specific context loaded automatically in VS Code. Focuses on code generation rules: always use `inherited sharing`, don't add `@track`, use Named Credentials. Prevents Copilot from generating code that violates project conventions.
+
+### Deployment Script
+
+- **`scripts/quick-deploy.ps1`** — Dependency-ordered deployment script that deploys in 4 stages (CMDT → Apex → LWC → Objects/Triggers) and skips components with pre-existing compilation errors. Created because `sf project deploy start --source-dir force-app` fails due to pre-existing issues in `AutomatedReportService`, `CompanyDataServiceTest`, etc.
+
 ### Bug Fixes Found During Deployment
 
 - `Tax_Configuration__mdt` fields `Standard_Deduction__c` and `Social_Security_Wage_Base__c` used `Currency` type — **Custom Metadata Types don't support Currency fields**. Changed to `Number` type.
@@ -356,6 +369,8 @@ These were discovered during the full `force-app` deployment attempt and are **n
 ## Git History
 
 ```
+10c64ac chore: add AI context files and quick-deploy script
+f09c9de docs: enhance MODERNIZATION_CHANGELOG with educational explanations
 3dfd1da chore: reorganize docs, fix deployment issues, update changelog
 472a712 docs: consolidate documentation and add supporting scripts
 9ac56c3 feat: add Interview Feedback Tracker and platform enhancements
@@ -372,7 +387,7 @@ These were discovered during the full `force-app` deployment attempt and are **n
 |----------|--------|--------|
 | API Version | 58.0 → 62.0 across 79 metadata files | Done |
 | `@track` removal | 60 properties across 10 LWCs | Done |
-| Sharing keywords | 4 service classes + 2 event classes | Done |
+| Sharing keywords | 41 classes (20 production + 21 test) | Done |
 | Tax rates | 2023 → 2025, moved to Custom Metadata | Done |
 | Named Credentials | API keys replaced with callout endpoints | Done |
 | SOQL Injection | Input validation in PerformanceOptimizationService | Done |
@@ -383,5 +398,7 @@ These were discovered during the full `force-app` deployment attempt and are **n
 | Pagination | getApplicationsPaginated() with LIMIT/OFFSET | Done |
 | Accessibility | WCAG aria-live, keyboard nav, semantic roles | Done |
 | Docs Cleanup | 20 docs organized into 3 subdirectories | Done |
-| Source Control | 340 files → 4 clean commits, gitignore updated | Done |
+| Source Control | 340 files → clean commits, gitignore updated | Done |
+| AI Context | CLAUDE.md + copilot-instructions.md for AI tools | Done |
+| Deploy Script | quick-deploy.ps1 with dependency ordering | Done |
 | xmlns Fix | sforge → sforce typo in CMDT field metadata | Done |

@@ -5,7 +5,7 @@
  * @date 2025-01-08
  */
 @IsTest
-public class ContactAssignmentServiceTest {
+public inherited sharing class ContactAssignmentServiceTest {
     
     /**
      * @description Test setup method using TestDataFactory pattern

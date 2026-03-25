@@ -5,7 +5,7 @@
  * @date 2024
  */
 @isTest
-private class AutomatedReportServiceTest {
+private inherited sharing class AutomatedReportServiceTest {
     
     @TestSetup
     static void setupTestData() {

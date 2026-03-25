@@ -2,7 +2,7 @@
  * Hello World Apex class for testing deployment workflow
  * This class demonstrates basic Apex functionality and deployment process
  */
-public class HelloWorld {
+public inherited sharing class HelloWorld {
     
     /**
      * Simple method that returns a greeting message

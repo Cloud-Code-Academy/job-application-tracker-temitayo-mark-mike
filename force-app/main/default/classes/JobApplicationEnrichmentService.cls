@@ -3,7 +3,7 @@
  * @author Learning Journey
  * @date 2025-01-08
  */
-public class JobApplicationEnrichmentService {
+public inherited sharing class JobApplicationEnrichmentService {
     
     // Service instances
     private CompanyDataService companyService;

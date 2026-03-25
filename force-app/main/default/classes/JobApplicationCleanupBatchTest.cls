@@ -4,7 +4,7 @@
  * @date 2025-01-08
  */
 @IsTest
-public class JobApplicationCleanupBatchTest {
+public inherited sharing class JobApplicationCleanupBatchTest {
     
     @TestSetup
     static void setupTestData() {

@@ -4,7 +4,7 @@
  * @date 2024
  */
 @isTest
-public class SalaryMarketAnalysisBatchTest {
+public inherited sharing class SalaryMarketAnalysisBatchTest {
     
     /**
      * @description Test data setup

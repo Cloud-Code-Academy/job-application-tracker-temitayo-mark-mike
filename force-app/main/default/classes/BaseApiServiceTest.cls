@@ -4,7 +4,7 @@
  * @date 2025-01-08
  */
 @IsTest
-public class BaseApiServiceTest {
+public inherited sharing class BaseApiServiceTest {
     
     /**
      * @description Test implementation of BaseApiService for testing

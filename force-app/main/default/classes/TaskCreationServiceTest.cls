@@ -5,7 +5,7 @@
  * @date 2025-01-08
  */
 @IsTest
-public class TaskCreationServiceTest {
+public inherited sharing class TaskCreationServiceTest {
     
     /**
      * @description Test setup method using TestDataFactory pattern

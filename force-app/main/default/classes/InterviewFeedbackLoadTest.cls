@@ -5,7 +5,7 @@
  * @date 2024
  */
 @IsTest
-public class InterviewFeedbackLoadTest {
+public inherited sharing class InterviewFeedbackLoadTest {
     
     private static final Integer MAX_CONCURRENT_USERS = 10;
     private static final Integer RECORDS_PER_USER = 50;

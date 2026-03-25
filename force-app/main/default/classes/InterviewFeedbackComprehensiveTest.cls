@@ -5,7 +5,7 @@
  * @date 2024
  */
 @IsTest
-public class InterviewFeedbackComprehensiveTest {
+public inherited sharing class InterviewFeedbackComprehensiveTest {
     
     private static final Integer COMPREHENSIVE_TEST_SIZE = 500;
     private static final Integer PERFORMANCE_THRESHOLD_MS = 5000;

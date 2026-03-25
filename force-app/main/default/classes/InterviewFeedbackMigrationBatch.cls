@@ -3,7 +3,7 @@
  * @author Interview Feedback Tracker Team
  * @date 2024
  */
-public class InterviewFeedbackMigrationBatch implements Database.Batchable<sObject>, Database.Stateful {
+public inherited sharing class InterviewFeedbackMigrationBatch implements Database.Batchable<sObject>, Database.Stateful {
     
     private Integer totalProcessed = 0;
     private Integer totalSuccessful = 0;

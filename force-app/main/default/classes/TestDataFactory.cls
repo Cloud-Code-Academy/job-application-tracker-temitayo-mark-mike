@@ -5,7 +5,7 @@
  * @date 2025-01-08
  */
 @IsTest
-public class TestDataFactory {
+public inherited sharing class TestDataFactory {
     
     // Constants for consistent test data
     public static final String TEST_COMPANY_NAME = 'Test Company Inc';

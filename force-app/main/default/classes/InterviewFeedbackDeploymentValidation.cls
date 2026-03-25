@@ -4,7 +4,7 @@
  * @date 2024
  */
 @IsTest
-public class InterviewFeedbackDeploymentValidation {
+public inherited sharing class InterviewFeedbackDeploymentValidation {
     
     /**
      * @description Validates that all custom objects are properly deployed and accessible

@@ -4,7 +4,7 @@
  * @date 2025-01-08
  */
 @IsTest
-public class JobApplicationEventSubscriberTest {
+public inherited sharing class JobApplicationEventSubscriberTest {
     
     @TestSetup
     static void setupTestData() {

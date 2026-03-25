@@ -4,7 +4,7 @@
  * @date 2025-01-08
  */
 @IsTest
-public class SalaryBenchmarkServiceTest {
+public inherited sharing class SalaryBenchmarkServiceTest {
     
     @TestSetup
     static void setupTestData() {

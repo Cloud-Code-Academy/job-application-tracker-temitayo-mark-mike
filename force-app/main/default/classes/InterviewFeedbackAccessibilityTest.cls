@@ -5,7 +5,7 @@
  * @date 2024
  */
 @IsTest
-public class InterviewFeedbackAccessibilityTest {
+public inherited sharing class InterviewFeedbackAccessibilityTest {
     
     @TestSetup
     static void setupAccessibilityTestData() {
