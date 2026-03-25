@@ -56,9 +56,9 @@ The `import { track } from 'lwc'` was also removed from each file's import state
 
 ### 3. Added `inherited sharing` to All Apex Classes
 
-**Files affected:** 41 Apex classes (20 production + 21 test classes)
+**Files affected:** 56 Apex classes across 3 audit passes
 
-Initial pass fixed `SalaryBenchmarkService.cls` and `CompanyDataService.cls`. A subsequent audit identified **39 additional classes** missing the sharing keyword — including batch jobs, schedulers, queueable classes, handlers, utility classes, and all test classes. All 41 now declare `inherited sharing`.
+Initial pass fixed `SalaryBenchmarkService.cls` and `CompanyDataService.cls`. A second audit found **39 more classes** missing the keyword — batch jobs, schedulers, queueable classes, handlers, utility classes, and test classes. A final audit caught **15 additional classes** that either had no sharing keyword (private test classes) or used `with sharing` when the project convention is `inherited sharing` (service classes called from mixed contexts). All 56 now consistently declare `inherited sharing`.
 
 **Why this matters:**
 
@@ -338,6 +338,49 @@ Created context files that AI coding tools read automatically when opening the p
 - `Tax_Configuration__mdt` fields `Standard_Deduction__c` and `Social_Security_Wage_Base__c` used `Currency` type — **Custom Metadata Types don't support Currency fields**. Changed to `Number` type.
 - `SalaryBenchmarkService.cls` used `currency` as a property name — this is an **Apex reserved word**. Renamed to `currencyCode`.
 
+### Final Audit Fixes
+
+A third comprehensive audit pass (automated scan of every file) caught issues the earlier manual reviews missed:
+
+#### Missing `.cls-meta.xml` Files (22 classes)
+
+**Files created:** 22 `.cls-meta.xml` files for classes like `FeedbackAnalyticsService`, `InterviewFeedbackService`, `FeedbackGDPRComplianceService`, and others.
+
+**Why this matters:**
+
+Every Apex class deployed to Salesforce needs a companion `.cls-meta.xml` file that declares its API version and status. Without it:
+
+- **`sf project deploy start` will fail** — the CLI doesn't know what API version to compile the class against
+- **Source tracking breaks** — `sf project retrieve start` won't pull the class because it doesn't exist in the manifest
+- **Version drift** — if you deploy via other means (change sets, workbench), the class defaults to whatever API version the org is on, which may differ from your project's intent
+
+These 22 classes were likely authored directly in the org (Developer Console) and retrieved without their metadata companion — a common mistake when mixing org-based and source-based development.
+
+#### Named Credential Migration for Remaining API Services
+
+**Files modified:** `SalaryDataAPIService.cls`, `WeatherAPIService.cls`
+
+`SalaryDataAPIService` had `API_KEY = 'your_api_key_here'` and `WeatherAPIService` had `API_KEY = 'demo_key'` — both using direct `BASE_URL` endpoints with manual `Authorization` headers. Migrated both to Named Credentials (`callout:Salary_Data_API`, `callout:Weather_API`), removing the hard-coded keys and `Authorization` headers entirely.
+
+**Why this matters:**
+
+This is the same pattern as Enhancement #1 (Named Credentials), but these two services were missed in the initial pass because they used placeholder keys that didn't trigger the same alarm as real-looking credentials. The lesson: **even placeholder keys establish a pattern** that future developers will copy. By the time real keys are added, the hard-coding habit is already baked in.
+
+#### Debug `console.log` Removal (6 statements, 4 components)
+
+**Files modified:** `executiveKpiDashboard.js`, `integrationDeploymentDashboard.js`, `performanceOptimizationDashboard.js`, `securityGovernanceDashboard.js`
+
+Removed `console.log('KPI Data processed:', ...)`, `console.log('Quarterly Report:', ...)`, `console.log('Monthly Report:', ...)`, `console.log('Health Data processed:', ...)`, `console.log('Performance Data processed:', ...)`, and `console.log('Security Data processed:', ...)`. Kept all `console.error(...)` calls since those log genuine error conditions.
+
+**Why this matters:**
+
+`console.log` in production code is a **code smell** for several reasons:
+
+- **Information leakage** — logged data is visible in browser DevTools to any user. In a Salesforce context, this could expose record data, API responses, or internal state to users who have DevTools open.
+- **Performance impact** — serializing complex objects (like `this.kpiData`) for console output costs CPU cycles on every invocation, even when nobody is watching.
+- **Noise in debugging** — when you actually need to debug an issue, real diagnostic logs are buried under "Data processed" noise.
+- **`console.error` is different** — it's intentional error logging that appears in the Error panel, helps with production debugging, and signals genuine failure conditions. That's why we kept those.
+
 ### Pre-Existing Issues (Not Caused by This Work)
 
 These were discovered during the full `force-app` deployment attempt and are **not regressions**:
@@ -369,6 +412,7 @@ These were discovered during the full `force-app` deployment attempt and are **n
 ## Git History
 
 ```
+56f2026 fix: final audit — sharing keywords, meta.xml, Named Credentials, debug cleanup
 ef612ef fix: add inherited sharing to 41 Apex classes missing sharing keyword
 10c64ac chore: add AI context files and quick-deploy script
 f09c9de docs: enhance MODERNIZATION_CHANGELOG with educational explanations
