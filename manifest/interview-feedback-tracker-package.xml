@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Interview Feedback Tracker Package Manifest -->
+    
+    <!-- Custom Objects -->
+    <types>
+        <members>Interview_Feedback__c</members>
+        <members>Feedback_Template__c</members>
+        <members>Competency_Rating__c</members>
+        <members>Feedback_Share__c</members>
+        <members>Interview_Feedback_Audit__c</members>
+        <name>CustomObject</name>
+    </types>
+    
+    <!-- Apex Classes -->
+    <types>
+        <members>InterviewFeedbackService</members>
+        <members>FeedbackAnalyticsService</members>
+        <members>FeedbackSharingService</members>
+        <members>FeedbackTemplateService</members>
+        <members>FeedbackSecurityService</members>
+        <members>FeedbackDataRetentionBatch</members>
+        <members>FeedbackDataRetentionScheduler</members>
+        <members>InterviewFeedbackTestDataFactory</members>
+        <members>InterviewFeedbackObjectTest</members>
+        <members>InterviewFeedbackServiceTest</members>
+        <members>FeedbackAnalyticsServiceTest</members>
+        <members>FeedbackSharingServiceTest</members>
+        <members>FeedbackSecurityServiceTest</members>
+        <members>FeedbackQueryOptimizationServiceTest</members>
+        <members>InterviewFeedbackComprehensiveTest</members>
+        <members>InterviewFeedbackErrorHandlingTest</members>
+        <name>ApexClass</name>
+    </types>
+    
+    <!-- Lightning Web Components -->
+    <types>
+        <members>interviewFeedbackCollector</members>
+        <members>performanceDashboard</members>
+        <members>mobileFeedbackCapture</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    
+    <!-- Permission Sets -->
+    <types>
+        <members>Interview_Feedback_Manager</members>
+        <members>Interview_Feedback_User</members>
+        <members>Interview_Feedback_Viewer</members>
+        <name>PermissionSet</name>
+    </types>
+    
+    <version>62.0</version>
+</Package>

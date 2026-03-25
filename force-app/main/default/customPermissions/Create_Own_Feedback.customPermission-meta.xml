@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Allows users to create feedback for their own job applications</description>
+    <label>Create Own Feedback</label>
+    <requiredPermission>
+        <name>Interview_Feedback_User</name>
+    </requiredPermission>
+</CustomPermission>

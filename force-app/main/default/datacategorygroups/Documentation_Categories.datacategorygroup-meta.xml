@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataCategoryGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <description>Categories for organizing project documentation in Knowledge Base</description>
+    <label>Documentation Categories</label>
+    <objectUsage>
+        <object>KnowledgeArticleVersion</object>
+    </objectUsage>
+    <dataCategory>
+        <name>Architecture</name>
+        <label>Architecture</label>
+    </dataCategory>
+    <dataCategory>
+        <name>Learning</name>
+        <label>Learning</label>
+    </dataCategory>
+    <dataCategory>
+        <name>Team_Collaboration</name>
+        <label>Team Collaboration</label>
+    </dataCategory>
+    <dataCategory>
+        <name>User_Guides</name>
+        <label>User Guides</label>
+    </dataCategory>
+    <dataCategory>
+        <name>Specifications</name>
+        <label>Specifications</label>
+    </dataCategory>
+</DataCategoryGroup>

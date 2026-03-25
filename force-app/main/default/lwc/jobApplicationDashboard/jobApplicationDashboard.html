@@ -1,0 +1,230 @@
+<template>
+    <lightning-card title="Job Application Dashboard" icon-name="utility:chart" class="dashboard-card">
+        <div slot="actions">
+            <lightning-button-group>
+                <lightning-button
+                    variant="neutral"
+                    label="Refresh"
+                    icon-name="utility:refresh"
+                    onclick={handleRefresh}
+                    disabled={isLoading}
+                    aria-label="Refresh dashboard data">
+                </lightning-button>
+                <lightning-button
+                    variant="neutral"
+                    label={showDetailedView ? "Simple View" : "Detailed View"}
+                    icon-name={showDetailedView ? "utility:collapse" : "utility:expand"}
+                    onclick={handleToggleDetailedView}
+                    aria-pressed={showDetailedView}>
+                </lightning-button>
+            </lightning-button-group>
+        </div>
+
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium" role="main" aria-label="Job application statistics">
+            
+            <!-- Current Record Info -->
+            <div if:true={currentRecord} class="current-record-banner slds-m-bottom_medium" role="region" aria-label="Current application details">
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                        <h3 class="slds-text-heading_small slds-m-bottom_x-small">
+                            Current Application
+                        </h3>
+                        <div class="current-record-details">
+                            <div class="record-title">
+                                {currentRecord.companyName} - {currentRecord.positionTitle}
+                            </div>
+                            <div class="record-meta">
+                                <span class={currentRecordStatusClass}>
+                                    {currentRecord.status}
+                                </span>
+                                <span class="salary-info">
+                                    {currentRecordSalary}
+                                </span>
+                                <span class="date-info">
+                                    Applied: {currentRecordDate}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <div class="timeframe-selector">
+                            <lightning-combobox
+                                name="timeframe"
+                                label="Timeframe"
+                                value={selectedTimeframe}
+                                placeholder="Select timeframe..."
+                                options={timeframeOptions}
+                                onchange={handleTimeframeChange}
+                                variant="label-inline">
+                            </lightning-combobox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div if:true={isLoading} class="slds-text-align_center slds-m-vertical_large">
+                <lightning-spinner alternative-text="Loading dashboard data..." size="medium"></lightning-spinner>
+                <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">
+                    Loading your job application insights...
+                </p>
+            </div>
+
+            <!-- Error State -->
+            <div if:true={error} class="slds-m-bottom_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>Failed to load dashboard data. Please try refreshing.</h2>
+                </div>
+            </div>
+
+            <!-- No Data State -->
+            <div if:false={hasData} class="no-data-container slds-text-align_center slds-m-vertical_large">
+                <div class="no-data-icon">📈</div>
+                <h3 class="slds-text-heading_medium slds-m-bottom_small">No Data Available</h3>
+                <p class="slds-text-body_regular slds-text-color_weak">
+                    {noDataMessage}
+                </p>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div if:true={hasData} class="dashboard-content">
+                
+                <!-- Key Metrics Row -->
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large" role="region" aria-label="Key metrics" aria-live="polite">
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="metric-card total-applications">
+                            <div class="metric-icon" aria-hidden="true">📋</div>
+                            <div class="metric-value">{totalApplications}</div>
+                            <div class="metric-label">Total Applications</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="metric-card average-salary">
+                            <div class="metric-icon" aria-hidden="true">💰</div>
+                            <div class="metric-value">{averageSalary}</div>
+                            <div class="metric-label">Average Salary</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="metric-card response-rate">
+                            <div class="metric-icon" aria-hidden="true">📞</div>
+                            <div class="metric-value">{responseRate}%</div>
+                            <div class="metric-label">Response Rate</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <div class="metric-card interview-rate">
+                            <div class="metric-icon" aria-hidden="true">🎤</div>
+                            <div class="metric-value">{interviewRate}%</div>
+                            <div class="metric-label">Interview Rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed View Content -->
+                <div if:true={showDetailedView} class="detailed-view">
+                    
+                    <!-- Status Breakdown -->
+                    <div class="slds-m-bottom_large">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">
+                            📊 Application Status Breakdown
+                        </h3>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <template for:each={statusBreakdown} for:item="statusItem">
+                                <div key={statusItem.status} class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                    <div class="status-breakdown-item">
+                                        <div class="status-header">
+                                            <span class={statusItem.cssClass}>{statusItem.status}</span>
+                                            <span class="status-count">{statusItem.count}</span>
+                                        </div>
+                                        <div class="status-bar">
+                                            <div class="status-progress" style={statusItem.progressStyle}></div>
+                                        </div>
+                                        <div class="status-percentage">{statusItem.percentage}%</div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Salary Insights -->
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <div class="insight-card">
+                                <h4 class="slds-text-heading_small slds-m-bottom_small">
+                                    💵 Salary Range
+                                </h4>
+                                <div class="insight-value">{salaryRange}</div>
+                                <div class="insight-description">
+                                    Range of salaries across all applications
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <div class="insight-card">
+                                <h4 class="slds-text-heading_small slds-m-bottom_small">
+                                    🏢 Top Companies
+                                </h4>
+                                <div class="top-companies-list">
+                                    <template for:each={topCompanies} for:item="company">
+                                        <div key={company.name} class="company-item">
+                                            <span class="company-name">{company.name}</span>
+                                            <span class="company-count">({company.count})</span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Applications -->
+                <div class="slds-m-bottom_medium">
+                    <h3 class="slds-text-heading_small slds-m-bottom_medium">
+                        🕒 Recent Applications
+                    </h3>
+                    <div class="recent-applications-container" role="list" aria-label="Recent job applications">
+                        <template for:each={recentApplications} for:item="app">
+                            <div key={app.id} 
+                                 class="recent-application-item" 
+                                 data-id={app.id}
+                                 role="listitem"
+                                 tabindex="0"
+                                 onclick={handleApplicationClick}
+                                 onkeydown={handleApplicationKeydown}
+                                 aria-label={app.companyName}>
+                                <div class="application-header">
+                                    <div class="application-title">
+                                        {app.companyName} - {app.positionTitle}
+                                    </div>
+                                    <div class={app.statusClass}>
+                                        {app.status}
+                                    </div>
+                                </div>
+                                <div class="application-details">
+                                    <span class="application-salary">{app.formattedSalary}</span>
+                                    <span class="application-date">{app.formattedDate}</span>
+                                </div>
+                            </div>
+                        </template>
+                        
+                        <div if:false={recentApplications.length} class="no-recent-applications">
+                            <p class="slds-text-color_weak">No recent applications found.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions slds-text-align_center">
+                    <lightning-button
+                        variant="brand"
+                        label="View All Applications"
+                        icon-name="utility:list"
+                        onclick={handleViewAllApplications}>
+                    </lightning-button>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

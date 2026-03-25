@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Step_by_Step_Instructions__c</fullName>
+    <label>Step-by-Step Instructions</label>
+    <type>Html</type>
+    <visibleLines>30</visibleLines>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <description>Detailed step-by-step learning instructions</description>
+</CustomField>

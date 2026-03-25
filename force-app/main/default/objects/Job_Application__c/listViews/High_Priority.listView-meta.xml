@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>High_Priority</fullName>
+    <columns>NAME</columns>
+    <columns>Company_Name__c</columns>
+    <columns>Position_Title__c</columns>
+    <columns>Status__c</columns>
+    <columns>Application_Date__c</columns>
+    <columns>Salary__c</columns>
+    <columns>Location__c</columns>
+    <columns>LAST_UPDATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Rating__c</field>
+        <operation>greaterOrEqual</operation>
+        <value>4</value>
+    </filters>
+    <label>High Priority (4-5 Stars)</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

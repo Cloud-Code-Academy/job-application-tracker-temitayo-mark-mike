@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Job Application Tracker Home — your career command center</description>
+    <flexiPage>Job_Tracker_Home</flexiPage>
+    <label>Home Dashboard</label>
+    <motif>Custom90: Airplane</motif>
+</CustomTab>

@@ -1,0 +1,630 @@
+/* Performance Optimization Dashboard Styles */
+
+.performance-dashboard-card {
+    max-width: 100%;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+/* Performance Cards */
+.performance-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.performance-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.performance-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+}
+
+.cpu-card::before {
+    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+}
+
+.memory-card::before {
+    background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+}
+
+.query-card::before {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.cache-card::before {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.performance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.performance-icon {
+    font-size: 2rem;
+    opacity: 0.8;
+}
+
+.performance-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.performance-status[data-status="good"] {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.performance-status[data-status="warning"] {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.performance-status[data-status="critical"] {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+.performance-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+}
+
+.performance-label {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+
+.performance-subtitle {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+/* Progress Bars */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #f1f5f9;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.cache-fill {
+    background: linear-gradient(90deg, #10b981, #059669) !important;
+}
+
+/* Query Analysis */
+.query-analysis-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    height: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.query-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.query-metric {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.query-metric:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.metric-icon {
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+.metric-content {
+    flex: 1;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* Data Volume */
+.data-volume-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    height: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.volume-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.volume-metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 0.5rem;
+}
+
+.volume-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+}
+
+.volume-value {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 0.875rem;
+}
+
+/* Recommendations */
+.recommendations-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.recommendation-item {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.recommendation-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.recommendation-item[data-priority="HIGH"] {
+    border-left: 4px solid #f59e0b;
+}
+
+.recommendation-item[data-priority="MEDIUM"] {
+    border-left: 4px solid #3b82f6;
+}
+
+.recommendation-item[data-priority="LOW"] {
+    border-left: 4px solid #10b981;
+}
+
+.recommendation-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.recommendation-priority {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.recommendation-item[data-priority="HIGH"] .recommendation-priority {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.recommendation-item[data-priority="MEDIUM"] .recommendation-priority {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+.recommendation-item[data-priority="LOW"] .recommendation-priority {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.recommendation-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e293b;
+    flex: 1;
+}
+
+.recommendation-effort {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.recommendation-description {
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.recommendation-impact {
+    font-size: 0.875rem;
+    color: #059669;
+    font-weight: 500;
+}
+
+/* Resource Utilization */
+.resource-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    height: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.resource-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.resource-item {
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 0.75rem;
+}
+
+.resource-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.resource-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.resource-percentage {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.resource-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.resource-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.resource-details {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* Performance Tools */
+.tools-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    height: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.tool-button {
+    width: 100%;
+}
+
+/* Real-time Monitor */
+.monitor-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.monitor-status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.monitor-status[data-status="OPTIMAL"] {
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+}
+
+.monitor-status[data-status="GOOD"] {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.monitor-status[data-status="WARNING"] {
+    background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+}
+
+.monitor-status[data-status="CRITICAL"] {
+    background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+}
+
+.status-icon {
+    font-size: 2rem;
+}
+
+.status-text {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e293b;
+    flex: 1;
+}
+
+.status-timestamp {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.monitor-warnings {
+    padding: 1rem;
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+    border-radius: 0.75rem;
+}
+
+.warning-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0 0;
+}
+
+.warning-item {
+    padding: 0.5rem 0;
+    color: #dc2626;
+    font-weight: 500;
+}
+
+.warning-item::before {
+    content: '⚠️ ';
+    margin-right: 0.5rem;
+}
+
+/* Data Source Indicator */
+.data-source-indicator {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+}
+
+.source-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.source-value {
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.source-value[data-source="cache"] {
+    color: #059669;
+}
+
+.source-value[data-source="database"] {
+    color: #3b82f6;
+}
+
+.source-timestamp {
+    color: #6b7280;
+    margin-left: auto;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 3rem 1rem;
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .performance-card {
+        padding: 1rem;
+    }
+    
+    .performance-value {
+        font-size: 2rem;
+    }
+    
+    .query-metric {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .volume-metric {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .recommendation-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .monitor-status {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .data-source-indicator {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .performance-card {
+        padding: 0.75rem;
+    }
+    
+    .performance-value {
+        font-size: 1.75rem;
+    }
+    
+    .performance-icon {
+        font-size: 1.5rem;
+    }
+    
+    .query-analysis-container,
+    .data-volume-container,
+    .resource-container,
+    .tools-container,
+    .monitor-container {
+        padding: 1rem;
+    }
+    
+    .metric-value {
+        font-size: 1.25rem;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .performance-dashboard-card {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    }
+    
+    .performance-card,
+    .query-analysis-container,
+    .data-volume-container,
+    .resource-container,
+    .tools-container,
+    .monitor-container,
+    .recommendation-item {
+        background: #1e293b;
+        border-color: #334155;
+        color: #e2e8f0;
+    }
+    
+    .performance-value,
+    .metric-value,
+    .volume-value {
+        color: #e2e8f0;
+    }
+    
+    .query-metric,
+    .volume-metric,
+    .resource-item {
+        background: linear-gradient(135deg, #334155 0%, #475569 100%);
+    }
+}
+
+/* Print styles */
+@media print {
+    .performance-dashboard-card {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .performance-card,
+    .query-analysis-container,
+    .data-volume-container,
+    .resource-container,
+    .tools-container,
+    .monitor-container,
+    .recommendation-item {
+        box-shadow: none;
+        border: 1px solid #000;
+        break-inside: avoid;
+        margin-bottom: 1rem;
+    }
+    
+    .performance-card:hover,
+    .recommendation-item:hover {
+        transform: none;
+        box-shadow: none;
+    }
+}

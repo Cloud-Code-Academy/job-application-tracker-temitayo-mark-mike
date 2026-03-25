@@ -1,0 +1,170 @@
+<template>
+    <div class="calc-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">
+                    <lightning-icon icon-name="utility:moneybag" size="medium" class="header-icon"></lightning-icon>
+                    Salary Calculator
+                </h1>
+                <p class="page-subtitle">Estimate your take-home pay with real-time tax calculations</p>
+            </div>
+            <div class="header-actions">
+                <lightning-button
+                    variant="neutral"
+                    label="Reset"
+                    icon-name="utility:refresh"
+                    onclick={handleReset}>
+                </lightning-button>
+                <template if:true={recordId}>
+                    <lightning-button
+                        variant="brand"
+                        label="Save to Record"
+                        icon-name="utility:save"
+                        onclick={handleSaveToRecord}
+                        disabled={isCalculating}
+                        class="slds-m-left_small">
+                    </lightning-button>
+                </template>
+            </div>
+        </div>
+
+        <div class="calc-body">
+            <!-- Input Section -->
+            <div class="input-section">
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                        <lightning-input
+                            type="number"
+                            label="Annual Gross Salary"
+                            value={salary}
+                            onchange={handleSalaryChange}
+                            formatter="currency"
+                            step="1000"
+                            min="0"
+                            max="10000000"
+                            placeholder="Enter annual salary..."
+                            class="salary-input">
+                        </lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <lightning-radio-group
+                            name="calculationMethod"
+                            label="Calculation Method"
+                            options={calculationMethods}
+                            value={selectedMethod}
+                            onchange={handleMethodChange}
+                            type="button">
+                        </lightning-radio-group>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <template if:true={isCalculating}>
+                <div class="loading-section">
+                    <lightning-spinner alternative-text="Calculating..." size="small"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Error -->
+            <template if:true={calculationError}>
+                <div class="error-banner">
+                    <lightning-icon icon-name="utility:warning" size="small" variant="error"></lightning-icon>
+                    <span>{calculationError}</span>
+                </div>
+            </template>
+
+            <!-- Results -->
+            <template if:false={calculationError}>
+                <!-- Tax Breakdown -->
+                <div class="section-card">
+                    <h2 class="section-title">
+                        <lightning-icon icon-name="utility:trending" size="x-small" class="section-icon"></lightning-icon>
+                        Tax Deductions
+                    </h2>
+                    <div class="tax-grid">
+                        <div class="tax-card tax-federal">
+                            <div class="tax-icon-wrap">
+                                <lightning-icon icon-name="custom:custom17" size="small"></lightning-icon>
+                            </div>
+                            <div class="tax-info">
+                                <span class="tax-label">Federal Tax</span>
+                                <span class="tax-amount">{formattedFederalTax}</span>
+                                <span class="tax-pct">{federalTaxPercentage}% of gross</span>
+                            </div>
+                        </div>
+                        <div class="tax-card tax-ss">
+                            <div class="tax-icon-wrap">
+                                <lightning-icon icon-name="standard:people" size="small"></lightning-icon>
+                            </div>
+                            <div class="tax-info">
+                                <span class="tax-label">Social Security</span>
+                                <span class="tax-amount">{formattedSocialSecurityTax}</span>
+                                <span class="tax-pct">{socialSecurityPercentage}% of gross</span>
+                            </div>
+                        </div>
+                        <div class="tax-card tax-medicare">
+                            <div class="tax-icon-wrap">
+                                <lightning-icon icon-name="standard:healthcare_facility" size="small"></lightning-icon>
+                            </div>
+                            <div class="tax-info">
+                                <span class="tax-label">Medicare</span>
+                                <span class="tax-amount">{formattedMedicareTax}</span>
+                                <span class="tax-pct">{medicarePercentage}% of gross</span>
+                            </div>
+                        </div>
+                        <div class="tax-card tax-total">
+                            <div class="tax-icon-wrap">
+                                <lightning-icon icon-name="utility:chart" size="small"></lightning-icon>
+                            </div>
+                            <div class="tax-info">
+                                <span class="tax-label">Total Taxes</span>
+                                <span class="tax-amount tax-total-value">{formattedTotalTax}</span>
+                                <span class="tax-pct">{totalTaxPercentage}% effective rate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Take-Home Pay -->
+                <div class="section-card take-home-section">
+                    <h2 class="section-title">
+                        <lightning-icon icon-name="utility:success" size="x-small" class="section-icon"></lightning-icon>
+                        Your Take-Home Pay
+                    </h2>
+                    <div class="take-home-grid">
+                        <div class="take-home-card primary">
+                            <span class="take-home-label">Per Year</span>
+                            <span class="take-home-value">{formattedYearlyTakeHome}</span>
+                        </div>
+                        <div class="take-home-card">
+                            <span class="take-home-label">Per Month</span>
+                            <span class="take-home-value">{formattedMonthlyTakeHome}</span>
+                        </div>
+                        <div class="take-home-card">
+                            <span class="take-home-label">Bi-Weekly</span>
+                            <span class="take-home-value">{formattedBiWeeklyTakeHome}</span>
+                        </div>
+                        <div class="take-home-card">
+                            <span class="take-home-label">Per Week</span>
+                            <span class="take-home-value">{formattedWeeklyTakeHome}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Config Source -->
+                <div class="config-info">
+                    <template if:true={isClientSideCalculation}>
+                        <lightning-icon icon-name="utility:sparkle" size="xx-small"></lightning-icon>
+                        Real-time estimate using {taxConfigSource} tax rates
+                    </template>
+                    <template if:false={isClientSideCalculation}>
+                        <lightning-icon icon-name="utility:check" size="xx-small"></lightning-icon>
+                        Server-side calculation using {taxConfigSource} tax rates
+                    </template>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

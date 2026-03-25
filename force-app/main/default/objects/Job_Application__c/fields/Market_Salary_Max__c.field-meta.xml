@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Market_Salary_Max__c</fullName>
+    <description>Maximum salary for this position based on market analysis</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The maximum salary range for this position based on current market data analysis.</inlineHelpText>
+    <label>Market Salary Max</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

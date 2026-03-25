@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Standard access to Interview Feedback features for regular users</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Interview Feedback User</label>
+    
+    <!-- Object Permissions -->
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Interview_Feedback__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Feedback_Template__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Competency_Rating__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Feedback_Share__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    
+    <!-- Field Permissions - Limited access to sensitive fields -->
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Job_Application__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Interview_Round__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Interviewer_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Interview_Feedback__c.Interviewer_Email__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Interview_Type__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Interview_Date__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Duration_Minutes__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Overall_Rating__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Technical_Rating__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Communication_Rating__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Cultural_Fit_Rating__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Detailed_Feedback__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Strengths__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Areas_For_Improvement__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Recommendation__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Feedback_Source__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Interview_Feedback__c.Is_Confidential__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Interview_Feedback__c.Feedback_Status__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <!-- Custom Permissions -->
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>Create_Own_Feedback</name>
+    </customPermissions>
+    
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>Share_Own_Feedback</name>
+    </customPermissions>
+</PermissionSet>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Competency_Areas__c</fullName>
+    <description>Competency areas to evaluate in this interview type</description>
+    <externalId>false</externalId>
+    <label>Competency Areas</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Technical Skills</fullName>
+                <default>false</default>
+                <label>Technical Skills</label>
+            </value>
+            <value>
+                <fullName>Communication</fullName>
+                <default>false</default>
+                <label>Communication</label>
+            </value>
+            <value>
+                <fullName>Problem Solving</fullName>
+                <default>false</default>
+                <label>Problem Solving</label>
+            </value>
+            <value>
+                <fullName>Leadership</fullName>
+                <default>false</default>
+                <label>Leadership</label>
+            </value>
+            <value>
+                <fullName>Cultural Fit</fullName>
+                <default>false</default>
+                <label>Cultural Fit</label>
+            </value>
+            <value>
+                <fullName>Teamwork</fullName>
+                <default>false</default>
+                <label>Teamwork</label>
+            </value>
+            <value>
+                <fullName>Adaptability</fullName>
+                <default>false</default>
+                <label>Adaptability</label>
+            </value>
+            <value>
+                <fullName>Innovation</fullName>
+                <default>false</default>
+                <label>Innovation</label>
+            </value>
+            <value>
+                <fullName>Customer Focus</fullName>
+                <default>false</default>
+                <label>Customer Focus</label>
+            </value>
+            <value>
+                <fullName>Decision Making</fullName>
+                <default>false</default>
+                <label>Decision Making</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>5</visibleLines>
+</CustomField>

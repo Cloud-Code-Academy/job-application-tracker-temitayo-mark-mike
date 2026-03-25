@@ -1,0 +1,533 @@
+/* Job Application Dashboard Component Styles */
+
+.dashboard-card {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Current Record Banner */
+.current-record-banner {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    color: white;
+    margin-bottom: 1.5rem;
+}
+
+.current-record-details .record-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.current-record-details .record-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.current-record-details .record-meta span {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.timeframe-selector {
+    margin-top: 1rem;
+}
+
+.timeframe-selector lightning-combobox {
+    --slds-c-combobox-label-color-text: rgba(255, 255, 255, 0.9);
+}
+
+/* No Data State */
+.no-data-container {
+    padding: 3rem 1rem;
+}
+
+.no-data-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+/* Metric Cards */
+.metric-card {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+}
+
+.metric-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Specific metric card colors */
+.total-applications::before {
+    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+}
+
+.average-salary::before {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.response-rate::before {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.interview-rate::before {
+    background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+}
+
+/* Status Breakdown */
+.status-breakdown-item {
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 1rem;
+}
+
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.status-count {
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.status-bar {
+    height: 8px;
+    background: #f3f4f6;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.status-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    transition: width 0.3s ease;
+}
+
+.status-percentage {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+/* Insight Cards */
+.insight-card {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.insight-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.insight-description {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.top-companies-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.company-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.company-item:last-child {
+    border-bottom: none;
+}
+
+.company-name {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.company-count {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+/* Recent Applications */
+.recent-applications-container {
+    background: #f9fafb;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+}
+
+.recent-application-item {
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.recent-application-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #3b82f6;
+}
+
+.recent-application-item:last-child {
+    margin-bottom: 0;
+}
+
+.application-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.application-title {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 1rem;
+}
+
+.application-details {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.application-salary {
+    font-weight: 600;
+    color: #059669;
+}
+
+.no-recent-applications {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+}
+
+/* Status Theme Classes */
+.slds-theme_info {
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.slds-theme_warning {
+    background-color: #f59e0b;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.slds-theme_default {
+    background-color: #6b7280;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.slds-theme_success {
+    background-color: #10b981;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.slds-theme_alt-inverse {
+    background-color: #8b5cf6;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.slds-theme_error {
+    background-color: #ef4444;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Quick Actions */
+.quick-actions {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .current-record-banner {
+        padding: 1rem;
+    }
+    
+    .current-record-details .record-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .metric-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .metric-value {
+        font-size: 1.5rem;
+    }
+    
+    .metric-icon {
+        font-size: 2rem;
+    }
+    
+    .application-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .application-details {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-card {
+        margin: 0;
+    }
+    
+    .current-record-banner {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    
+    .metric-card {
+        padding: 0.75rem;
+    }
+    
+    .metric-value {
+        font-size: 1.25rem;
+    }
+    
+    .insight-card {
+        padding: 1rem;
+    }
+    
+    .recent-applications-container {
+        padding: 0.75rem;
+    }
+    
+    .recent-application-item {
+        padding: 0.75rem;
+    }
+}
+
+/* Animation for loading states */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dashboard-content {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Focus and accessibility improvements */
+.recent-application-item:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.metric-card:focus-within {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .metric-card {
+        border: 2px solid #000;
+    }
+    
+    .recent-application-item {
+        border: 2px solid #000;
+    }
+    
+    .current-record-banner {
+        background: #000;
+        border: 2px solid #fff;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .metric-card {
+        transition: none;
+    }
+    
+    .metric-card:hover {
+        transform: none;
+    }
+    
+    .recent-application-item {
+        transition: none;
+    }
+    
+    .recent-application-item:hover {
+        transform: none;
+    }
+    
+    .dashboard-content {
+        animation: none;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .metric-card {
+        background: #1f2937;
+        border-color: #374151;
+        color: #f9fafb;
+    }
+    
+    .metric-value {
+        color: #f9fafb;
+    }
+    
+    .insight-card {
+        background: #1f2937;
+        border-color: #374151;
+        color: #f9fafb;
+    }
+    
+    .insight-value {
+        color: #f9fafb;
+    }
+    
+    .recent-applications-container {
+        background: #1f2937;
+        border-color: #374151;
+    }
+    
+    .recent-application-item {
+        background: #111827;
+        border-color: #374151;
+        color: #f9fafb;
+    }
+    
+    .application-title {
+        color: #f9fafb;
+    }
+}
+
+/* Print styles */
+@media print {
+    .dashboard-card {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .current-record-banner {
+        background: white;
+        color: black;
+        border: 1px solid #000;
+    }
+    
+    .metric-card {
+        box-shadow: none;
+        border: 1px solid #000;
+        break-inside: avoid;
+    }
+    
+    .recent-application-item {
+        box-shadow: none;
+        border: 1px solid #000;
+        break-inside: avoid;
+    }
+}

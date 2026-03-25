@@ -1,0 +1,347 @@
+<template>
+    <lightning-card title="Interview Feedback Collection" icon-name="standard:feedback">
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-is-relative slds-p-around_large">
+                <lightning-spinner alternative-text="Loading feedback form..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error Messages -->
+        <template if:true={hasErrors}>
+            <div class="slds-m-bottom_medium">
+                <template for:each={errors} for:item="error">
+                    <div key={error.id} class="slds-notify slds-notify_alert slds-alert_error slds-m-bottom_x-small">
+                        <span class="slds-assistive-text">Error</span>
+                        <lightning-icon icon-name="utility:error" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        {error.message}
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- Success Message -->
+        <template if:true={showSuccessMessage}>
+            <div class="slds-notify slds-notify_alert slds-alert_success slds-m-bottom_medium">
+                <span class="slds-assistive-text">Success</span>
+                <lightning-icon icon-name="utility:success" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                Interview feedback saved successfully!
+            </div>
+        </template>
+
+        <!-- Main Form -->
+        <template if:false={isLoading}>
+            <div class="feedback-form-container">
+                <!-- Progress Indicator -->
+                <template if:true={showProgressIndicator}>
+                    <div class="slds-m-bottom_large">
+                        <lightning-progress-indicator 
+                            current-step={currentStep} 
+                            type="path" 
+                            variant="base">
+                            <lightning-progress-step label="Basic Info" value="basic"></lightning-progress-step>
+                            <lightning-progress-step label="Ratings" value="ratings"></lightning-progress-step>
+                            <lightning-progress-step label="Feedback" value="feedback"></lightning-progress-step>
+                            <lightning-progress-step label="Review" value="review"></lightning-progress-step>
+                        </lightning-progress-indicator>
+                    </div>
+                </template>
+
+                <lightning-record-edit-form 
+                    object-api-name="Interview_Feedback__c" 
+                    record-id={recordId}
+                    onsubmit={handleSubmit}
+                    onsuccess={handleSuccess}
+                    onerror={handleError}>
+
+                    <!-- Step 1: Basic Information -->
+                    <template if:true={isBasicStep}>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input-field 
+                                    field-name="Job_Application__c" 
+                                    value={jobApplicationId}
+                                    required>
+                                </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input-field 
+                                    field-name="Interview_Round__c" 
+                                    value={feedbackData.Interview_Round__c}
+                                    onchange={handleFieldChange}
+                                    required>
+                                </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input-field 
+                                    field-name="Interview_Type__c" 
+                                    value={feedbackData.Interview_Type__c}
+                                    onchange={handleFieldChange}
+                                    required>
+                                </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input-field 
+                                    field-name="Interviewer_Name__c" 
+                                    value={feedbackData.Interviewer_Name__c}
+                                    onchange={handleFieldChange}>
+                                </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input-field 
+                                    field-name="Interviewer_Email__c" 
+                                    value={feedbackData.Interviewer_Email__c}
+                                    onchange={handleFieldChange}>
+                                </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input-field 
+                                    field-name="Interview_Date__c" 
+                                    value={feedbackData.Interview_Date__c}
+                                    onchange={handleFieldChange}>
+                                </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input-field 
+                                    field-name="Duration_Minutes__c" 
+                                    value={feedbackData.Duration_Minutes__c}
+                                    onchange={handleFieldChange}>
+                                </lightning-input-field>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Step 2: Ratings -->
+                    <template if:true={isRatingsStep}>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1">
+                                <h3 class="slds-text-heading_small slds-m-bottom_medium">Rate the candidate's performance (1-5 scale)</h3>
+                            </div>
+                            
+                            <!-- Rating Sliders for Mobile -->
+                            <template if:true={isMobile}>
+                                <div class="slds-col slds-size_1-of-1">
+                                    <div class="rating-slider-container">
+                                        <label class="slds-form-element__label">Technical Rating: {feedbackData.Technical_Rating__c}</label>
+                                        <input 
+                                            type="range" 
+                                            min="1" 
+                                            max="5" 
+                                            step="0.5"
+                                            value={feedbackData.Technical_Rating__c}
+                                            data-field="Technical_Rating__c"
+                                            onchange={handleRatingChange}
+                                            class="rating-slider">
+                                        <div class="rating-labels">
+                                            <span>Poor</span>
+                                            <span>Excellent</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1">
+                                    <div class="rating-slider-container">
+                                        <label class="slds-form-element__label">Communication Rating: {feedbackData.Communication_Rating__c}</label>
+                                        <input 
+                                            type="range" 
+                                            min="1" 
+                                            max="5" 
+                                            step="0.5"
+                                            value={feedbackData.Communication_Rating__c}
+                                            data-field="Communication_Rating__c"
+                                            onchange={handleRatingChange}
+                                            class="rating-slider">
+                                        <div class="rating-labels">
+                                            <span>Poor</span>
+                                            <span>Excellent</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1">
+                                    <div class="rating-slider-container">
+                                        <label class="slds-form-element__label">Cultural Fit Rating: {feedbackData.Cultural_Fit_Rating__c}</label>
+                                        <input 
+                                            type="range" 
+                                            min="1" 
+                                            max="5" 
+                                            step="0.5"
+                                            value={feedbackData.Cultural_Fit_Rating__c}
+                                            data-field="Cultural_Fit_Rating__c"
+                                            onchange={handleRatingChange}
+                                            class="rating-slider">
+                                        <div class="rating-labels">
+                                            <span>Poor</span>
+                                            <span>Excellent</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Standard Rating Fields for Desktop -->
+                            <template if:false={isMobile}>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                    <lightning-input-field 
+                                        field-name="Technical_Rating__c" 
+                                        value={feedbackData.Technical_Rating__c}
+                                        onchange={handleFieldChange}>
+                                    </lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                    <lightning-input-field 
+                                        field-name="Communication_Rating__c" 
+                                        value={feedbackData.Communication_Rating__c}
+                                        onchange={handleFieldChange}>
+                                    </lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                    <lightning-input-field 
+                                        field-name="Cultural_Fit_Rating__c" 
+                                        value={feedbackData.Cultural_Fit_Rating__c}
+                                        onchange={handleFieldChange}>
+                                    </lightning-input-field>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                    <!-- Step 3: Detailed Feedback -->
+                    <template if:true={isFeedbackStep}>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">
+                                        <span>Detailed Feedback</span>
+                                        <template if:true={supportsVoiceInput}>
+                                            <lightning-button-icon 
+                                                icon-name="utility:record" 
+                                                variant="border-filled" 
+                                                alternative-text="Voice Input"
+                                                title="Voice Input"
+                                                onclick={toggleVoiceInput}
+                                                class="slds-m-left_x-small voice-input-button"
+                                                disabled={isRecording}>
+                                            </lightning-button-icon>
+                                            <template if:true={isRecording}>
+                                                <span class="slds-text-color_error slds-m-left_x-small">Recording...</span>
+                                            </template>
+                                        </template>
+                                    </label>
+                                    <lightning-textarea 
+                                        name="detailedFeedback"
+                                        value={feedbackData.Detailed_Feedback__c}
+                                        onchange={handleFieldChange}
+                                        data-field="Detailed_Feedback__c"
+                                        placeholder="Provide detailed feedback about the interview..."
+                                        rows="4">
+                                    </lightning-textarea>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input-field 
+                                    field-name="Strengths__c" 
+                                    value={feedbackData.Strengths__c}
+                                    onchange={handleFieldChange}>
+                                </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input-field 
+                                    field-name="Areas_for_Improvement__c" 
+                                    value={feedbackData.Areas_for_Improvement__c}
+                                    onchange={handleFieldChange}>
+                                </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input-field 
+                                    field-name="Recommendation__c" 
+                                    value={feedbackData.Recommendation__c}
+                                    onchange={handleFieldChange}>
+                                </lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input-field 
+                                    field-name="Is_Confidential__c" 
+                                    value={feedbackData.Is_Confidential__c}
+                                    onchange={handleFieldChange}>
+                                </lightning-input-field>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Step 4: Review -->
+                    <template if:true={isReviewStep}>
+                        <div class="review-container">
+                            <h3 class="slds-text-heading_small slds-m-bottom_medium">Review Your Feedback</h3>
+                            
+                            <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                                <dl class="slds-list_horizontal slds-wrap">
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate">Interview Round:</dt>
+                                    <dd class="slds-item_detail slds-truncate">{feedbackData.Interview_Round__c}</dd>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate">Interview Type:</dt>
+                                    <dd class="slds-item_detail slds-truncate">{feedbackData.Interview_Type__c}</dd>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate">Interviewer:</dt>
+                                    <dd class="slds-item_detail slds-truncate">{feedbackData.Interviewer_Name__c}</dd>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate">Technical Rating:</dt>
+                                    <dd class="slds-item_detail slds-truncate">{feedbackData.Technical_Rating__c}/5</dd>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate">Communication Rating:</dt>
+                                    <dd class="slds-item_detail slds-truncate">{feedbackData.Communication_Rating__c}/5</dd>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate">Cultural Fit Rating:</dt>
+                                    <dd class="slds-item_detail slds-truncate">{feedbackData.Cultural_Fit_Rating__c}/5</dd>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate">Recommendation:</dt>
+                                    <dd class="slds-item_detail slds-truncate">{feedbackData.Recommendation__c}</dd>
+                                </dl>
+                            </div>
+
+                            <template if:true={feedbackData.Detailed_Feedback__c}>
+                                <div class="slds-box slds-m-bottom_medium">
+                                    <h4 class="slds-text-heading_x-small slds-m-bottom_small">Detailed Feedback:</h4>
+                                    <p>{feedbackData.Detailed_Feedback__c}</p>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                    <!-- Navigation Buttons -->
+                    <div class="slds-m-top_large">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <div class="slds-col">
+                                <template if:false={isFirstStep}>
+                                    <lightning-button 
+                                        label="Previous" 
+                                        onclick={handlePrevious}
+                                        variant="neutral">
+                                    </lightning-button>
+                                </template>
+                            </div>
+                            <div class="slds-col">
+                                <template if:false={isLastStep}>
+                                    <lightning-button 
+                                        label="Next" 
+                                        onclick={handleNext}
+                                        variant="brand"
+                                        disabled={isCurrentStepInvalid}>
+                                    </lightning-button>
+                                </template>
+                                <template if:true={isLastStep}>
+                                    <lightning-button 
+                                        label="Save Feedback" 
+                                        type="submit"
+                                        variant="brand"
+                                        disabled={isSaving}>
+                                    </lightning-button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-record-edit-form>
+
+                <!-- Offline Status Indicator -->
+                <template if:true={isOffline}>
+                    <div class="slds-notify slds-notify_alert slds-alert_warning slds-m-top_medium">
+                        <span class="slds-assistive-text">Warning</span>
+                        <lightning-icon icon-name="utility:offline" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        You are currently offline. Your feedback will be saved locally and synced when connection is restored.
+                    </div>
+                </template>
+            </div>
+        </template>
+    </lightning-card>
+</template>

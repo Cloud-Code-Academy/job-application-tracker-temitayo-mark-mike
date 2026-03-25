@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Central hub for all project documentation and knowledge articles</description>
+    <label>Documentation Hub</label>
+    <motif>Custom18: Hammer</motif>
+    <page>KnowledgeHome</page>
+</CustomTab>

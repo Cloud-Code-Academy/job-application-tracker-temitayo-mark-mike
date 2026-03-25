@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Security_Classification__c</fullName>
+    <description>Security classification of the data involved</description>
+    <externalId>false</externalId>
+    <label>Security Classification</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>STANDARD</fullName>
+                <default>true</default>
+                <label>STANDARD</label>
+            </value>
+            <value>
+                <fullName>SENSITIVE</fullName>
+                <default>false</default>
+                <label>SENSITIVE</label>
+            </value>
+            <value>
+                <fullName>CONFIDENTIAL</fullName>
+                <default>false</default>
+                <label>CONFIDENTIAL</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

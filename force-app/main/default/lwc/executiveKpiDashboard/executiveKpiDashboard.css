@@ -1,0 +1,457 @@
+/* Executive KPI Dashboard Styles */
+
+.executive-dashboard-card {
+    max-width: 100%;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+/* KPI Cards */
+.kpi-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+}
+
+.growth-card::before {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.conversion-card::before {
+    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+}
+
+.success-card::before {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.velocity-card::before {
+    background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+}
+
+.kpi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.kpi-icon {
+    font-size: 2rem;
+    opacity: 0.8;
+}
+
+.kpi-trend {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.kpi-trend[data-trend="positive"] {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.kpi-trend[data-trend="negative"] {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+.kpi-trend.neutral {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.kpi-value {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+}
+
+.kpi-label {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+
+.kpi-subtitle {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* Conversion Funnel */
+.funnel-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.funnel-stages {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.funnel-stage {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+}
+
+.stage-bar {
+    height: 60px;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.stage-bar:hover {
+    transform: scale(1.05);
+}
+
+.stage-info {
+    text-align: center;
+}
+
+.stage-count {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+}
+
+.stage-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+
+.stage-percentage {
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.funnel-arrow {
+    font-size: 1.5rem;
+    color: #9ca3af;
+    margin: 0 0.5rem;
+}
+
+/* Market Insights */
+.insights-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    height: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.insights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.insight-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.insight-name {
+    min-width: 120px;
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.875rem;
+}
+
+.insight-bar {
+    flex: 1;
+    height: 8px;
+    background-color: #f1f5f9;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.insight-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.insight-count {
+    min-width: 30px;
+    text-align: right;
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.875rem;
+}
+
+/* Forecasting */
+.forecast-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.forecast-metric {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.forecast-metric:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.forecast-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+.forecast-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.forecast-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* Performance Indicators */
+.performance-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.performance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.performance-item {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 0.75rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.performance-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.performance-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.performance-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.performance-indicator {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.performance-indicator.good,
+.performance-indicator[data-indicator="good"] {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.performance-indicator.neutral,
+.performance-indicator[data-indicator="neutral"] {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.performance-indicator.poor,
+.performance-indicator[data-indicator="poor"] {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 3rem 1rem;
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .kpi-card {
+        padding: 1rem;
+    }
+    
+    .kpi-value {
+        font-size: 2.5rem;
+    }
+    
+    .funnel-stages {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .funnel-arrow {
+        transform: rotate(90deg);
+        margin: 0.5rem 0;
+    }
+    
+    .stage-bar {
+        height: 40px;
+    }
+    
+    .performance-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .forecast-value {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .kpi-card {
+        padding: 0.75rem;
+    }
+    
+    .kpi-value {
+        font-size: 2rem;
+    }
+    
+    .kpi-icon {
+        font-size: 1.5rem;
+    }
+    
+    .funnel-container,
+    .insights-container,
+    .forecast-container,
+    .performance-container {
+        padding: 1rem;
+    }
+    
+    .forecast-value {
+        font-size: 1.75rem;
+    }
+    
+    .stage-count {
+        font-size: 1.5rem;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .executive-dashboard-card {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    }
+    
+    .kpi-card,
+    .funnel-container,
+    .insights-container,
+    .forecast-container,
+    .performance-container {
+        background: #1e293b;
+        border-color: #334155;
+        color: #e2e8f0;
+    }
+    
+    .kpi-value,
+    .stage-count,
+    .forecast-value,
+    .performance-value {
+        color: #e2e8f0;
+    }
+    
+    .forecast-metric,
+    .performance-item {
+        background: linear-gradient(135deg, #334155 0%, #475569 100%);
+    }
+}
+
+/* Print styles */
+@media print {
+    .executive-dashboard-card {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .kpi-card,
+    .funnel-container,
+    .insights-container,
+    .forecast-container,
+    .performance-container {
+        box-shadow: none;
+        border: 1px solid #000;
+        break-inside: avoid;
+        margin-bottom: 1rem;
+    }
+    
+    .kpi-card:hover,
+    .forecast-metric:hover,
+    .performance-item:hover {
+        transform: none;
+        box-shadow: none;
+    }
+}

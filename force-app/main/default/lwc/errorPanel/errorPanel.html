@@ -1,0 +1,42 @@
+<template>
+    <div class="slds-illustration slds-illustration_small" role="alert" aria-live="assertive">
+        <div class="slds-text-longform">
+            <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small">
+                <lightning-icon
+                    icon-name={iconName}
+                    alternative-text="Error"
+                    size="small"
+                    variant="error"
+                    class="slds-m-right_x-small">
+                </lightning-icon>
+                <h3 class="slds-text-heading_small">{friendlyMessage}</h3>
+            </div>
+
+            <template if:true={hasErrorDetails}>
+                <button
+                    class="slds-button slds-button_neutral slds-m-bottom_small"
+                    onclick={toggleDetails}
+                    aria-expanded={showDetails}
+                    aria-controls="error-details">
+                    <template if:false={showDetails}>Show Details</template>
+                    <template if:true={showDetails}>Hide Details</template>
+                </button>
+
+                <template if:true={showDetails}>
+                    <div id="error-details" class="slds-box slds-box_x-small slds-theme_shade slds-m-bottom_small">
+                        <p class="slds-text-body_small slds-text-color_error">{errorDetails}</p>
+                    </div>
+                </template>
+            </template>
+
+            <template if:true={showRetry}>
+                <button
+                    class="slds-button slds-button_brand"
+                    onclick={handleRetry}
+                    aria-label="Retry loading data">
+                    Try Again
+                </button>
+            </template>
+        </div>
+    </div>
+</template>

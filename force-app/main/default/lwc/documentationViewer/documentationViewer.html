@@ -1,0 +1,48 @@
+<template>
+    <div class="docs-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">
+                    <lightning-icon icon-name="utility:knowledge_base" size="medium" class="header-icon"></lightning-icon>
+                    Documentation
+                </h1>
+                <p class="page-subtitle">Reference guides, architecture, and conventions for the Job Application Tracker</p>
+            </div>
+        </div>
+
+        <div class="docs-body">
+            <!-- Sidebar Navigation -->
+            <nav class="docs-nav" aria-label="Documentation sections">
+                <template for:each={navItems} for:item="item">
+                    <div key={item.id}
+                         class={item.navClass}
+                         data-id={item.id}
+                         onclick={handleNavClick}
+                         role="button"
+                         tabindex="0">
+                        <lightning-icon icon-name={item.icon} size="xx-small"></lightning-icon>
+                        <span>{item.title}</span>
+                    </div>
+                </template>
+            </nav>
+
+            <!-- Content Area -->
+            <div class="docs-content">
+                <template if:true={activeContent}>
+                    <h2 class="content-title">{activeContent.title}</h2>
+                    <template for:each={activeContent.formattedContent} for:item="block">
+                        <div key={block.key} class="content-block">
+                            <h3 class="block-heading">{block.heading}</h3>
+                            <template for:each={block.paragraphs} for:item="para">
+                                <p key={para.key} class={para.cssClass}>
+                                    <lightning-formatted-rich-text value={para.text}></lightning-formatted-rich-text>
+                                </p>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>

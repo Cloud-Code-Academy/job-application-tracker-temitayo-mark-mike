@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+    </targets>
+    <masterLabel>Documentation Viewer</masterLabel>
+    <description>In-app documentation viewer with sidebar navigation for project reference guides, architecture, and conventions.</description>
+</LightningComponentBundle>

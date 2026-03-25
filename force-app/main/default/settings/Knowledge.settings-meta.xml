@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<KnowledgeSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <enableKnowledge>true</enableKnowledge>
+    <enableLightningKnowledge>true</enableLightningKnowledge>
+    <enableCreateEditOnArticlesTab>true</enableCreateEditOnArticlesTab>
+    <enableExternalMediaContent>true</enableExternalMediaContent>
+    <showArticleSummariesCustomerPortal>true</showArticleSummariesCustomerPortal>
+    <showArticleSummariesInternalApp>true</showArticleSummariesInternalApp>
+    <showArticleSummariesPartnerPortal>true</showArticleSummariesPartnerPortal>
+    <showValidationStatusField>true</showValidationStatusField>
+</KnowledgeSettings>
