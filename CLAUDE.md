@@ -19,7 +19,7 @@ Trigger → TriggerHandler → Service classes → LWC (via @AuraEnabled/@wire)
 
 - **Triggers:** `JobApplicationTrigger`, `InterviewFeedbackTrigger`, `EventValidationTrigger`
 - **Handlers:** `JobApplicationTriggerHandler`, `JobApplicationEventTriggerHandler`
-- **Services:** Domain logic in `*Service.cls` classes (e.g., `SalaryCalculationService`, `InterviewFeedbackService`, `FeedbackAnalyticsService`)
+- **Services:** Domain logic in `*Service.cls` classes (e.g., `SalaryCalculationService`, `InterviewCalendarService`, `InterviewFeedbackService`, `FeedbackAnalyticsService`)
 - **Async:** Batch (`SalaryMarketAnalysisBatch`, `JobApplicationCleanupBatch`, `FeedbackDataRetentionBatch`), Queueable (`EmailNotificationQueue`, `JobApplicationEnrichmentQueue`), Schedulable
 - **Platform Events:** `Job_Application_Event__e` with publisher/subscriber pattern
 - **External APIs:** `SalaryBenchmarkService`, `CompanyDataService`, `SalaryDataAPIService`, `WeatherAPIService` (use Named Credentials: `callout:Salary_Benchmark_API`, `callout:Company_Data_API`, `callout:Salary_Data_API`, `callout:Weather_API`)
@@ -40,18 +40,20 @@ Trigger → TriggerHandler → Service classes → LWC (via @AuraEnabled/@wire)
 
 | Component | Purpose |
 |-----------|---------|
+| `jobTrackerHomePage` | App landing page with hero, animated counters, pipeline viz |
 | `jobApplicationDashboard` | Main dashboard with metrics and application list |
 | `salaryCalculator` | Interactive salary/tax calculator (wired to TaxConfigurationService) |
 | `calendarIntegration` | Interview scheduling with conflict detection |
+| `applicationAnalyticsDashboard` | Application pipeline analytics with Kanban board |
 | `interviewFeedbackCollector` | Feedback entry form with competency ratings |
 | `mobileFeedbackCapture` | Mobile-optimized feedback capture |
 | `performanceDashboard` | Chart.js analytics dashboard |
 | `errorPanel` | Reusable error display with retry capability |
 | `securityGovernanceDashboard` | Compliance monitoring dashboard |
-| `applicationAnalyticsDashboard` | Application pipeline analytics |
 | `executiveKpiDashboard` | Executive KPI summary |
 | `integrationDeploymentDashboard` | Deployment status monitor |
 | `performanceOptimizationDashboard` | Performance metrics viewer |
+| `documentationViewer` | In-app documentation with sidebar navigation |
 
 ## Commands
 
@@ -105,5 +107,6 @@ See `MODERNIZATION_CHANGELOG.md` at root for the full history of recent upgrades
 - **Sharing:** All service classes use `inherited sharing` (inherits caller's sharing context)
 - **API auth:** Named Credentials only — never hard-code API keys
 - **LWC reactivity:** No `@track` on properties (reactive by default since API 48.0)
+- **LWC UI pattern:** Feature pages use custom container + gradient page-header + `lightning-icon` (no emojis)
 - **Testing:** Test classes follow `*Test.cls` naming; use `TestDataFactory` for test data
 - **Tax config:** Managed via `Tax_Configuration__mdt` — not hard-coded

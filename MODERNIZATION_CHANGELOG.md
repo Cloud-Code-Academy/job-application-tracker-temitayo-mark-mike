@@ -449,3 +449,207 @@ f09c9de docs: enhance MODERNIZATION_CHANGELOG with educational explanations
 | xmlns Fix | sforge → sforce typo in CMDT field metadata | Done |
 | Missing meta.xml | Created 22 .cls-meta.xml files for orphaned classes | Done |
 | Debug cleanup | Removed leftover console.log from LWC dashboards | Done |
+
+---
+
+## Phase 2 — App Polish & UI Redesign
+
+> **Date:** July 2025  
+> **Scope:** Home page creation, tab/navigation setup, data cleanup, UI redesign of feature pages  
+> **Deployed to:** `capstone@taju.com` (myCapstoneOrg)
+
+---
+
+### 1. Job Tracker Home Page LWC
+
+**Files created:** `jobTrackerHomePage/` LWC, `Job_Tracker_Home.flexipage-meta.xml`, `Job_Tracker_Home.tab-meta.xml`
+
+Built a full-featured landing page for the app with:
+- Hero section with app branding
+- Animated counter widgets (Total apps, Active apps, Interview rate, Avg salary)
+- Pipeline visualization showing status distribution
+- Quick-action cards linking to Analytics, Salary Calculator, and Interview Calendar
+- Salary insights section
+
+---
+
+### 2. Tab & FlexiPage Infrastructure
+
+**Files created:** 3 FlexiPages (`Job_Application_Analytics`, `Salary_Calculator`, `Interview_Calendar`), 3 tabs, `Admin.profile-meta.xml`
+
+Each feature component needed an App Page (FlexiPage), a Custom Tab, and profile visibility to be accessible from the app navigation.
+
+**Key lessons learned:**
+- AppPage FlexiPages cannot use `<properties>` in their template definition — only `flexipage:defaultAppHomeTemplate` with a single main region
+- Custom tabs default to hidden; profile-level `tabVisibilities` with `DefaultOn` is required
+- FlexiPages must be manually activated via Setup → Lightning App Builder → Activation after deployment
+
+---
+
+### 3. App Navigation Cleanup
+
+**File modified:** `Job_Application_Tracker.app-meta.xml`
+
+Removed 6 unrelated standard tabs (Contact, Account, Task, Event, Report, Dashboard) that cluttered the navigation. The app now shows only 5 relevant tabs:
+- Job Tracker Home
+- Job Applications
+- Application Analytics
+- Salary Calculator
+- Interview Calendar
+
+---
+
+### 4. Org Data Cleanup
+
+Deleted 293 test records ("Medium Test 1-50" etc.) and seeded 20 realistic showcase records with real company names (Salesforce, Google, Microsoft, Deloitte, etc.), realistic salaries ($155K–$210K), proper status distribution, and dates within the last 35 days. All values respect the org's restricted picklist values.
+
+---
+
+### 5. LWC Feature Page Redesign
+
+**Files modified:** `applicationAnalyticsDashboard` (HTML + CSS), `salaryCalculator` (HTML + CSS), `calendarIntegration` (HTML + CSS)
+
+All three feature pages were redesigned from basic `lightning-card` wrappers with emoji icons to a cohesive, modern UI:
+
+**Design pattern applied to all three:**
+- Replaced `<lightning-card>` with custom container + gradient page header (`#1b2a4a → #2d3e63 → #1a5276`)
+- Replaced all emoji icons (🏛️ 👥 🏥 📊 📅 📆 📋 📄 🏢 ⚡ ✅ ⚠️ ❌) with `<lightning-icon>` components
+- Moved primary actions (New Application, Schedule Interview, Save, Reset) into the page header
+- Added consistent section headers with icon + title pattern
+
+**Salary Calculator specific:**
+- New tax breakdown uses a 4-column grid with color-coded icon wrappers (red = federal, orange = SS, purple = Medicare, slate = total)
+- Take-home section has a green gradient background with the yearly amount highlighted in a primary green card
+- "Save to Record" button conditionally hidden when no `recordId` (standalone AppPage mode)
+- Calculation method switched to `type="button"` radio group for cleaner presentation
+
+**Interview Calendar specific:**
+- Job application context displayed as an inline banner with company name, position, and status badge
+- Time suggestions changed from full-width buttons to compact pill chips with hover-to-brand-color effect
+- Form fields organized in a clean grid (full-width subject, 2-column dates, 2-column type/location)
+- Conflict section redesigned with amber background and individual conflict rows
+
+**Analytics Dashboard specific:**
+- Metric cards with gradient icon containers (blue = total, amber = active, purple = interviews, green = success)
+- 4px top border on each card matching its category color
+- Pipeline shown as a multi-column Kanban-style board
+- Empty state icon changed from emoji to `lightning-icon`
+
+---
+
+### Phase 2 Deployment Summary
+
+| Deployment | Components | Status |
+|-----------|-----------|--------|
+| Job Tracker Home Page (LWC + FlexiPage + Tab) | 3/3 | Succeeded |
+| Feature FlexiPages + Tabs | 6/6 | Succeeded |
+| Admin Profile (tab visibility) | 1/1 | Succeeded |
+| App Navigation Update | 1/1 | Succeeded |
+| Analytics Dashboard Redesign | 1/1 | Succeeded |
+| Salary Calculator Redesign | 1/1 | Succeeded |
+| Interview Calendar Redesign | 1/1 | Succeeded |
+| **Total deployed** | **14** | **Succeeded** |
+
+---
+
+## Phase 3 — Data, Calendar, and Documentation Enhancements
+
+> **Date:** March 2026  
+> **Scope:** Expanded data, list views, interview calendar timeline, documentation viewer, app navigation  
+> **Deployed to:** `capstone@taju.com` (myCapstoneOrg)
+
+---
+
+### 1. Expanded Job Application Data
+
+Seeded 30 additional realistic job applications bringing the total to ~50 records. New records span top-tier tech companies (Airbnb, Spotify, GitLab, OpenAI, Anthropic, Databricks, etc.) with realistic salaries ($160K–$250K), proper status distribution, follow-up dates, and detailed notes.
+
+**Status distribution:** Applied (10), Interviewing (8+), Saved (5+), Closed (4+), Negotiating (3+), Applying (3+), Accepted (1+)
+
+---
+
+### 2. New List Views
+
+**Files created:** 5 new list views, 1 updated
+
+| List View | Filter | Purpose |
+|-----------|--------|---------|
+| Negotiating | Status = Negotiating | Track active offer negotiations with salary and follow-up dates |
+| Top Salary Opportunities | Salary > 0 | Compare compensation across all opportunities |
+| Needs Follow-Up | Follow-up ≤ Today, Status ≠ Closed | Daily action items — overdue follow-ups |
+| Remote Positions | Location = Remote | Filter for remote-only opportunities |
+| Accepted Offers | Status = Accepted | View accepted positions with take-home pay breakdown |
+
+**Updated:** Interviewing list view — added Notes__c column and reordered Follow_Up_Date__c to first position for priority visibility.
+
+---
+
+### 3. Interview Calendar Timeline
+
+**Files created:** `InterviewCalendarService.cls` (Apex), updated `calendarIntegration` LWC (HTML, CSS, JS)
+
+Added a real-time interview timeline below the scheduling form in the Interview Calendar tab:
+
+- **Upcoming tab:** Displays future events sorted by date, with urgency indicators (red = within 24 hours, amber = within 3 days)
+- **Past tab:** Shows interviews from the last 30 days
+- **Event cards:** Show date, time range, subject, location, and relative time label ("Tomorrow", "In 3 days", "Yesterday")
+- **Live refresh:** Timeline refreshes automatically after scheduling a new interview
+- **Tab UI:** Switchable tabs with badge counts
+
+**Apex service** (`InterviewCalendarService`):
+- `getUpcomingInterviews()` — queries Events owned by current user starting from now, limit 50
+- `getPastInterviews()` — queries Events from last 30 days, limit 20
+- Uses `inherited sharing` and cacheable wire adapters
+
+---
+
+### 4. Documentation Viewer LWC
+
+**Files created:** `documentationViewer/` LWC (JS, HTML, CSS, meta.xml), `Documentation.flexipage-meta.xml`, `Documentation.tab-meta.xml`
+
+Built an in-app documentation viewer accessible from the app navigation bar. Provides a rich, formatted reference guide directly in the Salesforce org without needing to access the repository.
+
+**Sections:**
+- Getting Started — quick start guide and feature overview
+- Architecture — trigger-handler-service pattern, platform stack, data model
+- Objects & Fields — complete field reference for Job_Application__c
+- List Views — descriptions of all 10 available list views
+- Salary Calculator — how it works + how to update tax rates via Custom Metadata
+- Conventions — code standards, naming conventions, git workflow
+- Team & Credits — project team info and modernization history
+
+**UI features:**
+- Sidebar navigation with icon-labeled sections and active state highlighting
+- `lightning-formatted-rich-text` for bold and code formatting
+- Responsive: sidebar collapses to horizontal scrollable tabs on mobile
+- Matches the app-wide gradient page-header design pattern
+
+---
+
+### 5. App Navigation Update
+
+Added Documentation tab to the app navigation (6 tabs total):
+1. Job Tracker Home
+2. Job Applications
+3. Application Analytics
+4. Salary Calculator
+5. Interview Calendar
+6. Documentation
+
+Profile visibility set to DefaultOn for System Administrator.
+
+---
+
+### Phase 3 Deployment Summary
+
+| Deployment | Components | Status |
+|-----------|-----------|--------|
+| InterviewCalendarService (Apex) | 1/1 | Succeeded |
+| Calendar Integration LWC (updated) | 1/1 | Succeeded |
+| Documentation Viewer LWC (new) | 1/1 | Succeeded |
+| Documentation FlexiPage + Tab | 2/2 | Succeeded |
+| List Views (5 new + 1 updated) | 6/6 | Succeeded |
+| App Navigation Update | 1/1 | Succeeded |
+| Admin Profile Update | 1/1 | Succeeded |
+| Job Application Records | 30 new | Succeeded |
+| **Total** | **43+** | **Succeeded** |
