@@ -15,22 +15,7 @@
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     
-    <!-- Field Permissions - Full Access -->
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Job_Application__c.Company_Name__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Job_Application__c.Position_Title__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Job_Application__c.Status__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
+    <!-- Field Permissions - Full Access (excluding required fields) -->
     <fieldPermissions>
         <editable>true</editable>
         <field>Job_Application__c.Salary__c</field>
@@ -107,6 +92,10 @@
     <!-- Tab Access -->
     <tabSettings>
         <tab>Job_Application__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Job_Tracker_Home</tab>
         <visibility>Visible</visibility>
     </tabSettings>
 </PermissionSet>

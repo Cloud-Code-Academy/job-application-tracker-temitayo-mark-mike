@@ -14,12 +14,10 @@
     <navType>Standard</navType>
     <tabs>Job_Tracker_Home</tabs>
     <tabs>Job_Application__c</tabs>
-    <tabs>standard-Contact</tabs>
-    <tabs>standard-Account</tabs>
-    <tabs>standard-Task</tabs>
-    <tabs>standard-Event</tabs>
-    <tabs>standard-report</tabs>
-    <tabs>standard-Dashboard</tabs>
+    <tabs>Job_Application_Analytics</tabs>
+    <tabs>Salary_Calculator</tabs>
+    <tabs>Interview_Calendar</tabs>
+    <tabs>Documentation</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Job_Application_Tracker_UtilityBar</utilityBar>
 </CustomApplication>

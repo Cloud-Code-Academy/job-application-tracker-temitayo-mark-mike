@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Interactive salary calculator with tax breakdowns</description>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentName>salaryCalculator</componentName>
+                <identifier>c_salaryCalculator</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>main</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <masterLabel>Salary Calculator</masterLabel>
+    <template>
+        <name>flexipage:defaultAppHomeTemplate</name>
+    </template>
+    <type>AppPage</type>
+</FlexiPage>
