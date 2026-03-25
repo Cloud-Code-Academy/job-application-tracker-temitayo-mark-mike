@@ -20,14 +20,14 @@ public inherited sharing class SalaryBenchmarkService extends BaseApiService {
         public Decimal maxSalary { get; set; }
         public Decimal medianSalary { get; set; }
         public Decimal averageSalary { get; set; }
-        public String currency { get; set; }
+        public String currencyCode { get; set; }
         public Integer sampleSize { get; set; }
         public Date lastUpdated { get; set; }
         public List<SalaryPercentile> percentiles { get; set; }
         public List<SalaryByExperience> experienceBreakdown { get; set; }
         
         public SalaryBenchmark() {
-            this.currency = 'USD';
+            this.currencyCode = 'USD';
             this.percentiles = new List<SalaryPercentile>();
             this.experienceBreakdown = new List<SalaryByExperience>();
         }
@@ -206,7 +206,7 @@ public inherited sharing class SalaryBenchmarkService extends BaseApiService {
             benchmark.jobTitle = (String) getNestedValue(data, 'job_title');
             benchmark.location = (String) getNestedValue(data, 'location');
             benchmark.experienceLevel = (String) getNestedValue(data, 'experience_level');
-            benchmark.currency = (String) getNestedValue(data, 'currency');
+            benchmark.currencyCode = (String) getNestedValue(data, 'currency');
             
             // Salary figures
             Object minSal = getNestedValue(data, 'salary.min');

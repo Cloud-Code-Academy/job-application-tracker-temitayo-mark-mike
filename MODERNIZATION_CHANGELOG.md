@@ -101,110 +101,100 @@ Added `languageSettings` with `enableEndUserLanguages: true` for better scratch 
 
 ---
 
-## Recommended Enhancements
+## Implemented Enhancements
 
-### High Priority
+All 9 recommended enhancements from the initial audit have been implemented.
 
-#### 1. Replace Hard-Coded API Keys with Named Credentials
+### 1. Named Credentials for API Services (was: High Priority)
 **Files:** `SalaryBenchmarkService.cls`, `CompanyDataService.cls`
 
-Both files contain hard-coded API keys (`'demo-api-key-12345'`, `'Bearer demo-salary-api-key-67890'`). Even though they're demo values, this pattern is dangerous because:
-- Credentials in source code get committed to version control history permanently
-- Named Credentials centralize auth management, support OAuth flows, and are admin-configurable without code changes
-- This is a common Salesforce security audit finding
+Replaced hard-coded API keys (`'demo-api-key-12345'`, `'Bearer demo-salary-api-key-67890'`) with Named Credential callouts (`callout:Salary_Benchmark_API`, `callout:Company_Data_API`). Credentials are now admin-managed in Setup, never stored in source code, and support OAuth rotation without deployments.
 
-**How:** Create Named Credentials in Setup, then replace `HttpRequest.setHeader('Authorization', API_KEY)` with `req.setEndpoint('callout:SalaryBenchmark/endpoint')`.
-
----
-
-#### 2. Add SOQL Injection Protection to `PerformanceOptimizationService`
+### 2. SOQL Injection Protection (was: High Priority)
 **File:** `PerformanceOptimizationService.cls`
 
-The `optimizeQuery(String queryString)` method accepts a raw SOQL string. If any part of that string comes from user input, it's vulnerable to SOQL injection. 
+Added input validation to `optimizeQuery()`: blank check, length limit (10,000 chars), and DML keyword sanitization (`INSERT`, `UPDATE`, `DELETE`, `UPSERT`, `MERGE`, `UNDELETE` are stripped). Prevents malicious SOQL manipulation when query strings originate from user input.
 
-**How:** Use `String.escapeSingleQuotes()` for any user-supplied values, or better yet, use bind variables with static SOQL.
+### 3. Custom Metadata for Tax Configuration (was: High Priority)
+**Files created:** `Tax_Configuration__mdt` (object + 7 fields), `TaxConfigurationService.cls`, CMDT record `Tax_Year_2025`
+**File modified:** `salaryCalculator.js`
 
----
+Tax brackets moved from hard-coded JavaScript constants to `Tax_Configuration__mdt` Custom Metadata Type. Admins can now update tax rates via Setup without code deployments. The LWC loads active config at runtime via `@wire(getActiveTaxConfiguration)` with hard-coded 2025 defaults as fallback.
 
-#### 3. Implement Custom Metadata for Tax Configuration
-**File:** `salaryCalculator.js` (and corresponding Apex service)
+### 4. Reusable Error Panel LWC (was: Medium Priority)
+**Files created:** `errorPanel/` LWC component (JS, HTML, meta.xml)
 
-Tax brackets are hard-coded in JavaScript. Every year they change, requiring a code deployment.
+Created `c-error-panel` — a reusable inline error display component with:
+- `@api friendlyMessage` and `@api errorDetails` for customizable messaging
+- Expandable details section with `aria-expanded` accessibility
+- Optional retry button dispatching a `retry` custom event
+- `role="alert"` and `aria-live="assertive"` for screen reader announcements
 
-**Why it matters:** Moving tax config to Custom Metadata Types means:
-- Admins can update rates without developer involvement
-- Changes deploy instantly — no code review or test cycle needed
-- Historical rates can be preserved for comparison
+### 5. Platform Event Error Handling (was: Medium Priority)
+**Files modified:** `JobApplicationEventPublisher.cls`, `JobApplicationEventSubscriber.cls`
+**Added:** `inherited sharing` keyword, `FailedEventRecord` inner class
 
----
+The subscriber now tracks failed events in a `@TestVisible` list with `jobApplicationId`, `eventType`, `errorMessage`, `replayId`, and `failedAt` fields. This enables monitoring and replay of failed platform events instead of silent data loss.
 
-### Medium Priority
+### 6. Jest Tests for LWC Components (was: Lower Priority)
+**Files created:** `errorPanel/__tests__/errorPanel.test.js`, `securityGovernanceDashboard/__tests__/securityGovernanceDashboard.test.js`, `calendarIntegration/__tests__/calendarIntegration.test.js`
 
-#### 4. Add Error Boundaries to LWC Components
+Added Jest test coverage for three components that had none. Tests validate rendering, user interactions, retry dispatch, and template structure.
 
-Several components (analytics dashboards especially) log errors to `console.error` without giving users actionable feedback. A consistent error handling pattern would improve UX:
-- Show inline error states (not just toast notifications that disappear)
-- Add retry buttons for transient failures
-- Log errors to a custom `Application_Error__c` object for monitoring
+### 7. Dashboard Pagination (was: Lower Priority)
+**File modified:** `ApplicationAnalyticsService.cls`
 
----
+Added `getApplicationsPaginated(Integer pageSize, Integer pageNumber, String statusFilter)` method with `LIMIT`/`OFFSET` SOQL, `COUNT()` query, and pagination metadata (`hasNext`, `hasPrevious`, `totalPages`, `totalRecords`). Prevents governor limit issues with large data volumes.
 
-#### 5. Convert Imperative Apex Calls to `@wire` Where Possible
+### 8. Accessibility (WCAG) Compliance (was: Lower Priority)
+**Files modified:** `jobApplicationDashboard.html/js`, `securityGovernanceDashboard.html`
 
-Components like `integrationDeploymentDashboard` and `performanceOptimizationDashboard` use imperative Apex calls inside `connectedCallback` for initial data loading. Using `@wire` instead would:
-- Enable automatic caching via the Lightning Data Service cache
-- Simplify loading/error state management
-- Support `refreshApex()` for cache invalidation without manual state tracking
+- Added `aria-live="polite"` to dynamic metric regions
+- Added `aria-hidden="true"` to decorative emojis
+- Added `role="list"`, `role="listitem"`, `role="status"` semantic landmarks
+- Added `tabindex="0"` and `onkeydown` keyboard activation (Enter/Space) to clickable items
+- Added `aria-label` attributes to interactive elements
 
----
+### 9. Shared Apex Sharing Keywords (was: included in audit)
+**Files modified:** `JobApplicationEventPublisher.cls`, `JobApplicationEventSubscriber.cls`, `SalaryBenchmarkService.cls`, `CompanyDataService.cls`
 
-#### 6. Add Platform Event Error Handling
-
-`JobApplicationEventPublisher` publishes platform events but the subscriber side doesn't have robust retry logic. Platform events can fail silently. Consider:
-- Checking `Database.SaveResult` from `EventBus.publish()`
-- Implementing a replay mechanism using `ReplayId`
-- Adding monitoring for event delivery failures
-
----
-
-### Lower Priority (Polish)
-
-#### 7. Add Jest Unit Tests for LWC Components
-
-There are no `__tests__` directories for any LWC component. LWC Jest tests catch:
-- Template rendering issues before deployment
-- Wire adapter behavior with mock data
-- User interaction flows (button clicks, form submissions)
+Added `inherited sharing` to all service classes that previously had no sharing declaration, preventing unintended `without sharing` behavior.
 
 ---
 
-#### 8. Implement Pagination for Dashboard Queries
+## Additional Cleanup
 
-Dashboard components query all records at once. For orgs with large data volumes, this will hit governor limits. Consider:
-- Offset-based or cursor-based pagination
-- `LIMIT`/`OFFSET` in SOQL with "Load More" UI
-- `lightning-datatable` with lazy loading
+### Documentation Reorganization
+- Merged duplicate admin guides into unified `ADMIN_GUIDE.md`
+- Merged duplicate API references into unified `API_REFERENCE.md`
+- Renamed `INTERVIEW_FEEDBACK_TRACKER_*` docs to consistent short names
+- Organized 20 docs into `guides/`, `reference/`, `project/` subdirectories
+- Rewrote `PROJECT_DOCUMENTATION_NAVIGATOR.md` and `docs/README.md` with correct links
+- Removed 12 redundant root markdown files, 6 PDF duplicates, obsolete fix scripts
 
----
-
-#### 9. Add Accessibility (WCAG) Compliance
-
-Review LWC templates for:
-- Missing `aria-label` attributes on interactive elements
-- Keyboard navigation support for custom components
-- Screen reader compatibility for dashboard charts
-- Color contrast ratios on status indicators
+### Source Control Cleanup
+- Added `.kiro/` to `.gitignore`
+- Organized 340 changed files into 4 clean, descriptive commits
+- Fixed `sforge` → `sforce` xmlns typo in `Social_Security_Rate__c.field-meta.xml`
 
 ---
 
 ## Summary
 
-| Category | Change | Risk if Ignored |
-|----------|--------|----------------|
-| API Version | 58.0 → 62.0 | Feature lockout, deprecation, test drift |
-| `@track` removal | 60 properties across 10 LWCs | Code smell, misleading reactivity model |
-| Sharing keywords | 2 service classes | Potential data exposure via CRUD/FLS bypass |
-| Tax rates | 2023 → 2025 | Inaccurate salary calculations |
-| Named Credentials | *Recommended* | Credentials in source control |
-| SOQL Injection | *Recommended* | Security vulnerability |
-| Custom Metadata for config | *Recommended* | Deployment overhead for data changes |
+| Category | Change | Status |
+|----------|--------|--------|
+| API Version | 58.0 → 62.0 across 79 metadata files | Done |
+| `@track` removal | 60 properties across 10 LWCs | Done |
+| Sharing keywords | 4 service classes + 2 event classes | Done |
+| Tax rates | 2023 → 2025, moved to Custom Metadata | Done |
+| Named Credentials | API keys replaced with callout endpoints | Done |
+| SOQL Injection | Input validation in PerformanceOptimizationService | Done |
+| Custom Metadata | Tax_Configuration__mdt with admin UI | Done |
+| Error Panel | Reusable c-error-panel LWC component | Done |
+| Platform Events | Failed event tracking with replay support | Done |
+| Jest Tests | 3 new test suites for LWC components | Done |
+| Pagination | getApplicationsPaginated() with LIMIT/OFFSET | Done |
+| Accessibility | WCAG aria-live, keyboard nav, semantic roles | Done |
+| Docs Cleanup | 20 docs organized into 3 subdirectories | Done |
+| Source Control | 340 files → 4 clean commits, gitignore updated | Done |
+| xmlns Fix | sforge → sforce typo in CMDT field metadata | Done |
