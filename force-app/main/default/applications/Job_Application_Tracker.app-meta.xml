@@ -12,15 +12,14 @@
     <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
     <label>Job Application Tracker</label>
     <navType>Standard</navType>
-    <tabs>Home</tabs>
+    <tabs>Job_Tracker_Home</tabs>
     <tabs>Job_Application__c</tabs>
-    <tabs>Contact</tabs>
-    <tabs>Account</tabs>
-    <tabs>Task</tabs>
-    <tabs>Event</tabs>
-    <tabs>Calendar</tabs>
-    <tabs>Reports</tabs>
-    <tabs>Dashboards</tabs>
+    <tabs>standard-Contact</tabs>
+    <tabs>standard-Account</tabs>
+    <tabs>standard-Task</tabs>
+    <tabs>standard-Event</tabs>
+    <tabs>standard-report</tabs>
+    <tabs>standard-Dashboard</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Job_Application_Tracker_UtilityBar</utilityBar>
 </CustomApplication>

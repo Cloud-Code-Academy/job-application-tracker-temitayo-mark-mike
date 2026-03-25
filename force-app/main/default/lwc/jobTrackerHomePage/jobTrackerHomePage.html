@@ -1,0 +1,235 @@
+<template>
+    <!-- HERO SECTION -->
+    <div class="home-container">
+
+        <!-- Animated Background -->
+        <div class="hero-section">
+            <div class="hero-bg-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+            </div>
+
+            <div class="hero-content">
+                <div class="hero-text">
+                    <p class="hero-date">{currentTime}</p>
+                    <h1 class="hero-title">{greeting} <lightning-icon icon-name="utility:sparkle" size="small" class="sparkle-icon"></lightning-icon></h1>
+                    <p class="hero-subtitle">Your career journey, powered by data</p>
+                </div>
+
+                <!-- Quick Action Cards -->
+                <div class="quick-actions" role="list" aria-label="Quick actions">
+                    <template for:each={quickActions} for:item="action">
+                        <div key={action.id}
+                             class={action.gradient}
+                             data-action={action.action}
+                             onclick={handleQuickAction}
+                             onkeydown={handleKeyAction}
+                             tabindex="0"
+                             role="listitem"
+                             aria-label={action.title}>
+                            <div class="action-card">
+                                <lightning-icon icon-name={action.icon} size="medium" class="action-icon"></lightning-icon>
+                                <div class="action-text">
+                                    <h3>{action.title}</h3>
+                                    <p>{action.description}</p>
+                                </div>
+                                <lightning-icon icon-name="utility:chevronright" size="x-small" class="action-arrow"></lightning-icon>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOADING STATE -->
+        <template if:true={isLoading}>
+            <div class="loading-section">
+                <lightning-spinner alternative-text="Loading analytics" size="medium"></lightning-spinner>
+                <p class="loading-text">Loading your career insights...</p>
+            </div>
+        </template>
+
+        <!-- ERROR STATE -->
+        <template if:true={hasError}>
+            <div class="error-section">
+                <c-error-panel
+                    friendly-message={errorMessage}
+                    show-retry
+                    onretry={handleRetry}>
+                </c-error-panel>
+            </div>
+        </template>
+
+        <!-- MAIN CONTENT -->
+        <template if:false={isLoading}>
+            <template if:false={hasError}>
+
+                <!-- STATS OVERVIEW -->
+                <section class="stats-section" aria-label="Application Statistics" aria-live="polite">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <lightning-icon icon-name="utility:trending" size="x-small" class="section-icon"></lightning-icon>
+                            Your Numbers at a Glance
+                        </h2>
+                    </div>
+
+                    <div class="stats-grid">
+                        <!-- Total Applications -->
+                        <div class="stat-card stat-total">
+                            <div class="stat-icon-wrap stat-icon-blue">
+                                <lightning-icon icon-name="utility:layers" size="small" variant="inverse"></lightning-icon>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value">{displayTotal}</span>
+                                <span class="stat-label">Total Applications</span>
+                            </div>
+                            <div class="stat-accent stat-accent-blue"></div>
+                        </div>
+
+                        <!-- Active -->
+                        <div class="stat-card stat-active">
+                            <div class="stat-icon-wrap stat-icon-green">
+                                <lightning-icon icon-name="utility:activity" size="small" variant="inverse"></lightning-icon>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value">{displayActive}</span>
+                                <span class="stat-label">Active Applications</span>
+                            </div>
+                            <div class="stat-accent stat-accent-green"></div>
+                        </div>
+
+                        <!-- Interview Rate -->
+                        <div class="stat-card stat-interview">
+                            <div class="stat-icon-wrap stat-icon-amber">
+                                <lightning-icon icon-name="utility:people" size="small" variant="inverse"></lightning-icon>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value">{displayInterviewRate}</span>
+                                <span class="stat-label">Interview Rate</span>
+                            </div>
+                            <div class="stat-ring" style={interviewRateCircleStyle}></div>
+                        </div>
+
+                        <!-- Success Rate -->
+                        <div class="stat-card stat-success">
+                            <div class="stat-icon-wrap stat-icon-emerald">
+                                <lightning-icon icon-name="utility:success" size="small" variant="inverse"></lightning-icon>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value">{displaySuccessRate}</span>
+                                <span class="stat-label">Success Rate</span>
+                            </div>
+                            <div class="stat-ring" style={successRateCircleStyle}></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MIDDLE ROW: Pipeline + Salary -->
+                <section class="middle-section">
+                    <!-- Pipeline Breakdown -->
+                    <div class="card pipeline-card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <lightning-icon icon-name="utility:filterList" size="x-small" class="section-icon"></lightning-icon>
+                                Application Pipeline
+                            </h2>
+                            <button class="view-all-btn" onclick={navigateToListView}>View All</button>
+                        </div>
+                        <template if:true={hasStatusBreakdown}>
+                            <div class="pipeline-bars">
+                                <template for:each={statusBreakdown} for:item="status">
+                                    <div key={status.status} class="pipeline-row">
+                                        <div class="pipeline-label">
+                                            <span class="pipeline-dot" style={status.barStyle}></span>
+                                            <span class="pipeline-name">{status.status}</span>
+                                        </div>
+                                        <div class="pipeline-bar-track">
+                                            <div class="pipeline-bar-fill" style={status.barStyle}></div>
+                                        </div>
+                                        <span class="pipeline-count">{status.count}</span>
+                                        <span class="pipeline-pct">{status.percentage}%</span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template if:false={hasStatusBreakdown}>
+                            <div class="empty-state">
+                                <lightning-icon icon-name="utility:add" size="large" class="empty-icon"></lightning-icon>
+                                <p>No applications yet. Start tracking your first one!</p>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Salary Insights -->
+                    <div class="card salary-card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <lightning-icon icon-name="utility:moneybag" size="x-small" class="section-icon"></lightning-icon>
+                                Salary Insights
+                            </h2>
+                        </div>
+                        <div class="salary-metrics">
+                            <div class="salary-metric">
+                                <span class="salary-label">Average Salary</span>
+                                <span class="salary-value salary-avg">{formattedAvgSalary}</span>
+                                <span class="salary-subtext">across all applications</span>
+                            </div>
+                            <div class="salary-divider"></div>
+                            <div class="salary-metric">
+                                <span class="salary-label">Highest Offer</span>
+                                <span class="salary-value salary-max">{formattedMaxSalary}</span>
+                                <span class="salary-subtext">best opportunity</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RECENT ACTIVITY -->
+                <section class="activity-section">
+                    <div class="card activity-card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <lightning-icon icon-name="utility:clock" size="x-small" class="section-icon"></lightning-icon>
+                                Recent Activity
+                            </h2>
+                        </div>
+                        <template if:true={hasRecentActivity}>
+                            <div class="activity-list" role="list">
+                                <template for:each={recentActivity} for:item="item">
+                                    <div key={item.key} class="activity-item" role="listitem">
+                                        <div class="activity-timeline">
+                                            <div class="timeline-dot"></div>
+                                            <div class="timeline-line"></div>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-header">
+                                                <span class="activity-company">{item.company}</span>
+                                                <span class={item.statusClass}>{item.status}</span>
+                                            </div>
+                                            <span class="activity-role">{item.position}</span>
+                                            <span class="activity-time">{item.timeAgo}</span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template if:false={hasRecentActivity}>
+                            <div class="empty-state">
+                                <lightning-icon icon-name="utility:clock" size="large" class="empty-icon"></lightning-icon>
+                                <p>No recent activity to show</p>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- FOOTER -->
+                <footer class="home-footer">
+                    <p>Job Application Tracker &bull; Built by Temitayo, Mark &amp; Mike &bull; Cloud Code Academy Capstone</p>
+                </footer>
+
+            </template>
+        </template>
+    </div>
+</template>
