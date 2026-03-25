@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Read-only access to Job Applications for reporting and analytics</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Job Application Viewer</label>
+    
+    <!-- Object Permissions - Read Only -->
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Job_Application__c</object>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
+    
+    <!-- Field Permissions - Read Only Access -->
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Job_Application__c.Company_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Job_Application__c.Position_Title__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Job_Application__c.Status__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Job_Application__c.Location__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Job_Application__c.Application_Date__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <!-- Sensitive Fields - No Access -->
+    <!-- Salary information is not accessible to viewers -->
+    <!-- Notes field is not accessible to viewers -->
+    <!-- Tax calculations are not accessible to viewers -->
+    <!-- Contact information is not accessible to viewers -->
+    
+    <!-- Apex Class Access - Analytics Only -->
+    <classAccesses>
+        <apexClass>ApplicationAnalyticsService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    
+    <!-- Tab Access -->
+    <tabSettings>
+        <tab>Job_Application__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+</PermissionSet>

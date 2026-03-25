@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Learning_Validation_Rule</fullName>
+    <active>true</active>
+    <description>Learning exercise: Prevent high ratings without salary information</description>
+    <errorConditionFormula>AND(
+        ISPICKVAL(Rating__c, &quot;5&quot;),
+        ISBLANK(Salary__c)
+    )</errorConditionFormula>
+    <errorDisplayField>Rating__c</errorDisplayField>
+    <errorMessage>Cannot rate as &quot;Very High Interest&quot; (5) without providing salary information.</errorMessage>
+</ValidationRule>

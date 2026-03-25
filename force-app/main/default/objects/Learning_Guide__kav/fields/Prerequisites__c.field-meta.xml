@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prerequisites__c</fullName>
+    <label>Prerequisites</label>
+    <type>Html</type>
+    <visibleLines>5</visibleLines>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <description>Required knowledge or skills before starting this guide</description>
+</CustomField>

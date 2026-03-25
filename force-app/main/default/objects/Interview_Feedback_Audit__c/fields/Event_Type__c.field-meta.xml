@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Event_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Event Type</label>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>DATA_ENCRYPTION</fullName>
+                <default>false</default>
+                <label>Data Encryption</label>
+            </value>
+            <value>
+                <fullName>GDPR_ANONYMIZATION</fullName>
+                <default>false</default>
+                <label>GDPR Anonymization</label>
+            </value>
+            <value>
+                <fullName>DATA_RETENTION</fullName>
+                <default>false</default>
+                <label>Data Retention</label>
+            </value>
+            <value>
+                <fullName>GDPR_ACCESS_REQUEST</fullName>
+                <default>false</default>
+                <label>GDPR Access Request</label>
+            </value>
+            <value>
+                <fullName>GDPR_ACCESS_COMPLETE</fullName>
+                <default>false</default>
+                <label>GDPR Access Complete</label>
+            </value>
+            <value>
+                <fullName>GDPR_ACCESS_ERROR</fullName>
+                <default>false</default>
+                <label>GDPR Access Error</label>
+            </value>
+            <value>
+                <fullName>TEST_EVENT</fullName>
+                <default>false</default>
+                <label>Test Event</label>
+            </value>
+            <value>
+                <fullName>GDPR_ERROR</fullName>
+                <default>false</default>
+                <label>GDPR Error</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Tax Year 2025</label>
+    <protected>false</protected>
+    <values>
+        <field>Tax_Year__c</field>
+        <value xsi:type="xsd:double">2025</value>
+    </values>
+    <values>
+        <field>Standard_Deduction__c</field>
+        <value xsi:type="xsd:double">15000</value>
+    </values>
+    <values>
+        <field>Social_Security_Rate__c</field>
+        <value xsi:type="xsd:double">0.062</value>
+    </values>
+    <values>
+        <field>Social_Security_Wage_Base__c</field>
+        <value xsi:type="xsd:double">176100</value>
+    </values>
+    <values>
+        <field>Medicare_Rate__c</field>
+        <value xsi:type="xsd:double">0.0145</value>
+    </values>
+    <values>
+        <field>Tax_Brackets_JSON__c</field>
+        <value xsi:type="xsd:string">[{"min":0,"max":11925,"rate":0.10},{"min":11925,"max":48475,"rate":0.12},{"min":48475,"max":103350,"rate":0.22},{"min":103350,"max":197300,"rate":0.24},{"min":197300,"max":250525,"rate":0.32},{"min":250525,"max":626350,"rate":0.35},{"min":626350,"max":999999999,"rate":0.37}]</value>
+    </values>
+    <values>
+        <field>Is_Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+</CustomMetadata>
