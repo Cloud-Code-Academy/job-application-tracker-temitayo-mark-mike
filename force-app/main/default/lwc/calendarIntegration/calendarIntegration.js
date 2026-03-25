@@ -2,6 +2,9 @@ import { LightningElement, api, wire } from 'lwc';
 import { getRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { createRecord } from 'lightning/uiRecordApi';
+import { refreshApex } from '@salesforce/apex';
+import getUpcomingInterviews from '@salesforce/apex/InterviewCalendarService.getUpcomingInterviews';
+import getPastInterviews from '@salesforce/apex/InterviewCalendarService.getPastInterviews';
 
 // Job Application fields
 import COMPANY_NAME_FIELD from '@salesforce/schema/Job_Application__c.Company_Name__c';
@@ -38,6 +41,124 @@ export default class CalendarIntegration extends LightningElement {
     validationMessages = [];
     conflictCheckResults = [];
     jobApplicationData = null;
+
+    // Interview calendar data
+    upcomingInterviews = [];
+    pastInterviews = [];
+    _wiredUpcoming;
+    _wiredPast;
+    activeCalendarTab = 'upcoming';
+
+    // Wire upcoming interviews
+    @wire(getUpcomingInterviews)
+    wiredUpcoming(result) {
+        this._wiredUpcoming = result;
+        if (result.data) {
+            this.upcomingInterviews = result.data.map(evt => this.formatInterviewEvent(evt));
+        } else if (result.error) {
+            console.error('Error loading upcoming interviews:', result.error);
+        }
+    }
+
+    // Wire past interviews
+    @wire(getPastInterviews)
+    wiredPast(result) {
+        this._wiredPast = result;
+        if (result.data) {
+            this.pastInterviews = result.data.map(evt => this.formatInterviewEvent(evt));
+        } else if (result.error) {
+            console.error('Error loading past interviews:', result.error);
+        }
+    }
+
+    get hasUpcomingInterviews() {
+        return this.upcomingInterviews && this.upcomingInterviews.length > 0;
+    }
+
+    get hasPastInterviews() {
+        return this.pastInterviews && this.pastInterviews.length > 0;
+    }
+
+    get showUpcomingTab() {
+        return this.activeCalendarTab === 'upcoming';
+    }
+
+    get showPastTab() {
+        return this.activeCalendarTab === 'past';
+    }
+
+    get upcomingTabClass() {
+        return 'calendar-tab' + (this.activeCalendarTab === 'upcoming' ? ' active' : '');
+    }
+
+    get pastTabClass() {
+        return 'calendar-tab' + (this.activeCalendarTab === 'past' ? ' active' : '');
+    }
+
+    get upcomingCount() {
+        return this.upcomingInterviews ? this.upcomingInterviews.length : 0;
+    }
+
+    get pastCount() {
+        return this.pastInterviews ? this.pastInterviews.length : 0;
+    }
+
+    handleCalendarTabClick(event) {
+        this.activeCalendarTab = event.currentTarget.dataset.tab;
+    }
+
+    formatInterviewEvent(evt) {
+        const start = new Date(evt.startTime);
+        const end = new Date(evt.endTime);
+        const now = new Date();
+        const diffMs = start - now;
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+        let timeLabel;
+        if (diffDays > 1) {
+            timeLabel = `In ${diffDays} days`;
+        } else if (diffDays === 1) {
+            timeLabel = 'Tomorrow';
+        } else if (diffHours > 0) {
+            timeLabel = `In ${diffHours}h`;
+        } else if (diffMs > 0) {
+            timeLabel = 'Starting soon';
+        } else {
+            const pastDays = Math.abs(diffDays);
+            timeLabel = pastDays === 0 ? 'Today' : pastDays === 1 ? 'Yesterday' : `${pastDays} days ago`;
+        }
+
+        const dateStr = start.toLocaleDateString('en-US', {
+            weekday: 'short', month: 'short', day: 'numeric'
+        });
+        const timeStr = start.toLocaleTimeString('en-US', {
+            hour: 'numeric', minute: '2-digit'
+        });
+        const endTimeStr = end.toLocaleTimeString('en-US', {
+            hour: 'numeric', minute: '2-digit'
+        });
+
+        // Determine urgency class
+        let urgencyClass = 'event-card';
+        if (diffMs > 0 && diffDays <= 1) {
+            urgencyClass += ' event-urgent';
+        } else if (diffMs > 0 && diffDays <= 3) {
+            urgencyClass += ' event-soon';
+        }
+
+        return {
+            id: evt.id,
+            subject: evt.subject,
+            dateLabel: dateStr,
+            timeRange: `${timeStr} – ${endTimeStr}`,
+            timeLabel: timeLabel,
+            location: evt.location || 'No location set',
+            relatedName: evt.relatedRecordName,
+            relatedId: evt.relatedRecordId,
+            urgencyClass: urgencyClass
+        };
+    }
 
     // Interview type options
     interviewTypeOptions = [
@@ -218,6 +339,10 @@ export default class CalendarIntegration extends LightningElement {
             
             this.showSuccessMessage = true;
             this.showToast('Success', 'Interview scheduled successfully!', 'success');
+
+            // Refresh interview lists
+            refreshApex(this._wiredUpcoming);
+            refreshApex(this._wiredPast);
             
             // Clear form after successful creation
             setTimeout(() => {
