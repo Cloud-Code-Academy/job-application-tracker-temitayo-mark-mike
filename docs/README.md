@@ -15,6 +15,7 @@ Learning, development, and team collaboration resources.
 - [Testing Mastery Guide](guides/TESTING_MASTERY_GUIDE.md) - Testing strategies and patterns
 - [Team Collaboration Guide](guides/TEAM_COLLABORATION_GUIDE.md) - Team workflows and leadership
 - [Knowledge Base Setup Guide](guides/KNOWLEDGE_BASE_SETUP_GUIDE.md) - Salesforce Knowledge configuration
+- [Tech Stack Explorer](tech-stack-explorer.html) - Interactive standalone guide to the complementary (non-Salesforce) tech stack, mapped to this project. Open in any browser
 
 ## Reference
 

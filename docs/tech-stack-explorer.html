@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beyond Salesforce · Tech Stack Explorer · Job Application Tracker</title>
+<meta name="description" content="An interactive, standalone guide to the complementary tech stack (languages, databases, DevOps, frontend, soft skills) explained through the Job Application Tracker Salesforce project.">
+<style>
+/* ==========================================================================
+   Design tokens
+   ========================================================================== */
+:root {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --ease: cubic-bezier(.2,.8,.2,1);
+  --c-lang: #8b5cf6;
+  --c-db: #06b6d4;
+  --c-devops: #f97316;
+  --c-front: #ec4899;
+  --c-soft: #22c55e;
+  --c-using: #22c55e;
+  --c-twin: #38bdf8;
+  --c-stretch: #f59e0b;
+}
+[data-theme="dark"] {
+  --bg: #0a0b14;
+  --bg-2: #10121f;
+  --surface: rgba(255,255,255,.04);
+  --surface-2: rgba(255,255,255,.07);
+  --surface-solid: #141728;
+  --border: rgba(255,255,255,.09);
+  --border-strong: rgba(255,255,255,.18);
+  --text: #eef0ff;
+  --text-2: #b4b8d4;
+  --text-3: #7d82a3;
+  --code-bg: #0d0f1c;
+  --shadow: 0 20px 60px -20px rgba(0,0,0,.6);
+  --glow: 0 0 0 1px rgba(139,92,246,.35), 0 10px 40px -10px rgba(139,92,246,.45);
+}
+[data-theme="light"] {
+  --bg: #f6f7fb;
+  --bg-2: #eef0f8;
+  --surface: rgba(255,255,255,.75);
+  --surface-2: #ffffff;
+  --surface-solid: #ffffff;
+  --border: rgba(20,24,60,.09);
+  --border-strong: rgba(20,24,60,.2);
+  --text: #12142a;
+  --text-2: #464a6b;
+  --text-3: #7a7e9c;
+  --code-bg: #12142a;
+  --shadow: 0 20px 50px -24px rgba(30,35,90,.35);
+  --glow: 0 0 0 1px rgba(139,92,246,.35), 0 10px 40px -14px rgba(139,92,246,.4);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background .4s var(--ease), color .4s var(--ease);
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(900px 600px at 10% -10%, rgba(139,92,246,.18), transparent 60%),
+    radial-gradient(800px 500px at 100% 0%, rgba(6,182,212,.14), transparent 60%),
+    radial-gradient(700px 500px at 50% 110%, rgba(236,72,153,.10), transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+}
+a { color: inherit; }
+code { font-family: var(--font-mono); font-size: .86em; background: var(--surface-2); border: 1px solid var(--border); padding: .08em .4em; border-radius: 6px; }
+h1, h2, h3, h4 { line-height: 1.15; margin: 0; letter-spacing: -.02em; }
+p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid #a78bfa; outline-offset: 3px; border-radius: 6px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.container { width: min(1180px, 100% - 40px); margin-inline: auto; }
+.gradient-text {
+  background: linear-gradient(100deg, #a78bfa 0%, #22d3ee 45%, #f472b6 90%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* ==========================================================================
+   Nav
+   ========================================================================== */
+.progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 60;
+  background: linear-gradient(90deg, #8b5cf6, #06b6d4, #ec4899); transition: width .1s linear; }
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: saturate(1.6) blur(14px);
+  -webkit-backdrop-filter: saturate(1.6) blur(14px);
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner { display: flex; align-items: center; gap: 18px; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.brand-mark { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+  background: linear-gradient(135deg, #8b5cf6, #06b6d4); color: #fff; font-size: 13px; font-weight: 800; box-shadow: var(--glow); }
+.nav-links { display: flex; gap: 4px; margin-left: auto; }
+.nav-links a { text-decoration: none; color: var(--text-2); font-size: 14px; font-weight: 500; padding: 7px 12px; border-radius: 999px; transition: .2s var(--ease); }
+.nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--surface-2); }
+.icon-btn { width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface);
+  display: grid; place-items: center; transition: .2s var(--ease); flex: none; }
+.icon-btn:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+.icon-btn svg { width: 18px; height: 18px; }
+.menu-btn { display: none; }
+@media (max-width: 960px) {
+  .nav-links { position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; padding: 12px 20px 18px;
+    background: var(--surface-solid); border-bottom: 1px solid var(--border); display: none; }
+  .nav-links.open { display: flex; }
+  .menu-btn { display: grid; margin-left: auto; }
+}
+
+/* ==========================================================================
+   Sections + shared pieces
+   ========================================================================== */
+section { padding: 96px 0; position: relative; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: #a78bfa; margin-bottom: 14px; }
+.eyebrow::before { content: ""; width: 18px; height: 2px; background: currentColor; border-radius: 2px; }
+.section-title { font-size: clamp(30px, 4.4vw, 46px); font-weight: 800; }
+.section-lead { color: var(--text-2); font-size: clamp(16px, 1.6vw, 18.5px); max-width: 720px; margin-top: 14px; }
+.section-head { margin-bottom: 44px; }
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; border-radius: 999px; border: 1px solid var(--border-strong);
+  background: var(--surface); font-weight: 600; font-size: 15px; text-decoration: none; transition: .25s var(--ease); }
+.btn:hover { transform: translateY(-2px); border-color: #a78bfa; }
+.btn-primary { background: linear-gradient(120deg, #7c3aed, #0891b2); border: 0; color: #fff; box-shadow: var(--glow); }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-sm { padding: 8px 14px; font-size: 13.5px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--text-2); white-space: nowrap; }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.status-using { --s: var(--c-using); }
+.status-twin { --s: var(--c-twin); }
+.status-stretch { --s: var(--c-stretch); }
+.status-pill { color: var(--s); border-color: color-mix(in srgb, var(--s) 40%, transparent); background: color-mix(in srgb, var(--s) 12%, transparent); }
+.status-pill .dot { background: var(--s); box-shadow: 0 0 10px var(--s); }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+.hero { padding: 72px 0 90px; }
+.hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 50px; align-items: center; }
+.hero h1 { font-size: clamp(40px, 6.6vw, 76px); font-weight: 850; letter-spacing: -.035em; }
+.hero-sub { font-size: clamp(17px, 1.9vw, 20px); color: var(--text-2); margin-top: 22px; max-width: 600px; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 46px; max-width: 620px; }
+.stat { padding: 16px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); }
+.stat b { display: block; font-size: 28px; font-weight: 800; letter-spacing: -.02em; }
+.stat span { font-size: 12.5px; color: var(--text-3); }
+.orbit { position: relative; aspect-ratio: 1; width: min(460px, 100%); margin-inline: auto; }
+.orbit-ring { position: absolute; inset: 0; border-radius: 50%; border: 1px dashed var(--border-strong); animation: spin 60s linear infinite; }
+.orbit-ring.r2 { inset: 17%; animation-duration: 42s; animation-direction: reverse; }
+.orbit-ring.r3 { inset: 34%; border-style: solid; border-color: var(--border); animation: none; }
+.orbit-core { position: absolute; inset: 37%; border-radius: 50%; display: grid; place-items: center; text-align: center;
+  background: radial-gradient(circle at 30% 30%, #38bdf8, #0b63c9 70%); color: #fff; box-shadow: 0 0 80px rgba(56,189,248,.5);
+  font-weight: 800; font-size: clamp(11px, 1.6vw, 15px); line-height: 1.1; }
+.orbit-core small { display: block; font-weight: 500; opacity: .85; font-size: .75em; margin-top: 2px; }
+.orbit-chip { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px; border-radius: 15px;
+  display: grid; place-items: center; font-weight: 800; font-size: 13px; color: #fff;
+  background: var(--chip, #8b5cf6); box-shadow: 0 8px 24px -6px var(--chip, #8b5cf6);
+  animation: spin 60s linear infinite reverse; }
+.orbit-ring.r2 .orbit-chip { animation-duration: 42s; animation-direction: normal; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .orbit { width: min(340px, 90%); order: -1; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ==========================================================================
+   Analogy (restaurant)
+   ========================================================================== */
+.analogy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.analogy { padding: 26px; transition: .35s var(--ease); position: relative; overflow: hidden; }
+.analogy::after { content: ""; position: absolute; inset: auto -40% -60% auto; width: 220px; height: 220px; border-radius: 50%;
+  background: var(--accent); opacity: .12; filter: blur(30px); transition: .4s var(--ease); }
+.analogy:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+.analogy:hover::after { opacity: .28; }
+.analogy .tag { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .08em; text-transform: uppercase; }
+.analogy h3 { font-size: 21px; margin: 8px 0 10px; }
+.analogy p { color: var(--text-2); font-size: 15px; }
+.analogy .icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 16px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); }
+.analogy .icon svg { width: 22px; height: 22px; }
+@media (max-width: 900px) { .analogy-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .analogy-grid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   Architecture map
+   ========================================================================== */
+.arch { display: grid; grid-template-columns: 1.25fr .75fr; gap: 22px; }
+.arch-board { padding: 26px; }
+.arch-row { display: flex; align-items: stretch; gap: 10px; }
+.arch-row + .arch-row { margin-top: 14px; }
+.arch-label { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--text-3); margin: 18px 0 8px; }
+.arch-label:first-child { margin-top: 0; }
+.arch-node { flex: 1; min-width: 0; text-align: left; padding: 14px 14px; border-radius: var(--radius); border: 1px solid var(--border);
+  background: var(--surface-2); transition: .25s var(--ease); position: relative; }
+.arch-node b { display: block; font-size: 14.5px; }
+.arch-node span { display: block; font-size: 12px; color: var(--text-3); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.arch-node:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.arch-node.active { border-color: #a78bfa; box-shadow: var(--glow); }
+.arch-arrow { display: grid; place-items: center; color: var(--text-3); flex: none; width: 18px; }
+.arch-arrow svg { width: 16px; height: 16px; }
+.arch-panel { padding: 26px; position: sticky; top: 90px; align-self: start; }
+.arch-panel h3 { font-size: 22px; margin-bottom: 8px; }
+.arch-panel p { color: var(--text-2); font-size: 15px; }
+.arch-panel .speaks { margin-top: 18px; font-size: 12px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: .1em; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.tech-chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface-2); font-size: 13px; font-weight: 600; transition: .2s var(--ease); }
+.tech-chip:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+.mono { width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center; font-size: 10px; font-weight: 800; color: #fff;
+  background: var(--chip); flex: none; letter-spacing: -.02em; }
+@media (max-width: 900px) {
+  .arch { grid-template-columns: 1fr; }
+  .arch-panel { position: static; }
+  .arch-row { flex-wrap: wrap; }
+  .arch-arrow { display: none; }
+  .arch-node { flex: 1 1 45%; }
+}
+
+/* ==========================================================================
+   Stack explorer
+   ========================================================================== */
+.toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 26px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.filter { padding: 8px 15px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); font-size: 14px; font-weight: 600;
+  color: var(--text-2); transition: .2s var(--ease); display: inline-flex; align-items: center; gap: 8px; }
+.filter:hover { color: var(--text); border-color: var(--border-strong); }
+.filter[aria-pressed="true"] { color: #fff; background: var(--fc, #7c3aed); border-color: transparent; box-shadow: 0 6px 20px -8px var(--fc, #7c3aed); }
+.search { position: relative; }
+.search input { width: 240px; padding: 10px 14px 10px 38px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface);
+  color: var(--text); font: inherit; font-size: 14px; }
+.search input::placeholder { color: var(--text-3); }
+.search svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--text-3); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.legend button { background: none; border: 0; padding: 0; }
+.legend .pill { cursor: pointer; transition: .2s var(--ease); }
+.legend button[aria-pressed="false"] .pill { opacity: .4; }
+.tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.tech-card { text-align: left; padding: 22px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface);
+  transition: .3s var(--ease); position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 12px; min-height: 210px; }
+.tech-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: var(--chip); opacity: .7; }
+.tech-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--chip) 55%, transparent); box-shadow: var(--shadow); }
+.tech-card .top { display: flex; align-items: center; gap: 12px; }
+.tech-card .mono { width: 42px; height: 42px; border-radius: 12px; font-size: 14px; }
+.tech-card h3 { font-size: 18px; }
+.tech-card .cat { font-size: 12px; color: var(--text-3); font-weight: 600; }
+.tech-card p { color: var(--text-2); font-size: 14.5px; flex: 1; }
+.tech-card .foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.learned-flag { font-size: 12px; font-weight: 700; color: var(--c-using); display: none; align-items: center; gap: 4px; }
+.tech-card.learned .learned-flag { display: inline-flex; }
+.empty { padding: 50px; text-align: center; color: var(--text-3); display: none; }
+
+/* Drawer */
+.scrim { position: fixed; inset: 0; background: rgba(5,6,15,.55); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: .3s var(--ease); z-index: 80; }
+.scrim.open { opacity: 1; pointer-events: auto; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(640px, 100%); background: var(--surface-solid); border-left: 1px solid var(--border);
+  z-index: 90; transform: translateX(105%); transition: transform .45s var(--ease); display: flex; flex-direction: column; box-shadow: var(--shadow); }
+.drawer.open { transform: none; }
+.drawer-head { padding: 26px 28px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 16px; align-items: flex-start; position: relative; }
+.drawer-head::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, color-mix(in srgb, var(--chip) 22%, transparent), transparent 60%); pointer-events: none; }
+.drawer-head .mono { width: 56px; height: 56px; border-radius: 16px; font-size: 18px; }
+.drawer-head h2 { font-size: 28px; }
+.drawer-head .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.drawer-head .close { margin-left: auto; position: relative; }
+.drawer-body { overflow-y: auto; padding: 8px 28px 40px; }
+.d-section { margin-top: 26px; }
+.d-section h4 { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--text-3); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.d-section p, .d-section li { color: var(--text-2); font-size: 15.5px; }
+.d-section ul { margin: 0; padding-left: 20px; }
+.d-section li + li { margin-top: 8px; }
+.tagline { font-size: 18px; color: var(--text); font-weight: 500; margin-top: 20px; }
+.callout { padding: 16px 18px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface-2); }
+.callout.plain { border-left: 3px solid var(--chip); }
+.callout.quote { font-style: italic; border-left: 3px solid #a78bfa; }
+.twin { display: flex; align-items: center; gap: 12px; }
+.twin .eq { font-size: 22px; color: var(--text-3); }
+.learn-toggle { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-radius: var(--radius); border: 1px dashed var(--border-strong); margin-top: 26px; cursor: pointer; }
+.learn-toggle input { width: 20px; height: 20px; accent-color: #22c55e; }
+
+/* Code blocks */
+.code { position: relative; border-radius: var(--radius); background: var(--code-bg); border: 1px solid rgba(255,255,255,.08); overflow: hidden; }
+.code-head { display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,.07);
+  font-size: 12px; color: #9aa0c3; font-weight: 600; }
+.code-head .lights { display: flex; gap: 6px; margin-right: 10px; }
+.code-head .lights i { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
+.code-head .lights i:nth-child(2) { background: #febc2e; }
+.code-head .lights i:nth-child(3) { background: #28c840; }
+.code-head .left { display: flex; align-items: center; }
+.copy { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); color: #c9cdea; font-size: 12px; padding: 4px 10px; border-radius: 7px; }
+.copy:hover { background: rgba(255,255,255,.12); }
+.code pre { margin: 0; padding: 16px 18px; overflow-x: auto; font-family: var(--font-mono); font-size: 13px; line-height: 1.65; color: #e3e6ff; tab-size: 2; }
+.tok-c { color: #6b7194; font-style: italic; }
+.tok-s { color: #a5e3a0; }
+.tok-k { color: #c4a1ff; }
+.tok-n { color: #ffb86b; }
+.tok-f { color: #7dd3fc; }
+
+/* ==========================================================================
+   Rosetta stone
+   ========================================================================== */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; padding: 6px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); width: fit-content; max-width: 100%; }
+.tab { padding: 9px 16px; border-radius: 999px; border: 0; background: none; font-size: 14px; font-weight: 600; color: var(--text-2); transition: .2s var(--ease); }
+.tab:hover { color: var(--text); }
+.tab[aria-selected="true"] { background: linear-gradient(120deg, #7c3aed, #0891b2); color: #fff; }
+.rosetta { margin-top: 26px; }
+.rosetta-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rosetta-side h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.rosetta-notes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.rosetta-notes .card { padding: 20px 22px; }
+.rosetta-notes h5 { margin: 0 0 8px; font-size: 14px; }
+.rosetta-notes ul { margin: 0; padding-left: 18px; color: var(--text-2); font-size: 14.5px; }
+.rosetta-notes li + li { margin-top: 6px; }
+.same h5 { color: var(--c-using); }
+.diff h5 { color: var(--c-stretch); }
+@media (max-width: 820px) { .rosetta-pair, .rosetta-notes { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   Journey
+   ========================================================================== */
+.journey { padding: 30px; }
+.journey-track { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; position: relative; margin-bottom: 30px; }
+.journey-track::before { content: ""; position: absolute; left: 4%; right: 4%; top: 22px; height: 2px; background: var(--border-strong); }
+.journey-fill { position: absolute; left: 4%; top: 22px; height: 2px; background: linear-gradient(90deg, #8b5cf6, #06b6d4, #ec4899); width: 0; transition: width .6s var(--ease); }
+.j-step { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; background: none; border: 0; padding: 0; }
+.j-dot { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800;
+  background: var(--surface-solid); border: 2px solid var(--border-strong); color: var(--text-3); transition: .35s var(--ease); z-index: 1; }
+.j-step.done .j-dot { border-color: transparent; background: var(--chip); color: #fff; }
+.j-step.current .j-dot { transform: scale(1.18); box-shadow: 0 0 0 6px color-mix(in srgb, var(--chip) 25%, transparent); }
+.j-step small { font-size: 11.5px; color: var(--text-3); text-align: center; line-height: 1.25; font-weight: 600; }
+.j-step.current small { color: var(--text); }
+.j-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; min-height: 230px; }
+.j-detail h3 { font-size: 26px; margin: 10px 0 10px; }
+.j-detail p { color: var(--text-2); font-size: 16px; }
+.j-controls { display: flex; gap: 10px; align-items: center; margin-top: 26px; flex-wrap: wrap; }
+.j-counter { margin-left: auto; color: var(--text-3); font-size: 14px; font-weight: 600; }
+.fade-swap { animation: fadeUp .45s var(--ease); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (max-width: 820px) {
+  .journey-track { grid-template-columns: repeat(4, 1fr); row-gap: 18px; }
+  .journey-track::before, .journey-fill { display: none; }
+  .j-detail { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   Quiz
+   ========================================================================== */
+.quiz { display: grid; grid-template-columns: 1fr 300px; gap: 22px; }
+.quiz-main { padding: 32px; }
+.quiz-progress { height: 6px; border-radius: 6px; background: var(--surface-2); overflow: hidden; margin-bottom: 26px; }
+.quiz-progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #8b5cf6, #06b6d4); transition: width .5s var(--ease); }
+.quiz-q { font-size: clamp(19px, 2.2vw, 23px); font-weight: 700; line-height: 1.35; }
+.quiz-scn { color: var(--text-3); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+.option { text-align: left; padding: 16px 18px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface-2);
+  font-weight: 600; font-size: 15px; transition: .2s var(--ease); display: flex; align-items: center; gap: 12px; }
+.option:hover:not(:disabled) { border-color: #a78bfa; transform: translateY(-2px); }
+.option:disabled { cursor: default; }
+.option.correct { border-color: var(--c-using); background: color-mix(in srgb, var(--c-using) 14%, transparent); }
+.option.wrong { border-color: #ef4444; background: color-mix(in srgb, #ef4444 12%, transparent); }
+.option .key { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; font-size: 12px; background: var(--surface); border: 1px solid var(--border); flex: none; }
+.explain { margin-top: 20px; display: none; }
+.explain.show { display: block; animation: fadeUp .4s var(--ease); }
+.quiz-side { padding: 26px; display: flex; flex-direction: column; gap: 18px; }
+.score-ring { width: 150px; height: 150px; margin-inline: auto; position: relative; }
+.score-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.score-ring circle { fill: none; stroke-width: 10; }
+.score-ring .bg { stroke: var(--surface-2); }
+.score-ring .fg { stroke: url(#ringGrad); stroke-linecap: round; transition: stroke-dashoffset .6s var(--ease); }
+.score-ring .label { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-weight: 800; font-size: 30px; }
+.score-ring .label small { display: block; font-size: 12px; color: var(--text-3); font-weight: 600; }
+.rank { text-align: center; }
+.rank b { display: block; font-size: 18px; }
+.rank span { font-size: 13.5px; color: var(--text-3); }
+@media (max-width: 860px) { .quiz { grid-template-columns: 1fr; } .options { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   Soft skills / translator
+   ========================================================================== */
+.soft-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 22px; }
+.translator { padding: 28px; }
+.switch { display: inline-flex; padding: 5px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); }
+.switch button { border: 0; background: none; padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 14px; color: var(--text-2); }
+.switch button[aria-pressed="true"] { background: var(--surface-solid); color: var(--text); box-shadow: 0 2px 10px rgba(0,0,0,.2); }
+.scenario-list { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
+.scenario-list .filter { font-size: 13px; padding: 7px 13px; }
+.bubble { padding: 22px 24px; border-radius: 20px 20px 20px 6px; background: var(--surface-2); border: 1px solid var(--border); font-size: 16.5px; line-height: 1.6; min-height: 140px; }
+.bubble.human { border-color: color-mix(in srgb, var(--c-soft) 45%, transparent); background: color-mix(in srgb, var(--c-soft) 9%, var(--surface-2)); }
+.bubble-who { font-size: 12px; color: var(--text-3); font-weight: 700; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+.soft-cards { display: grid; gap: 14px; }
+.soft-card { padding: 22px; }
+.soft-card h3 { font-size: 18px; margin-bottom: 6px; display: flex; gap: 10px; align-items: center; }
+.soft-card p { color: var(--text-2); font-size: 14.5px; }
+@media (max-width: 900px) { .soft-grid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   Roadmap
+   ========================================================================== */
+.roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.phase { padding: 26px; display: flex; flex-direction: column; }
+.phase-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+.phase h3 { font-size: 20px; }
+.phase .when { font-size: 13px; color: var(--text-3); margin-bottom: 18px; }
+.mini-ring { width: 44px; height: 44px; position: relative; flex: none; }
+.mini-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.mini-ring circle { fill: none; stroke-width: 5; }
+.mini-ring .bg { stroke: var(--surface-2); }
+.mini-ring .fg { stroke: var(--pc); stroke-linecap: round; transition: stroke-dashoffset .5s var(--ease); }
+.mini-ring span { position: absolute; inset: 0; display: grid; place-items: center; font-size: 11px; font-weight: 800; }
+.task { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-top: 1px solid var(--border); cursor: pointer; }
+.task input { margin-top: 4px; width: 18px; height: 18px; accent-color: #8b5cf6; flex: none; }
+.task div b { display: block; font-size: 14.5px; font-weight: 600; }
+.task div span { font-size: 13px; color: var(--text-3); }
+.task.done b { text-decoration: line-through; color: var(--text-3); }
+.roadmap-foot { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 22px; flex-wrap: wrap; color: var(--text-3); font-size: 14px; }
+@media (max-width: 900px) { .roadmap { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+footer { padding: 50px 0 70px; border-top: 1px solid var(--border); color: var(--text-3); font-size: 14px; }
+.foot-grid { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: center; }
+.toast { position: fixed; bottom: 26px; left: 50%; transform: translate(-50%, 30px); background: var(--surface-solid); border: 1px solid var(--border-strong);
+  padding: 12px 18px; border-radius: 999px; font-size: 14px; font-weight: 600; opacity: 0; pointer-events: none; transition: .35s var(--ease); z-index: 120; box-shadow: var(--shadow); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<!-- SVG gradient used by the quiz ring -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#top"><span class="brand-mark">JT</span><span>Beyond Salesforce</span></a>
+    <nav class="nav-links" id="navLinks" aria-label="Sections">
+      <a href="#big-idea">Big idea</a>
+      <a href="#your-project">Your project</a>
+      <a href="#explorer">Explorer</a>
+      <a href="#rosetta">Rosetta</a>
+      <a href="#journey">Journey</a>
+      <a href="#quiz">Quiz</a>
+      <a href="#soft-skills">Soft skills</a>
+      <a href="#roadmap">Roadmap</a>
+    </nav>
+    <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle light or dark theme">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+<!-- ======================================================================
+     HERO
+     ====================================================================== -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow">Job Application Tracker · Field Guide</span>
+      <h1>Not just<br><span class="gradient-text">Salesforce.</span></h1>
+      <p class="hero-sub">
+        You built an enterprise app on Salesforce. Here's the secret: you've also been quietly practising
+        half of the wider tech industry's toolkit. This guide maps every <em>complementary</em> skill
+        (languages, databases, DevOps, frontend and soft skills) back to code you already wrote.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#explorer">Explore the stack
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn" href="#quiz">Take the 2-minute quiz</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b id="statTotal">19</b><span>skills explained</span></div>
+        <div class="stat"><b id="statUsing" style="color:var(--c-using)">6</b><span>already in your repo</span></div>
+        <div class="stat"><b id="statTwin" style="color:var(--c-twin)">9</b><span>have a Salesforce twin</span></div>
+        <div class="stat"><b id="statStretch" style="color:var(--c-stretch)">4</b><span>stretch goals</span></div>
+      </div>
+    </div>
+    <div class="orbit" aria-hidden="true" id="orbit">
+      <div class="orbit-ring"></div>
+      <div class="orbit-ring r2"></div>
+      <div class="orbit-ring r3"></div>
+      <div class="orbit-core"><div>Salesforce<small>Apex · LWC · SOQL</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     BIG IDEA
+     ====================================================================== -->
+<section id="big-idea">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">The big idea</span>
+      <h2 class="section-title">Think of your app as a <span class="gradient-text">restaurant</span></h2>
+      <p class="section-lead">Salesforce is a beautifully equipped kitchen you rent. It's fantastic, but great chefs know how
+        other kitchens work too. Each part of the complementary stack maps to a part of running the place.</p>
+    </div>
+    <div class="analogy-grid" id="analogyGrid"></div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     YOUR PROJECT TODAY
+     ====================================================================== -->
+<section id="your-project">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Your project today</span>
+      <h2 class="section-title">You're already speaking <span class="gradient-text">more languages</span> than you think</h2>
+      <p class="section-lead">This is the real architecture of the tracker: 88 Apex classes, 14 Lightning Web Components, 3 triggers, a Platform Event
+        and 4 external APIs. Click any block to see which "non-Salesforce" skills it already exercises.</p>
+    </div>
+    <div class="arch reveal">
+      <div class="card arch-board" id="archBoard"></div>
+      <aside class="card arch-panel" id="archPanel" aria-live="polite"></aside>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     EXPLORER
+     ====================================================================== -->
+<section id="explorer">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Stack explorer</span>
+      <h2 class="section-title">All 19 skills, <span class="gradient-text">one click each</span></h2>
+      <p class="section-lead">Every card opens a deep dive: a plain-English analogy, exactly where it shows up in this repo,
+        its Salesforce "twin", a code sample, a level-up project idea, and a line you can use in interviews.</p>
+    </div>
+    <div class="toolbar reveal">
+      <div class="filters" id="catFilters" role="group" aria-label="Filter by category"></div>
+      <label class="search">
+        <span class="sr-only">Search skills</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="search" type="search" placeholder="Search: cache, offline, Apex…" autocomplete="off">
+      </label>
+    </div>
+    <div class="legend reveal" id="statusLegend" role="group" aria-label="Filter by status"></div>
+    <div class="tech-grid" id="techGrid"></div>
+    <div class="empty" id="emptyState">Nothing matches that search. Try "cache", "mobile" or "test".</div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     ROSETTA
+     ====================================================================== -->
+<section id="rosetta">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">The Rosetta Stone</span>
+      <h2 class="section-title">Same idea, <span class="gradient-text">different accent</span></h2>
+      <p class="section-lead">The fastest way to learn a new technology is to translate something you already know. Left: what's in
+        your repo (or its pattern). Right: the same thing in the wider world.</p>
+    </div>
+    <div class="tabs reveal" role="tablist" id="rosettaTabs" aria-label="Translations"></div>
+    <div class="rosetta" id="rosettaPanel" role="tabpanel"></div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     JOURNEY
+     ====================================================================== -->
+<section id="journey">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Follow one application</span>
+      <h2 class="section-title">The life of a job posting in a <span class="gradient-text">full-stack world</span></h2>
+      <p class="section-lead">Imagine the tracker grown up. Follow a single job posting from "found online" to "offer accepted" and
+        watch every complementary skill pick up the baton. Green badges are things your project does today.</p>
+    </div>
+    <div class="card journey reveal">
+      <div class="journey-track" id="jTrack"><div class="journey-fill" id="jFill"></div></div>
+      <div id="jDetail"></div>
+      <div class="j-controls">
+        <button class="btn btn-sm" id="jPrev" aria-label="Previous step">← Back</button>
+        <button class="btn btn-sm btn-primary" id="jPlay">▶ Auto-play</button>
+        <button class="btn btn-sm" id="jNext" aria-label="Next step">Next →</button>
+        <span class="j-counter" id="jCounter"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     QUIZ
+     ====================================================================== -->
+<section id="quiz">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Pick the right tool</span>
+      <h2 class="section-title">Eight scenarios. <span class="gradient-text">What would you reach for?</span></h2>
+      <p class="section-lead">Real situations based on this tracker. No trick questions, and every answer explains <em>why</em>.</p>
+    </div>
+    <div class="quiz reveal">
+      <div class="card quiz-main" id="quizMain"></div>
+      <aside class="card quiz-side">
+        <div class="score-ring">
+          <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="50"/><circle class="fg" id="scoreArc" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16"/></svg>
+          <div class="label"><div><span id="scoreNum">0</span><small>of <span id="scoreOf">8</span> correct</small></div></div>
+        </div>
+        <div class="rank"><b id="rankTitle">Ready when you are</b><span id="rankSub">Answer a question to start your score.</span></div>
+        <button class="btn btn-sm" id="quizReset" style="justify-content:center">↺ Restart quiz</button>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     SOFT SKILLS
+     ====================================================================== -->
+<section id="soft-skills">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Soft skills</span>
+      <h2 class="section-title">The <span class="gradient-text">"human API"</span> is the one everyone calls</h2>
+      <p class="section-lead">Communication, leadership and mentoring decide whether great code gets used. Try the jargon
+        translator: same facts, two very different audiences.</p>
+    </div>
+    <div class="soft-grid reveal">
+      <div class="card translator">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <h3 style="font-size:20px">Jargon translator</h3>
+          <div class="switch" role="group" aria-label="Audience">
+            <button id="modeDev" aria-pressed="true">Dev-speak</button>
+            <button id="modeHuman" aria-pressed="false">Human-speak</button>
+          </div>
+        </div>
+        <div class="scenario-list" id="scenarioList" role="group" aria-label="Scenarios"></div>
+        <div class="bubble" id="bubble" aria-live="polite"></div>
+        <div class="bubble-who" id="bubbleWho"></div>
+      </div>
+      <div class="soft-cards" id="softCards"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     ROADMAP
+     ====================================================================== -->
+<section id="roadmap">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Your roadmap</span>
+      <h2 class="section-title">From "Salesforce dev" to <span class="gradient-text">"platform-fluent engineer"</span></h2>
+      <p class="section-lead">Bite-sized missions, each built on this repo. Tick them off. Progress is saved in your browser.</p>
+    </div>
+    <div class="roadmap reveal" id="roadmapGrid"></div>
+    <div class="roadmap-foot">
+      <span id="roadmapSummary"></span>
+      <button class="btn btn-sm" id="roadmapReset">↺ Reset progress</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container foot-grid">
+    <div><b style="color:var(--text)">Enterprise Job Application Tracker</b> · Capstone by Temitayo, Mark &amp; Mike · Cloud Code Academy</div>
+    <div>Standalone file: no build, no dependencies. Open it in any browser.</div>
+  </div>
+</footer>
+
+<!-- Drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" aria-hidden="true">
+  <div class="drawer-head" id="drawerHead"></div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ==========================================================================
+   Content
+   ========================================================================== */
+const CATS = {
+  lang:   { label: 'Languages',   color: '#8b5cf6' },
+  db:     { label: 'Databases',   color: '#06b6d4' },
+  devops: { label: 'DevOps',      color: '#f97316' },
+  front:  { label: 'Frontend',    color: '#ec4899' },
+  soft:   { label: 'Soft Skills', color: '#22c55e' }
+};
+const STATUS = {
+  using:   { label: 'Already in your project', short: 'In your repo' },
+  twin:    { label: 'Has a Salesforce twin',   short: 'Salesforce twin' },
+  stretch: { label: 'Stretch goal',            short: 'Stretch goal' }
+};
+
+const TECH = [
+  /* ---------------- Languages ---------------- */
+  {
+    id: 'js', name: 'JavaScript', mono: 'JS', color: '#eab308', cat: 'lang', status: 'using',
+    blurb: 'The language of the browser, and of every Lightning Web Component you shipped.',
+    tagline: 'You are already a JavaScript developer. Salesforce just calls it "LWC".',
+    plain: 'If Salesforce is the stage, JavaScript is the actor who reacts when the audience claps. Every button, animated counter and chart in the tracker is JavaScript responding to a click.',
+    project: [
+      'All <b>14 Lightning Web Components</b> are modern ES-module JavaScript classes. For example <code>salaryCalculator.js</code> recomputes take-home pay as you type.',
+      '<code>performanceDashboard.js</code> loads <b>Chart.js</b> with <code>loadScript</code>, a classic third-party JS library.',
+      'Your toolchain is pure JavaScript ecosystem: <b>Jest</b> (<code>npm run test:unit</code>), <b>ESLint</b>, <b>Prettier</b>, <b>Husky</b> and <b>lint-staged</b> in <code>package.json</code>.'
+    ],
+    twin: 'Lightning Web Components',
+    levelUp: 'Write a 20-line Node.js script that reads <code>data/showcase-job-applications.csv</code> and prints how many applications sit in each status. Same language, no Salesforce required.',
+    soundbite: '"I write modern JavaScript daily: ES modules, async/await against Apex, and Jest unit tests with mocks."',
+    code: { lang: 'JavaScript · Node.js', src:
+`// count-by-status.js: run with  node count-by-status.js
+import { readFileSync } from 'node:fs';
+
+const [header, ...rows] = readFileSync('data/showcase-job-applications.csv', 'utf8')
+  .trim().split('\\n');
+const statusCol = header.split(',').indexOf('Status__c');
+
+const counts = {};
+for (const row of rows) {
+  // naive split is fine for a demo; use a CSV parser for real data
+  const status = row.split(',')[statusCol];
+  counts[status] = (counts[status] ?? 0) + 1;
+}
+console.table(counts); // { Interviewing: 4, Applied: 6, ... }` }
+  },
+  {
+    id: 'py', name: 'Python', mono: 'Py', color: '#3776ab', cat: 'lang', status: 'stretch',
+    blurb: 'The Swiss-army knife for data wrangling, automation and machine learning.',
+    tagline: 'Python is the intern who never sleeps: it loads, cleans and analyses data while you get coffee.',
+    plain: 'Imagine 500 job postings in a spreadsheet. Typing them into Salesforce is a weekend of misery. A 15-line Python script does it in seconds, then tells you which companies reply fastest.',
+    project: [
+      'Your repo ships sample data in <code>data/showcase-job-applications.csv</code>. Python is the most common tool for bulk-loading files like this through the Salesforce API.',
+      'The <code>scripts/</code> folder holds Apex and SOQL helper scripts. Python is the cross-platform way to automate the same chores from outside the org.',
+      'Analytics services such as <code>ApplicationAnalyticsService</code> crunch numbers in Apex. Python (pandas) is where data teams do that kind of analysis at scale.'
+    ],
+    twin: 'Anonymous Apex scripts + Data Loader',
+    levelUp: 'Use <code>simple_salesforce</code> to export every <code>Job_Application__c</code>, then chart "days from Applied to Interviewing" with pandas + matplotlib.',
+    soundbite: '"I use Python for the work around Salesforce: bulk data loads, cleanup scripts and analysis that would hit governor limits in Apex."',
+    code: { lang: 'Python', src:
+`import csv
+from simple_salesforce import Salesforce
+
+sf = Salesforce(username=USER, password=PWD, security_token=TOKEN)
+
+# Map CSV columns -> real fields on Job_Application__c
+FIELDS = ["Company_Name__c", "Position_Title__c", "Salary__c",
+          "Status__c", "Application_Date__c", "Notes__c", "Job_URL__c"]
+
+with open("data/showcase-job-applications.csv", newline="") as f:
+    records = [{k: row[k] for k in FIELDS} for row in csv.DictReader(f)]
+
+# One bulk call instead of hundreds of manual clicks
+results = sf.bulk.Job_Application__c.insert(records, batch_size=200)
+print(f"Loaded {sum(r['success'] for r in results)} applications")` }
+  },
+  {
+    id: 'java', name: 'Java', mono: 'Jv', color: '#e76f00', cat: 'lang', status: 'twin',
+    blurb: 'The enterprise workhorse, and Apex\'s older sibling.',
+    tagline: 'If you can read Apex, you can already read about 80% of Java.',
+    plain: 'Apex was modelled on Java. Same curly braces, same classes, same "public static". It\'s like learning Spanish when you already speak Portuguese: the grammar is familiar, the vocabulary shifts a bit.',
+    project: [
+      '<code>SalaryCalculationService.cls</code> uses classes, static methods and strong types: exactly how Java is written.',
+      'Your <b>trigger → handler → service</b> layering is the same layered-architecture pattern found in Java Spring applications.',
+      '<b>38 test classes</b> with <code>@IsTest</code> mirror Java\'s JUnit <code>@Test</code> style almost one-to-one.'
+    ],
+    twin: 'Apex',
+    levelUp: 'Port <code>SalaryCalculationService</code> tax-bracket logic to a plain Java class plus a JUnit test. Notice how little changes.',
+    soundbite: '"Apex is Java-flavoured, so I\'m comfortable in object-oriented Java codebases and JVM tooling."',
+    code: { lang: 'Java (compare with your Apex)', src:
+`public class SalaryCalculator {
+    private static final double SOCIAL_SECURITY_RATE = 0.062;
+    private static final double MEDICARE_RATE        = 0.0145;
+
+    public static double socialSecurity(double salary) {
+        return salary * SOCIAL_SECURITY_RATE;   // Apex: Decimal, Java: double
+    }
+
+    public static double medicare(double salary) {
+        return salary * MEDICARE_RATE;
+    }
+}
+
+// JUnit test (Apex equivalent: @IsTest + System.assertEquals)
+@Test
+void medicareIsOnePointFourFivePercent() {
+    assertEquals(1450.0, SalaryCalculator.medicare(100_000), 0.01);
+}` }
+  },
+  {
+    id: 'go', name: 'Go', mono: 'Go', color: '#00add8', cat: 'lang', status: 'stretch',
+    blurb: 'Tiny, fast, and brilliant at doing many things at once.',
+    tagline: 'Go is the espresso shot of backend languages: small, strong, gets things done fast.',
+    plain: 'Picture checking 50 job boards. Apex would visit them one at a time, politely queuing. Go sends 50 assistants out at the same moment ("goroutines") and they\'re all back before Apex finishes the first.',
+    project: [
+      'The tracker calls <b>4 external APIs</b> (<code>SalaryBenchmarkService</code>, <code>CompanyDataService</code>, <code>SalaryDataAPIService</code>, <code>WeatherAPIService</code>). Those APIs are often written in Go.',
+      'Apex callouts are capped per transaction. A small Go service can fan out to many sources and hand Salesforce one tidy answer.',
+      '<code>JobApplicationEnrichmentQueue</code> enriches records asynchronously. A Go worker is the off-platform version of that idea.'
+    ],
+    twin: 'Queueable Apex (but without the limits)',
+    levelUp: 'Write a Go CLI that pings each job-board URL from your CSV concurrently and reports which postings are still live.',
+    soundbite: '"For high-throughput integration work outside Salesforce, I\'d reach for Go: simple concurrency and a single binary to deploy."',
+    code: { lang: 'Go', src:
+`func fetchAll(boards []string) []Job {
+    var (
+        wg   sync.WaitGroup
+        mu   sync.Mutex
+        jobs []Job
+    )
+    for _, url := range boards {
+        wg.Add(1)
+        go func(u string) {          // one goroutine per board, all at once
+            defer wg.Done()
+            found := scrape(u)
+            mu.Lock()
+            jobs = append(jobs, found...)
+            mu.Unlock()
+        }(url)
+    }
+    wg.Wait()                        // wait for every board to report back
+    return jobs
+}` }
+  },
+
+  /* ---------------- Databases ---------------- */
+  {
+    id: 'sql', name: 'SQL', mono: 'SQL', color: '#0ea5e9', cat: 'db', status: 'twin',
+    blurb: 'The universal language for asking databases questions.',
+    tagline: 'SOQL is SQL with a Salesforce accent. You\'re roughly 70% fluent already.',
+    plain: 'A database is a giant filing cabinet. SQL is how you ask the clerk: "Bring me every application in Interviewing, highest salary first." SOQL is the same request, phrased the way Salesforce\'s clerk likes it.',
+    project: [
+      'Every service class queries with SOQL, e.g. <code>SELECT ... FROM Job_Application__c WHERE Status__c = \'Interviewing\'</code>.',
+      '<code>QueryOptimizationService</code> and <code>FeedbackQueryOptimizationService</code> exist purely to make queries faster. That\'s SQL performance tuning by another name.',
+      'Relationship fields like <code>Primary_Contact__c</code> are SQL foreign keys; <code>Primary_Contact__r.Name</code> is a JOIN in disguise.'
+    ],
+    twin: 'SOQL',
+    levelUp: 'Export your applications to a free PostgreSQL database and rewrite three of your SOQL queries as SQL, including one real <code>JOIN</code> and one <code>GROUP BY</code>.',
+    soundbite: '"I think in SQL. SOQL relationship queries map to JOINs, and I tune queries with selective filters and indexes."',
+    code: { lang: 'SQL (PostgreSQL)', src:
+`-- Your SOQL:  SELECT Company_Name__c, Salary__c, Primary_Contact__r.Name
+--              FROM Job_Application__c WHERE Status__c = 'Interviewing'
+
+SELECT ja.company_name,
+       ja.salary,
+       c.name            AS primary_contact
+FROM   job_application ja
+LEFT   JOIN contact c ON c.id = ja.primary_contact_id   -- the "__r" hop
+WHERE  ja.status = 'Interviewing'
+ORDER  BY ja.salary DESC
+LIMIT  10;
+
+-- Bonus: something SOQL makes awkward
+SELECT status, COUNT(*) AS apps, ROUND(AVG(salary)) AS avg_salary
+FROM   job_application
+GROUP  BY status
+ORDER  BY apps DESC;` }
+  },
+  {
+    id: 'nosql', name: 'NoSQL', mono: '{ }', color: '#16a34a', cat: 'db', status: 'twin',
+    blurb: 'Flexible, schema-light storage for messy, fast-changing data.',
+    tagline: 'SQL is a spreadsheet with strict columns. NoSQL is a folder of sticky notes. Each note can look different.',
+    plain: 'Job postings from the wild are messy: one has 40 fields, another has 4, a third has nested "benefits" lists. Instead of forcing them into fixed columns, a document database (MongoDB, DynamoDB) just stores each posting as-is, like a JSON file.',
+    project: [
+      'Your external API services receive <b>JSON</b> responses and parse them with <code>JSON.deserializeUntyped</code>. Those payloads are NoSQL-style documents.',
+      'The <code>Job_Application_Event__e</code> Platform Event carries a flexible payload, the same "message as a document" thinking.',
+      'Long-text fields like <code>Notes__c</code> and <code>Learning_Notes__c</code> hold semi-structured content that a document store handles natively.'
+    ],
+    twin: 'JSON payloads from callouts + Platform Events',
+    levelUp: 'Store raw API responses from <code>CompanyDataService</code> in a free MongoDB Atlas cluster, then query "all companies with remote benefits".',
+    soundbite: '"I choose NoSQL when the shape of the data changes often or arrives as nested JSON, and SQL when I need strict relationships."',
+    code: { lang: 'MongoDB (JavaScript shell)', src:
+`// Each posting is stored exactly as it arrived. No schema migration needed.
+db.postings.insertOne({
+  company: "Acme Cloud",
+  title: "Salesforce Developer",
+  salary: { min: 95000, max: 125000, currency: "USD" },
+  location: { type: "Remote", timezone: "US/Eastern" },
+  skills: ["Apex", "LWC", "SOQL", "JavaScript"],
+  benefits: ["401k", "4-day week"]
+});
+
+// Find remote roles that mention LWC and pay at least 100k
+db.postings.find({
+  "location.type": "Remote",
+  skills: "LWC",
+  "salary.max": { $gte: 100000 }
+});` }
+  },
+  {
+    id: 'redis', name: 'Redis', mono: 'Rd', color: '#dc2626', cat: 'db', status: 'twin',
+    blurb: 'An in-memory store, the fastest "remember this for later" on the planet.',
+    tagline: 'Redis is a sticky note on your monitor: instant to read, and it\'s fine if it gets thrown away tonight.',
+    plain: 'Some answers are expensive to compute but rarely change, like tax brackets. Rather than recalculating every time, you jot the answer on a sticky note (a cache) and read it back in microseconds.',
+    project: [
+      '<code>PerformanceCacheService.cls</code> already does this with <b>Salesforce Platform Cache</b>: <code>Cache.Org.put(...)</code> and <code>Cache.Org.get(...)</code> on the <code>local.JobApplicationCache</code> partition.',
+      'It caches salary calculations and analytics results with a time-to-live (TTL), exactly the Redis <code>SET key value EX seconds</code> pattern.',
+      'Same trade-off too: caches can be evicted, so the code falls back to recomputing on a miss.'
+    ],
+    twin: 'Platform Cache (Cache.Org)',
+    levelUp: 'Spin up Redis with Docker (<code>docker run -p 6379:6379 redis</code>) and rebuild <code>PerformanceCacheService</code>\'s get-or-compute logic in Node.js.',
+    soundbite: '"I\'ve implemented cache-aside with TTLs using Platform Cache. Redis is the same pattern off-platform."',
+    code: { lang: 'Node.js + Redis', src:
+`// Cache-aside: the same pattern as PerformanceCacheService.cls
+async function getTakeHome(salary) {
+  const key = \`salary:\${salary}\`;
+
+  const cached = await redis.get(key);           // ≈ Cache.Org.get(...)
+  if (cached) return JSON.parse(cached);         // cache hit: microseconds
+
+  const result = calculateTaxes(salary);         // cache miss: do the work
+  await redis.set(key, JSON.stringify(result), { EX: 3600 }); // ≈ Cache.Org.put(..., ttl)
+  return result;
+}` }
+  },
+  {
+    id: 'graph', name: 'Graph Databases', mono: 'Gr', color: '#0891b2', cat: 'db', status: 'stretch',
+    blurb: 'Databases where the relationships are the main event.',
+    tagline: 'A graph database answers "who do I know who knows someone at Google?" in one line.',
+    plain: 'Think of a detective\'s corkboard with photos and red string. Relational databases store the photos; graph databases (Neo4j) are obsessed with the string, and following it is lightning fast.',
+    project: [
+      'Your data is already a graph: <b>Job Application → Primary Contact → Interview Feedback → Competency Ratings</b>.',
+      '<code>Feedback_Share__c</code> links feedback to mentors and coaches. Those are edges in a professional network.',
+      'Asking "which contacts connect me to my top-rated companies?" takes several SOQL queries today. In Cypher it\'s one pattern.'
+    ],
+    twin: 'Lookup & master-detail relationships',
+    levelUp: 'Export Contacts and Job Applications into Neo4j AuraDB Free and find the shortest referral path to a dream company.',
+    soundbite: '"When the questions are about connections, like referrals or recommendations, I\'d model it as a graph rather than chaining joins."',
+    code: { lang: 'Cypher (Neo4j)', src:
+`// Shortest chain of people from me to anyone at a target company
+MATCH path = shortestPath(
+  (me:Person {name: "Temitayo"})-[:KNOWS*..4]-(insider:Person)
+               -[:WORKS_AT]->(:Company {name: "Dream Corp"})
+)
+RETURN [p IN nodes(path) | p.name] AS referralChain;
+
+// -> ["Temitayo", "Mark", "Bootcamp Mentor", "Dream Corp Engineer"]` }
+  },
+
+  /* ---------------- DevOps ---------------- */
+  {
+    id: 'git', name: 'Git', mono: 'Git', color: '#f05032', cat: 'devops', status: 'using',
+    blurb: 'Version control: an infinite undo button plus a team time machine.',
+    tagline: 'Git is "save game" for code, and it lets three people play the same game without overwriting each other.',
+    plain: 'Remember naming files <code>final_v2_REALLY_final.docx</code>? Git ends that. Every change is a labelled snapshot, every experiment gets its own branch, and you can always rewind.',
+    project: [
+      'This entire repo is a Git repository, and you\'re reading this on a feature branch.',
+      'Built by a team of three, so branches, merges and pull requests are how Temitayo, Mark and Mike avoid stepping on each other.',
+      '<b>Husky</b> hooks run <b>lint-staged</b> before every commit (see <code>package.json</code>), so Git itself enforces code quality.'
+    ],
+    twin: 'Change sets (but far better)',
+    levelUp: 'Practise <code>git rebase -i</code> on a throwaway branch to squash messy commits into a clean story before a PR.',
+    soundbite: '"I use feature branches, small focused commits and PR reviews, and our pre-commit hooks lint code automatically."',
+    code: { lang: 'Shell', src:
+`git switch -c feature/salary-competitiveness   # new branch for one idea
+# ...edit SalaryBenchmarkService.cls...
+git add -p                                      # stage only the hunks you mean
+git commit -m "Add market-competitiveness score to applications"
+git push -u origin feature/salary-competitiveness
+# open a Pull Request -> teammate reviews -> merge` }
+  },
+  {
+    id: 'cicd', name: 'CI/CD', mono: 'CI', color: '#2563eb', cat: 'devops', status: 'using',
+    blurb: 'Robots that test and ship your code every time you push.',
+    tagline: 'CI/CD is a tireless quality inspector who checks every dish before it leaves the kitchen.',
+    plain: 'Continuous Integration = every change is automatically built and tested. Continuous Delivery = every change that passes can be shipped with a button (or automatically). No more "works on my org".',
+    project: [
+      '<code>.github/workflows/scratch-deploy-run-tests-scan.yml</code> is a <b>GitHub Actions</b> pipeline: it deploys to a scratch org, runs Apex tests and runs a code scan.',
+      'It reuses a shared workflow from Cloud Code Academy, a real-world pattern for standardising pipelines across many repos.',
+      'Locally, <code>npm run lint</code> and <code>npm run test:unit</code> are the same checks CI should enforce on every PR.'
+    ],
+    twin: 'Salesforce DevOps Center',
+    levelUp: 'Add a second workflow that runs <code>npm run lint</code> and <code>npm run test:unit</code> on every pull request (no org needed).',
+    soundbite: '"Our pipeline deploys to a scratch org and runs Apex tests plus static analysis. I can extend it with Jest and lint gates."',
+    code: { lang: 'GitHub Actions YAML', src:
+`# .github/workflows/lwc-checks.yml (a suggested addition)
+name: LWC lint + Jest
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test:unit -- --coverage` }
+  },
+  {
+    id: 'docker', name: 'Docker', mono: 'Dk', color: '#2496ed', cat: 'devops', status: 'twin',
+    blurb: 'Ship your whole environment in a box that runs the same everywhere.',
+    tagline: 'Docker is a lunchbox: pack the app and everything it needs, and it tastes the same at any desk.',
+    plain: '"It works on my machine" happens because machines differ: different Node versions, different CLIs. A container bundles the exact versions so every teammate and every CI run gets an identical setup.',
+    project: [
+      '<code>config/project-scratch-def.json</code> describes a disposable, reproducible org. That\'s the Salesforce version of a container image.',
+      'Scratch orgs (<code>cloud-code-scratch</code>) are spun up, used and thrown away, exactly how containers are treated.',
+      'Your toolchain (Node, Salesforce CLI, Jest) is a perfect candidate for a dev container so new teammates are productive in minutes.'
+    ],
+    twin: 'Scratch orgs + scratch-def.json',
+    levelUp: 'Add a <code>.devcontainer/</code> with Node 20 and the Salesforce CLI so the repo opens ready-to-code in VS Code or Codespaces.',
+    soundbite: '"I treat environments as disposable and reproducible: scratch orgs on-platform, containers off-platform."',
+    code: { lang: 'Dockerfile', src:
+`# A reproducible toolbox for this repo
+FROM node:20-slim
+
+RUN npm install --global @salesforce/cli
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci                      # exact dependency versions from the lockfile
+COPY . .
+
+CMD ["npm", "run", "test:unit"] # same result on every laptop and in CI` }
+  },
+  {
+    id: 'k8s', name: 'Kubernetes', mono: 'K8', color: '#326ce5', cat: 'devops', status: 'stretch',
+    blurb: 'An autopilot that runs, heals and scales lots of containers.',
+    tagline: 'If Docker is a lunchbox, Kubernetes is the cafeteria manager deciding how many lunches to make.',
+    plain: 'Traffic spikes at 9am on Mondays when everyone job-hunts. Kubernetes notices, starts more copies of your service, replaces any that crash, and scales back down at night so you don\'t pay for idle servers.',
+    project: [
+      'Salesforce\'s multi-tenant platform already does this for you behind the scenes. That\'s why you never provision servers.',
+      '<b>Governor limits</b> are Salesforce\'s version of Kubernetes resource quotas: fair-share rules so no tenant hogs the machine.',
+      'If the tracker ever became a public SaaS product, the off-platform pieces (scrapers, APIs) would likely run on Kubernetes.'
+    ],
+    twin: 'The multi-tenant platform + governor limits',
+    levelUp: 'Install <code>kind</code> or <code>minikube</code>, deploy the Docker image from the Docker card, and scale it with <code>kubectl scale</code>.',
+    soundbite: '"I understand why Kubernetes exists: self-healing, autoscaling and resource quotas, the same ideas behind Salesforce\'s governor limits."',
+    code: { lang: 'Kubernetes YAML', src:
+`apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: job-scraper
+spec:
+  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: job-scraper }
+  minReplicas: 2          # always keep two running
+  maxReplicas: 20         # Monday-morning rush
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target: { type: Utilization, averageUtilization: 70 }` }
+  },
+  {
+    id: 'aws', name: 'AWS', mono: 'AWS', color: '#ff9900', cat: 'devops', status: 'twin',
+    blurb: 'A cloud buffet of storage, compute, queues and AI services.',
+    tagline: 'AWS is a giant hardware store. Salesforce is a beautiful pre-built house. Pros know both.',
+    plain: 'Need to store 10,000 resume PDFs cheaply? Run a script every hour? Send 50,000 emails? AWS rents you exactly that piece (S3, Lambda, SES) by the minute.',
+    project: [
+      'Your callouts use <b>Named Credentials</b> (<code>callout:Salary_Benchmark_API</code> and friends), the exact mechanism you\'d use to call AWS API Gateway securely.',
+      'The rule in <code>CLAUDE.md</code>, "Named Credentials only, never hard-code API keys", is AWS Secrets Manager thinking.',
+      'Batch and scheduled Apex (<code>SalaryMarketAnalysisScheduler</code>) mirror AWS EventBridge schedules triggering Lambda functions.'
+    ],
+    twin: 'Named Credentials + Scheduled Apex',
+    levelUp: 'Create an AWS Lambda behind API Gateway that returns salary data, point a Named Credential at it, and call it from <code>SalaryBenchmarkService</code>.',
+    soundbite: '"I\'ve integrated Salesforce with external APIs through Named Credentials, which is how I\'d securely connect to AWS services."',
+    code: { lang: 'Apex → AWS Lambda', src:
+`// Apex side: the pattern already used by SalaryBenchmarkService
+HttpRequest req = new HttpRequest();
+req.setEndpoint('callout:Salary_Benchmark_API/benchmarks?title='
+    + EncodingUtil.urlEncode(title, 'UTF-8'));
+req.setMethod('GET');
+HttpResponse res = new Http().send(req);
+
+// AWS side: a Lambda function behind API Gateway (Node.js)
+export const handler = async (event) => {
+  const title = event.queryStringParameters.title;
+  const data  = await lookupMarketSalary(title);   // e.g. from DynamoDB
+  return { statusCode: 200, body: JSON.stringify(data) };
+};` }
+  },
+
+  /* ---------------- Frontend ---------------- */
+  {
+    id: 'react', name: 'React', mono: 'Re', color: '#61dafb', cat: 'front', status: 'twin',
+    blurb: 'The most popular way to build interactive web UIs.',
+    tagline: 'LWC and React are cousins at the same family reunion: different haircuts, same DNA.',
+    plain: 'Both split a screen into reusable components that redraw themselves when data changes. Learn one well and the other is mostly new syntax.',
+    project: [
+      'Your 14 LWCs are components with state, events and lifecycle hooks, the same mental model React uses.',
+      'Reactive properties (no <code>@track</code> needed since API 48) behave like React state: change the value, the UI updates.',
+      '<code>errorPanel</code> is a reusable child component with a retry callback, the textbook React "props + callback" pattern.'
+    ],
+    twin: 'Lightning Web Components',
+    levelUp: 'Rebuild <code>salaryCalculator</code> as a React app with Vite. Compare lines of code and where state lives.',
+    soundbite: '"LWC taught me component architecture: state, events and composition. That transfers directly to React."',
+    code: { lang: 'React (compare with salaryCalculator LWC)', src:
+`import { useState } from 'react';
+
+export default function SalaryCalculator() {
+  const [salary, setSalary] = useState(95000);          // LWC: salary = 95000;
+
+  const socialSecurity = salary * 0.062;
+  const medicare       = salary * 0.0145;
+
+  return (
+    <section>
+      <input type="number" value={salary}
+             onChange={e => setSalary(Number(e.target.value))} />
+      <p>Social Security: \${socialSecurity.toFixed(2)}</p>
+      <p>Medicare: \${medicare.toFixed(2)}</p>
+    </section>
+  );
+}` }
+  },
+  {
+    id: 'mobile', name: 'Mobile Development', mono: 'Mb', color: '#a855f7', cat: 'front', status: 'twin',
+    blurb: 'Apps that live in pockets: touch-first, on the go, sometimes offline.',
+    tagline: 'The best time to log interview feedback is in the elevator right after the interview.',
+    plain: 'Mobile is about tiny screens, big thumbs, flaky signal and short attention spans. Design for "30 seconds, one hand, bad Wi-Fi" and you\'ve got the mindset.',
+    project: [
+      '<code>mobileFeedbackCapture</code> is a purpose-built, touch-optimised LWC for capturing interview feedback on a phone.',
+      'It already uses device APIs: <code>navigator.vibrate()</code> gives haptic feedback when you tap a rating.',
+      'Salesforce Mobile App runs your LWCs natively, so you\'ve shipped mobile UI without writing Swift or Kotlin.'
+    ],
+    twin: 'Salesforce Mobile App + mobile-first LWCs',
+    levelUp: 'Prototype a React Native or Flutter app with one screen: "Quick add application", posting to Salesforce via the REST API.',
+    soundbite: '"I\'ve built mobile-first components with haptics and offline queues, and I understand touch-first UX constraints."',
+    code: { lang: 'JavaScript (pattern from mobileFeedbackCapture)', src:
+`handleRatingTap(event) {
+  this.rating = Number(event.currentTarget.dataset.value);
+
+  // Haptic "tick" so the user feels the tap registered
+  if (navigator.vibrate) {
+    navigator.vibrate(10);
+  }
+
+  // No signal in the elevator? Queue it and sync later.
+  if (!navigator.onLine) {
+    this.offlineStorage.push({ rating: this.rating, at: Date.now() });
+    return;
+  }
+  this.saveFeedback();
+}` }
+  },
+  {
+    id: 'pwa', name: 'PWAs', mono: 'PW', color: '#5a0fc8', cat: 'front', status: 'twin',
+    blurb: 'Websites that install like apps and keep working offline.',
+    tagline: 'A PWA is a website that went to the gym: installable, offline-capable and push-notification ready.',
+    plain: 'Progressive Web Apps add two small files to a website: a manifest (name, icon, "open full-screen") and a service worker (a tiny script that caches pages so they load with no internet). No app store required.',
+    project: [
+      '<code>mobileFeedbackCapture</code> keeps an <code>offlineStorage</code> queue and shows a pending-sync count. That\'s the core PWA idea: offline first, sync later.',
+      'Reminders from <code>EmailNotificationQueue</code> are the server half of what PWA push notifications deliver on-device.',
+      'This very guide is one HTML file. Add a manifest + service worker and it becomes an installable PWA.'
+    ],
+    twin: 'Offline queue in mobileFeedbackCapture',
+    levelUp: 'Turn this explorer into a PWA: add <code>manifest.json</code> and a 15-line service worker, then "Install" it from Chrome.',
+    soundbite: '"I design for offline-first: queue locally, sync when online. PWAs formalise that with service workers."',
+    code: { lang: 'service-worker.js', src:
+`const CACHE = 'tracker-v1';
+const ASSETS = ['/', '/index.html', '/styles.css', '/app.js'];
+
+self.addEventListener('install', (e) => {
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));
+});
+
+// Network first, fall back to the cache when offline
+self.addEventListener('fetch', (e) => {
+  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+});` }
+  },
+
+  /* ---------------- Soft skills ---------------- */
+  {
+    id: 'comm', name: 'Communication', mono: 'Cm', color: '#16a34a', cat: 'soft', status: 'using',
+    blurb: 'Turning "what I built" into "why you should care".',
+    tagline: 'Code that nobody understands is a locked treasure chest. Communication is the key.',
+    plain: 'Great communication is translation: the same facts, tuned for the listener. Engineers want the mechanism; managers want the impact; users want to know what to click.',
+    project: [
+      'The <code>docs/</code> folder has guides for learners, admins and API consumers: one project, multiple audiences.',
+      '<code>documentationViewer</code> brings docs <i>inside</i> the app, so communication is part of the product.',
+      'The capstone ends with a presentation. Explaining trade-offs out loud is a graded skill here.'
+    ],
+    twin: 'Docs, demos & release notes',
+    levelUp: 'Record a 3-minute Loom demo of the tracker for a non-technical friend. If they can explain it back, you nailed it.',
+    soundbite: '"I document for multiple audiences, from admin guides to API references, and I can demo the same feature to an engineer or an executive."',
+    code: { lang: 'Pull-request template', src:
+`## What changed
+Interview reminders now go out the day before, not the morning of.
+
+## Why it matters
+Candidates asked for time to prepare; early tests cut no-shows.
+
+## How it works
+EmailNotificationQueue now schedules for (interview date - 1 day).
+
+## How I tested it
+- Apex test: EmailNotificationQueueTest (bulk: 200 records)
+- Manually created an Event for tomorrow -> email received
+
+## Screenshots / risks
+None. Rollback = revert this PR.` }
+  },
+  {
+    id: 'lead', name: 'Leadership', mono: 'Ld', color: '#15803d', cat: 'soft', status: 'using',
+    blurb: 'Setting direction, making calls, and making others better.',
+    tagline: 'Leadership isn\'t a job title. It\'s being the person who writes down the decision so the team stops arguing.',
+    plain: 'Technical leadership is mostly three things: pick a sensible direction, explain why, and remove obstacles for others. You do it every time you choose a pattern and write the reason down.',
+    project: [
+      'Choosing the <b>trigger → handler → service</b> pattern for the whole codebase was an architectural decision that every class now follows.',
+      'The "Conventions" section of <code>CLAUDE.md</code> (inherited sharing, Named Credentials only, no <code>@track</code>) is a team standard someone had to set.',
+      'The "Known Pre-Existing Issues" list is leadership too: honest about tech debt so nobody wastes a day re-discovering it.'
+    ],
+    twin: 'Architecture decisions & team conventions',
+    levelUp: 'Write a one-page Architecture Decision Record (ADR) explaining why Platform Events were used for status-change notifications.',
+    soundbite: '"I\'ve set and documented team conventions and made architecture calls that the rest of the codebase builds on."',
+    code: { lang: 'Architecture Decision Record', src:
+`# ADR-007: Publish status changes as Platform Events
+
+Status:   Accepted
+Context:  Several features react to Job_Application__c status changes
+          (tasks, emails, analytics). Calling each from the trigger couples
+          them together and risks governor limits.
+Decision: Publish Job_Application_Event__e from the trigger handler;
+          subscribers react asynchronously.
+Consequences:
+  + New features subscribe without touching the trigger
+  + Work runs outside the user's transaction
+  - Eventual consistency; harder to debug -> add logging` }
+  },
+  {
+    id: 'mentor', name: 'Mentoring', mono: 'Mt', color: '#22c55e', cat: 'soft', status: 'using',
+    blurb: 'Helping someone else level up, and learning twice as you do it.',
+    tagline: 'The quickest way to master Apex triggers is to teach them to someone who\'s never seen one.',
+    plain: 'Mentoring isn\'t having all the answers. It\'s asking good questions, sharing how you got unstuck, and giving feedback that\'s specific and kind.',
+    project: [
+      '<code>Feedback_Share__c</code> exists to "manage secure sharing of interview feedback with mentors and coaches". Mentoring is literally a feature.',
+      '<code>LEARNING_JOURNEY_GUIDE.md</code> and <code>TEAM_COLLABORATION_GUIDE.md</code> are written to bring the next developer up to speed.',
+      '<code>TestDataFactory</code> is a gift to future devs: one place to learn how valid test data is built.'
+    ],
+    twin: 'Feedback sharing + learning guides',
+    levelUp: 'Pair-program for 45 minutes with a newer student on writing a bulk-safe trigger test. Let them drive the keyboard.',
+    soundbite: '"I wrote onboarding guides for our project and I enjoy pairing. The app even has a feature for sharing feedback with mentors."',
+    code: { lang: 'Code-review comment that teaches', src:
+`Nice work, this reads cleanly!
+
+One thing to try: this SOQL is inside the for-loop (line 42), so 200
+records = 200 queries and we'd hit the 100-query limit.
+
+Could you collect the Ids into a Set first and query once?
+The bulk tests in JobApplicationTriggerTest show why it matters.
+
+Happy to pair on it for 15 min if useful.` }
+  }
+];
+const TECH_BY_ID = Object.fromEntries(TECH.map(t => [t.id, t]));
+
+const ANALOGIES = [
+  { cat: 'lang', title: 'Languages = cooking techniques', text: 'Apex is your signature dish. JavaScript, Python, Java and Go are grilling, baking and sous-vide. Same ingredients, more possibilities.',
+    icon: '<path d="M4 17l6-6-6-6M12 19h8"/>' },
+  { cat: 'db', title: 'Databases = the pantry', text: 'SQL is the labelled shelves, NoSQL the "misc" drawer, Redis the counter-top where today\'s prep sits, graph DBs the recipe-family tree.',
+    icon: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>' },
+  { cat: 'devops', title: 'DevOps = supply chain & inspection', text: 'Git is the recipe log, CI/CD the health inspector at every service, Docker the meal-kit box, Kubernetes the manager scaling staff, AWS the wholesale market.',
+    icon: '<path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/><circle cx="12" cy="12" r="3"/>' },
+  { cat: 'front', title: 'Frontend = the dining room', text: 'React is the dine-in experience, mobile is delivery, PWAs are the takeaway menu that works even when the phone line is down.',
+    icon: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>' },
+  { cat: 'soft', title: 'Soft skills = hospitality', text: 'A perfect dish served rudely still gets one star. Communication, leadership and mentoring are how people feel about what you cooked.',
+    icon: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/>' },
+  { cat: 'sf', title: 'Salesforce = the rented kitchen', text: 'World-class equipment, security and cleaning included, with house rules (governor limits). Knowing other kitchens makes you a better chef in this one.',
+    icon: '<path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 0 0 4.3 12 4 4 0 0 0 6 19z"/>' }
+];
+
+const ARCH = [
+  { label: 'Data & automation layer', row: [
+    { id: 'trigger', title: 'Triggers', sub: 'JobApplicationTrigger +2', techs: ['java', 'git'],
+      text: 'Three triggers fire on record changes. They stay thin and delegate, a separation-of-concerns habit that applies in every language.' },
+    { id: 'handler', title: 'Handlers', sub: 'JobApplicationTriggerHandler', techs: ['java', 'lead'],
+      text: 'Handlers route before/after events to services. Picking this pattern for the whole team is an architecture decision, i.e. leadership.' },
+    { id: 'service', title: 'Services', sub: 'SalaryCalculationService …', techs: ['java', 'sql', 'redis'],
+      text: 'Business logic lives here: tax maths, SOQL queries and Platform Cache via PerformanceCacheService. Java-style OOP, SQL-style queries, Redis-style caching.' },
+    { id: 'lwc', title: 'LWC (14)', sub: 'salaryCalculator, dashboards…', techs: ['js', 'react', 'mobile', 'pwa'],
+      text: 'Fourteen JavaScript components: reactive UI (React), Chart.js dashboards, and a mobile-first feedback capture with haptics and an offline queue (Mobile + PWA).' }
+  ]},
+  { label: 'Async & integration', row: [
+    { id: 'events', title: 'Platform Event', sub: 'Job_Application_Event__e', techs: ['nosql', 'aws'],
+      text: 'A publish/subscribe message bus. The same idea as AWS SNS/SQS or Kafka: producers and consumers that don\'t need to know about each other.' },
+    { id: 'async', title: 'Batch & Queueable', sub: 'SalaryMarketAnalysisBatch…', techs: ['go', 'aws', 'k8s'],
+      text: 'Background jobs and schedules. Off-platform, these become AWS Lambda + EventBridge, Go workers or Kubernetes CronJobs.' },
+    { id: 'callouts', title: 'External APIs', sub: 'callout:Salary_Benchmark_API', techs: ['aws', 'nosql', 'py'],
+      text: 'Four Named-Credential callouts that consume JSON. Secure secret handling and API integration are core cloud (AWS) skills.' },
+    { id: 'cache', title: 'Platform Cache', sub: 'local.JobApplicationCache', techs: ['redis'],
+      text: 'Cache.Org.put / get with a TTL. This is precisely what teams use Redis for everywhere else.' }
+  ]},
+  { label: 'Delivery & people', row: [
+    { id: 'git', title: 'Git + Husky', sub: 'lint-staged pre-commit', techs: ['git', 'js'],
+      text: 'Version control with automated pre-commit checks. Every commit is linted before it exists.' },
+    { id: 'ci', title: 'GitHub Actions', sub: 'scratch deploy + tests + scan', techs: ['cicd', 'docker'],
+      text: 'A CI pipeline that deploys to a disposable scratch org (a container-like environment), runs tests and scans code.' },
+    { id: 'tests', title: 'Tests', sub: '38 Apex test classes + Jest', techs: ['java', 'js', 'cicd'],
+      text: 'Apex tests mirror JUnit; LWC tests use Jest. Automated tests are what make CI/CD trustworthy.' },
+    { id: 'docs', title: 'Docs & guides', sub: 'docs/ + documentationViewer', techs: ['comm', 'mentor', 'lead'],
+      text: 'Learning, collaboration, admin and API guides, plus in-app docs. Communication and mentoring, written down.' }
+  ]}
+];
+
+const ROSETTA = [
+  { id: 'soql', tab: 'SOQL → SQL',
+    left:  { title: 'SOQL (in your services)', lang: 'SOQL', src:
+`SELECT Company_Name__c, Salary__c,
+       Primary_Contact__r.Name
+FROM   Job_Application__c
+WHERE  Status__c = 'Interviewing'
+ORDER  BY Salary__c DESC
+LIMIT  10` },
+    right: { title: 'SQL (PostgreSQL)', lang: 'SQL', src:
+`SELECT ja.company_name, ja.salary,
+       c.name
+FROM   job_application ja
+LEFT   JOIN contact c ON c.id = ja.primary_contact_id
+WHERE  ja.status = 'Interviewing'
+ORDER  BY ja.salary DESC
+LIMIT  10;` },
+    same: ['SELECT / FROM / WHERE / ORDER BY / LIMIT are identical', 'Filters, comparisons and aggregates (COUNT, AVG) work the same way'],
+    diff: ['SQL uses explicit JOINs; SOQL hides them behind __r relationships', 'SQL has no governor limits but also no automatic sharing rules']
+  },
+  { id: 'apex', tab: 'Apex → Java',
+    left:  { title: 'Apex', lang: 'Apex', src:
+`public inherited sharing class SalaryCalculationService {
+    public static Decimal medicare(Decimal salary) {
+        return salary * 0.0145;
+    }
+}
+
+@IsTest
+static void medicareTest() {
+    System.assertEquals(1450,
+        SalaryCalculationService.medicare(100000));
+}` },
+    right: { title: 'Java', lang: 'Java', src:
+`public class SalaryCalculationService {
+    public static double medicare(double salary) {
+        return salary * 0.0145;
+    }
+}
+
+@Test
+void medicareTest() {
+    assertEquals(1450.0,
+        SalaryCalculationService.medicare(100000), 0.01);
+}` },
+    same: ['Classes, static methods, access modifiers, curly braces', 'Unit tests with annotations and assertions'],
+    diff: ['Apex has built-in database (DML/SOQL) and sharing keywords', 'Java needs a build tool (Maven/Gradle) and runs on servers you manage']
+  },
+  { id: 'lwc', tab: 'LWC → React',
+    left:  { title: 'Lightning Web Component', lang: 'JavaScript', src:
+`import { LightningElement } from 'lwc';
+
+export default class SalaryCalculator extends LightningElement {
+    salary = 95000;                 // reactive by default
+
+    get medicare() {
+        return (this.salary * 0.0145).toFixed(2);
+    }
+    handleChange(event) {
+        this.salary = Number(event.target.value);
+    }
+}` },
+    right: { title: 'React', lang: 'JSX', src:
+`import { useState } from 'react';
+
+export default function SalaryCalculator() {
+    const [salary, setSalary] = useState(95000);
+
+    const medicare = (salary * 0.0145).toFixed(2);
+
+    return <input value={salary}
+        onChange={e => setSalary(Number(e.target.value))} />;
+}` },
+    same: ['Components, reactive state, event handlers, derived values', 'Composition: parent passes data down, child sends events up'],
+    diff: ['LWC uses classes + separate HTML templates; React uses functions + JSX', 'React needs you to choose routing, data fetching and hosting']
+  },
+  { id: 'cache', tab: 'Platform Cache → Redis',
+    left:  { title: 'Apex · PerformanceCacheService', lang: 'Apex', src:
+`String key = 'local.JobApplicationCache.salary' + salary;
+
+Object hit = Cache.Org.get(key);
+if (hit != null) return (Map<String, Decimal>) hit;
+
+Map<String, Decimal> result = calculate(salary);
+Cache.Org.put(key, result, 3600);   // TTL in seconds
+return result;` },
+    right: { title: 'Node.js · Redis', lang: 'JavaScript', src:
+`const key = \`salary:\${salary}\`;
+
+const hit = await redis.get(key);
+if (hit) return JSON.parse(hit);
+
+const result = calculate(salary);
+await redis.set(key, JSON.stringify(result), { EX: 3600 });
+return result;` },
+    same: ['Cache-aside pattern: check, compute on miss, store with a TTL', 'Both can evict data, so code must tolerate misses'],
+    diff: ['Redis has lists, sets, pub/sub, streams and much more', 'Redis is shared by any app; Platform Cache is scoped to your org']
+  },
+  { id: 'events', tab: 'Platform Events → Pub/Sub',
+    left:  { title: 'Apex · JobApplicationEventPublisher', lang: 'Apex', src:
+`Job_Application_Event__e evt = new Job_Application_Event__e(
+    Job_Application_Id__c = app.Id,
+    Previous_Status__c    = oldStatus,
+    Current_Status__c     = app.Status__c,
+    Event_Data__c         = JSON.serialize(extraData)
+);
+Database.SaveResult sr = EventBus.publish(evt);
+
+// A trigger on Job_Application_Event__e subscribes
+// and reacts asynchronously.` },
+    right: { title: 'Python · AWS SNS', lang: 'Python', src:
+`import boto3, json
+sns = boto3.client("sns")
+
+sns.publish(
+    TopicArn=STATUS_TOPIC_ARN,
+    Message=json.dumps({"jobApplicationId": app_id,
+                        "previousStatus": old_status,
+                        "currentStatus": status}),
+)
+# Lambda functions / SQS queues subscribe
+# and react asynchronously.` },
+    same: ['Publisher doesn\'t know who\'s listening: loose coupling', 'Subscribers process messages asynchronously'],
+    diff: ['Cloud queues offer retries, dead-letter queues and fan-out to any service', 'Platform Events integrate natively with Flows and Apex triggers'],
+    note: 'Simplified from JobApplicationEventPublisher.cls, which builds the event in buildPlatformEvent() and also sets Event_Type__c, Company_Name__c and Position_Title__c.'
+  },
+  { id: 'scratch', tab: 'Scratch org → Docker',
+    left:  { title: 'config/project-scratch-def.json', lang: 'JSON', src:
+`{
+  "orgName": "Demo company",
+  "edition": "Developer",
+  "features": ["EnableSetPasswordInApi"],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    }
+  }
+}` },
+    right: { title: 'Dockerfile', lang: 'Dockerfile', src:
+`FROM node:20-slim
+RUN npm install --global @salesforce/cli
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+CMD ["npm", "run", "test:unit"]` },
+    same: ['Declarative recipe for a disposable, reproducible environment', 'Checked into Git so every teammate gets the same setup'],
+    diff: ['A scratch org is a whole Salesforce instance hosted for you', 'A container runs anywhere: your laptop, CI, or any cloud']
+  }
+];
+
+const JOURNEY = [
+  { tech: 'py',     short: 'Scrape',  title: 'A Python script spots the posting', status: 'stretch',
+    text: 'Every morning a scheduled Python script scans job boards, normalises the messy HTML and finds "Salesforce Developer, Remote, $120k".' },
+  { tech: 'nosql',  short: 'Store raw', title: 'Raw posting lands in a document store', status: 'twin',
+    text: 'The posting is saved as-is (nested benefits, odd fields and all) in MongoDB, ready for later analysis without forcing a schema.' },
+  { tech: 'aws',    short: 'Enrich', title: 'Cloud services enrich it', status: 'twin',
+    text: 'A Lambda function adds market salary data. In today\'s tracker, SalaryBenchmarkService does this through a Named Credential callout.' },
+  { tech: 'sql',    short: 'Record', title: 'It becomes a Job_Application__c record', status: 'twin',
+    text: 'Salesforce stores it relationally with a Primary Contact lookup. Triggers fire, tax fields calculate and follow-up tasks are created.' },
+  { tech: 'redis',  short: 'Cache', title: 'Calculations get cached', status: 'twin',
+    text: 'Take-home pay for $120k is computed once and cached. PerformanceCacheService does this today with Platform Cache; Redis does it everywhere else.' },
+  { tech: 'react',  short: 'View', title: 'You review it on a slick dashboard', status: 'using',
+    text: 'The LWC dashboard (JavaScript + Chart.js) shows it in your pipeline. A public React portal could show the same data to recruiters.' },
+  { tech: 'mobile', short: 'Interview', title: 'Feedback captured in the elevator', status: 'twin',
+    text: 'Straight after the interview, mobileFeedbackCapture records your ratings with a haptic tap, queuing offline until you get signal.' },
+  { tech: 'cicd',   short: 'Ship', title: 'Meanwhile, every improvement ships safely', status: 'using',
+    text: 'Each new feature goes through Git, a pull request and the GitHub Actions pipeline: scratch org deploy, Apex tests, code scan. Offer accepted.' }
+];
+
+const QUIZ = [
+  { scn: 'Bulk data', q: 'A recruiter emails you a CSV with 2,000 historical applications. You want them in Salesforce today, with some cleanup first.',
+    options: ['Python script + Bulk API', 'Type them in manually', 'A new LWC', 'Kubernetes'], answer: 0,
+    why: 'Python (or Data Loader) is the classic tool: read the CSV, clean and map columns to fields like Company_Name__c, then bulk-insert in batches of 200.' },
+  { scn: 'Performance', q: 'The salary calculator recomputes the same tax brackets thousands of times a day. What pattern speeds it up?',
+    options: ['A graph database', 'Caching (Platform Cache / Redis)', 'More triggers', 'A PWA'], answer: 1,
+    why: 'Cache the result with a TTL. PerformanceCacheService already does this with Cache.Org. Redis is the off-platform equivalent.' },
+  { scn: 'Networking', q: 'You want to find the shortest chain of contacts who could refer you to a company. Best fit?',
+    options: ['Redis', 'SQL with ten JOINs', 'Graph database (Neo4j)', 'Docker'], answer: 2,
+    why: 'Questions about paths and connections are exactly what graph databases are built for: one shortestPath() query.' },
+  { scn: 'Teamwork', q: 'A teammate\'s change broke tests, but nobody noticed until demo day. What prevents this?',
+    options: ['CI/CD running tests on every push', 'Writing more comments', 'Switching to Go', 'A NoSQL database'], answer: 0,
+    why: 'Continuous Integration runs the test suite automatically on every change, the job .github/workflows already does for Apex.' },
+  { scn: 'Onboarding', q: 'A new student spends two days installing the right Node version and Salesforce CLI. How do you make setup instant?',
+    options: ['Write a longer README', 'A Docker dev container', 'A Platform Event', 'React'], answer: 1,
+    why: 'Package the toolchain in a container (or .devcontainer) so everyone gets identical versions in minutes.' },
+  { scn: 'Offline', q: 'Users want to log interview notes on the subway with no signal. Which approach fits?',
+    options: ['Bigger servers', 'Offline-first PWA / queued sync', 'Kubernetes autoscaling', 'More SOQL'], answer: 1,
+    why: 'Queue locally, sync when online. mobileFeedbackCapture already keeps an offline queue; a PWA service worker formalises it.' },
+  { scn: 'Integration', q: 'You need to call a salary API that requires a secret key. Where should the key live?',
+    options: ['Hard-coded in Apex', 'In a code comment', 'Named Credential / secrets manager', 'In the LWC JavaScript'], answer: 2,
+    why: 'Never hard-code secrets. The project rule is "Named Credentials only", the same principle as AWS Secrets Manager.' },
+  { scn: 'Stakeholders', q: 'Your manager asks why the batch job failed last night. What\'s the best first answer?',
+    options: ['"Governor limit exception in execute()."', '"It tried 60k records at once; I\'ve split it into smaller batches and added an alert."', '"Not sure, it works in my org."', '"Salesforce is buggy."'], answer: 1,
+    why: 'Communication! Lead with impact and the fix in plain language. Save the stack trace for the engineers.' }
+];
+const RANKS = [
+  { min: 0, title: 'Curious Explorer', sub: 'Every expert started here. Open a few cards above and try again!' },
+  { min: 3, title: 'Stack Apprentice', sub: 'You see the patterns. A couple more translations and it clicks.' },
+  { min: 5, title: 'Integration Ninja', sub: 'You know which tool fits which job. Recruiters love this.' },
+  { min: 7, title: 'Architect in the Making', sub: 'You think beyond one platform. That\'s senior-engineer thinking.' }
+];
+
+const SCENARIOS = [
+  { id: 'standup', label: 'Daily stand-up', who: 'Your scrum team',
+    dev: 'Refactored SalaryCalculationService to pull brackets from Tax_Configuration__mdt via TaxConfigurationService, added @AuraEnabled(cacheable=true) and wired it into the LWC. Bulk tests pass at 200 records.',
+    human: 'Admins can now update tax brackets themselves, no developer needed, and the calculator picks up changes instantly. It\'s tested and ready for review.' },
+  { id: 'demo', label: 'Demo to a hiring manager', who: 'A non-technical hiring manager',
+    dev: 'It\'s a trigger-handler-service architecture with Platform Events for async decoupling, Named Credential callouts, Platform Cache and 14 LWCs.',
+    human: 'It\'s a job-search command centre: it tracks every application, works out your real take-home pay, reminds you before interviews and checks salaries against the market, automatically.' },
+  { id: 'bug', label: 'Explaining a bug (hypothetical)', who: 'Your project lead',
+    dev: 'EventValidationTrigger threw on weekend Events because the DayOfWeek check used the user\'s locale rather than GMT.',
+    human: 'Some interviews were wrongly blocked as "weekend" for users in certain time zones. I\'ve fixed the time-zone check and added a test so it can\'t come back.' },
+  { id: 'review', label: 'Code review', who: 'A newer teammate',
+    dev: 'SOQL in loop. Bulkify. Use a Map<Id, SObject>.',
+    human: 'Nice work! One catch: the query inside the loop will hit Salesforce\'s 100-query limit with big data loads. If we collect the Ids first and query once, it\'s safe. Want to pair on it for 15 minutes?' }
+];
+
+const SOFT_CARDS = [
+  { tech: 'comm', title: 'Communication', text: 'Lead with impact, then the how. Your docs/ folder already speaks to learners, admins and API consumers.' },
+  { tech: 'lead', title: 'Leadership', text: 'Write decisions down. The trigger-handler-service pattern and the CLAUDE.md conventions are leadership in action.' },
+  { tech: 'mentor', title: 'Mentoring', text: 'Teach to learn twice. Feedback_Share__c literally lets users share interview feedback with mentors and coaches.' }
+];
+
+const ROADMAP = [
+  { id: 'now', title: 'This week', when: 'Polish what you already know', color: '#22c55e', tasks: [
+    { id: 'n1', title: 'Rewrite 3 SOQL queries as SQL', hint: 'Use the Rosetta tab as a guide' },
+    { id: 'n2', title: 'Run npm run lint and test:unit locally', hint: 'Know your JS toolchain cold' },
+    { id: 'n3', title: 'Explain the tracker in 60 seconds', hint: 'Use the Human-speak demo script' },
+    { id: 'n4', title: 'Write one ADR for a past decision', hint: 'See the Leadership card' }
+  ]},
+  { id: 'next', title: 'Next 30 days', when: 'Cross a bridge from a Salesforce twin', color: '#38bdf8', tasks: [
+    { id: 'x1', title: 'Bulk-load the sample CSV with Python', hint: 'simple_salesforce + Bulk API' },
+    { id: 'x2', title: 'Add a Jest + lint GitHub Action', hint: 'Copy the CI/CD card snippet' },
+    { id: 'x3', title: 'Rebuild salaryCalculator in React', hint: 'Vite + useState' },
+    { id: 'x4', title: 'Port PerformanceCacheService to Redis', hint: 'docker run -p 6379:6379 redis' },
+    { id: 'x5', title: 'Add a .devcontainer to the repo', hint: 'Node 20 + Salesforce CLI' }
+  ]},
+  { id: 'stretch', title: 'Stretch goals', when: 'Build something new', color: '#f59e0b', tasks: [
+    { id: 's1', title: 'A Go CLI that checks job URLs concurrently', hint: 'goroutines + WaitGroup' },
+    { id: 's2', title: 'Map your network in Neo4j', hint: 'shortestPath() to a dream company' },
+    { id: 's3', title: 'Salary API on AWS Lambda + Named Credential', hint: 'Swap in for SalaryBenchmarkService' },
+    { id: 's4', title: 'Make this guide an installable PWA', hint: 'manifest.json + service worker' }
+  ]}
+];
+
+/* ==========================================================================
+   Helpers
+   ========================================================================== */
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const store = {
+  get(key, fallback) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; } },
+  set(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch { /* private mode */ } }
+};
+const mono = (t, extra = '') => `<span class="mono" style="--chip:${t.color}" ${extra}>${esc(t.mono)}</span>`;
+const statusPill = (s, short = false) => `<span class="pill status-pill status-${s}"><span class="dot"></span>${short ? STATUS[s].short : STATUS[s].label}</span>`;
+const catPill = (c) => `<span class="pill"><span class="dot" style="background:${CATS[c].color}"></span>${CATS[c].label}</span>`;
+
+function toast(msg) {
+  const el = $('#toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove('show'), 1800);
+}
+
+/* Tiny syntax highlighter: comments, strings, numbers, keywords. */
+const KEYWORDS = new Set(('public private static final class return if else for new import from export default const let var async await ' +
+  'function void true false null try catch throw extends while in of go func defer type package select where order by limit join left on as ' +
+  'group having insert into values set get with def print and or not is lambda match return').split(' '));
+function highlight(src, lang = '') {
+  // Prose blocks (templates, ADRs, review comments) are shown as plain text.
+  if (/template|record|comment/i.test(lang)) return esc(src);
+  const hashComments = /python|shell|yaml|docker/i.test(lang);
+  const dashComments = /sql|soql|cypher/i.test(lang);
+  const re = /(\/\/[^\n]*|#[^\n]*|--[^\n]*)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\.)*`)|(\b\d[\d_.]*\b)|([A-Za-z_@$][\w$]*)/g;
+  let out = '', last = 0, m;
+  while ((m = re.exec(src))) {
+    out += esc(src.slice(last, m.index));
+    const [tok, com, str, num, word] = m;
+    if (com) {
+      const prev = src[m.index - 1];
+      const atBoundary = !prev || /\s/.test(prev);
+      const isComment = tok.startsWith('//') ? !/https?:$/.test(src.slice(Math.max(0, m.index - 6), m.index))
+        : tok[0] === '#' ? hashComments && atBoundary
+        : dashComments && atBoundary;
+      if (isComment) out += `<span class="tok-c">${esc(tok)}</span>`;
+      else { out += esc(tok[0]); re.lastIndex = m.index + 1; }
+    }
+    else if (str) out += `<span class="tok-s">${esc(tok)}</span>`;
+    else if (num) out += `<span class="tok-n">${esc(tok)}</span>`;
+    else if (word) {
+      const lw = word.toLowerCase();
+      if (KEYWORDS.has(word) || (KEYWORDS.has(lw) && word === word.toUpperCase() && word.length > 1)) out += `<span class="tok-k">${esc(tok)}</span>`;
+      else if (src[re.lastIndex] === '(') out += `<span class="tok-f">${esc(tok)}</span>`;
+      else out += esc(tok);
+    }
+    last = re.lastIndex;
+  }
+  return out + esc(src.slice(last));
+}
+function codeBlock(title, src) {
+  const id = 'c' + Math.random().toString(36).slice(2, 8);
+  return `<div class="code">
+    <div class="code-head"><div class="left"><span class="lights"><i></i><i></i><i></i></span>${esc(title)}</div>
+    <button class="copy" data-copy="${id}">Copy</button></div>
+    <pre id="${id}"><code>${highlight(src, title)}</code></pre></div>`;
+}
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-copy]');
+  if (!btn) return;
+  const text = document.getElementById(btn.dataset.copy).innerText;
+  const done = () => { btn.textContent = 'Copied ✓'; setTimeout(() => (btn.textContent = 'Copy'), 1400); };
+  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done, () => toast('Select the code and copy it manually'));
+  else toast('Select the code and copy it manually');
+});
+
+/* ==========================================================================
+   Theme + nav
+   ========================================================================== */
+const SUN = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+const MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+function applyTheme(t) {
+  document.documentElement.dataset.theme = t;
+  $('#themeIcon').innerHTML = t === 'dark' ? SUN : MOON;
+  store.set('jt-theme', t);
+}
+applyTheme(store.get('jt-theme', window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+$('#themeBtn').addEventListener('click', () => applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+$('#menuBtn').addEventListener('click', () => {
+  const open = $('#navLinks').classList.toggle('open');
+  $('#menuBtn').setAttribute('aria-expanded', open);
+});
+$$('#navLinks a').forEach(a => a.addEventListener('click', () => { $('#navLinks').classList.remove('open'); $('#menuBtn').setAttribute('aria-expanded', 'false'); }));
+
+const sections = $$('main section[id]');
+function onScroll() {
+  const h = document.documentElement;
+  $('#progress').style.width = (h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight) * 100) + '%';
+  let current = '';
+  for (const s of sections) if (s.getBoundingClientRect().top < 120) current = s.id;
+  $$('#navLinks a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+}, { threshold: .12 });
+$$('.reveal').forEach(el => io.observe(el));
+
+/* ==========================================================================
+   Hero orbit + stats
+   ========================================================================== */
+(function buildOrbit() {
+  const outer = ['js', 'py', 'java', 'go', 'git', 'docker', 'aws', 'k8s'];
+  const inner = ['sql', 'redis', 'react', 'pwa', 'nosql'];
+  const place = (ids, ringSel) => {
+    const ring = $(ringSel, $('#orbit'));
+    ids.forEach((id, i) => {
+      const t = TECH_BY_ID[id];
+      const angle = (360 / ids.length) * i;
+      const chip = document.createElement('span');
+      chip.className = 'orbit-chip';
+      chip.style.setProperty('--chip', t.color);
+      chip.textContent = t.mono;
+      chip.style.left = `calc(50% + ${Math.cos(angle * Math.PI / 180) * 50}%)`;
+      chip.style.top = `calc(50% + ${Math.sin(angle * Math.PI / 180) * 50}%)`;
+      ring.appendChild(chip);
+    });
+  };
+  place(outer, '.orbit-ring:not(.r2):not(.r3)');
+  place(inner, '.orbit-ring.r2');
+  const count = s => TECH.filter(t => t.status === s).length;
+  $('#statTotal').textContent = TECH.length;
+  $('#statUsing').textContent = count('using');
+  $('#statTwin').textContent = count('twin');
+  $('#statStretch').textContent = count('stretch');
+})();
+
+/* ==========================================================================
+   Analogies
+   ========================================================================== */
+$('#analogyGrid').innerHTML = ANALOGIES.map((a, i) => {
+  const color = a.cat === 'sf' ? '#38bdf8' : CATS[a.cat].color;
+  const tag = a.cat === 'sf' ? 'The foundation' : CATS[a.cat].label;
+  return `<article class="card analogy reveal" style="--accent:${color};transition-delay:${i * 60}ms">
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${a.icon}</svg></div>
+    <div class="tag">${tag}</div><h3>${esc(a.title)}</h3><p>${esc(a.text)}</p></article>`;
+}).join('');
+$$('#analogyGrid .reveal').forEach(el => io.observe(el));
+
+/* ==========================================================================
+   Architecture map
+   ========================================================================== */
+const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+$('#archBoard').innerHTML = ARCH.map((group, gi) => `
+  <div class="arch-label">${esc(group.label)}</div>
+  <div class="arch-row">${group.row.map((n, i) => `
+    ${i && gi === 0 ? `<span class="arch-arrow" aria-hidden="true">${ARROW}</span>` : ''}
+    <button class="arch-node" data-node="${n.id}"><b>${esc(n.title)}</b><span>${esc(n.sub)}</span></button>`).join('')}
+  </div>`).join('');
+const ARCH_NODES = Object.fromEntries(ARCH.flatMap(g => g.row).map(n => [n.id, n]));
+function showArch(id) {
+  const n = ARCH_NODES[id];
+  $$('.arch-node').forEach(b => b.classList.toggle('active', b.dataset.node === id));
+  $('#archPanel').innerHTML = `
+    <span class="eyebrow" style="margin-bottom:8px">In your repo</span>
+    <h3>${esc(n.title)}</h3>
+    <p style="font-family:var(--font-mono);font-size:12.5px;color:var(--text-3);margin-bottom:12px">${esc(n.sub)}</p>
+    <p class="fade-swap">${esc(n.text)}</p>
+    <div class="speaks">Already speaks</div>
+    <div class="chip-row">${n.techs.map(tid => { const t = TECH_BY_ID[tid];
+      return `<button class="tech-chip" data-open="${t.id}">${mono(t)}${esc(t.name)}</button>`; }).join('')}</div>`;
+}
+$('#archBoard').addEventListener('click', e => { const b = e.target.closest('.arch-node'); if (b) showArch(b.dataset.node); });
+showArch('service');
+
+/* ==========================================================================
+   Explorer
+   ========================================================================== */
+const learned = new Set(store.get('jt-learned', []));
+const filterState = { cat: 'all', statuses: new Set(['using', 'twin', 'stretch']), q: '' };
+
+$('#catFilters').innerHTML = [['all', 'All', '#7c3aed'], ...Object.entries(CATS).map(([k, v]) => [k, v.label, v.color])]
+  .map(([k, label, color]) => `<button class="filter" data-cat="${k}" style="--fc:${color}" aria-pressed="${k === 'all'}">${label}</button>`).join('');
+$('#statusLegend').innerHTML = Object.keys(STATUS).map(s =>
+  `<button data-status="${s}" aria-pressed="true" title="Toggle: ${STATUS[s].label}">${statusPill(s)}</button>`).join('');
+
+function renderGrid() {
+  const q = filterState.q.trim().toLowerCase();
+  const list = TECH.filter(t =>
+    (filterState.cat === 'all' || t.cat === filterState.cat) &&
+    filterState.statuses.has(t.status) &&
+    (!q || [t.name, t.blurb, t.plain, t.twin, ...t.project].join(' ').toLowerCase().includes(q)));
+  $('#techGrid').innerHTML = list.map((t, i) => `
+    <button class="tech-card ${learned.has(t.id) ? 'learned' : ''}" style="--chip:${t.color};animation:fadeUp .45s ${i * 30}ms both" data-open="${t.id}">
+      <div class="top">${mono(t)}<div><h3>${esc(t.name)}</h3><div class="cat">${CATS[t.cat].label}</div></div></div>
+      <p>${esc(t.blurb)}</p>
+      <div class="foot">${statusPill(t.status, true)}<span class="learned-flag">✓ Learned</span></div>
+    </button>`).join('');
+  $('#emptyState').style.display = list.length ? 'none' : 'block';
+}
+$('#catFilters').addEventListener('click', e => {
+  const b = e.target.closest('[data-cat]'); if (!b) return;
+  filterState.cat = b.dataset.cat;
+  $$('#catFilters .filter').forEach(x => x.setAttribute('aria-pressed', x === b));
+  renderGrid();
+});
+$('#statusLegend').addEventListener('click', e => {
+  const b = e.target.closest('[data-status]'); if (!b) return;
+  const s = b.dataset.status;
+  if (filterState.statuses.has(s) && filterState.statuses.size > 1) filterState.statuses.delete(s); else filterState.statuses.add(s);
+  $$('#statusLegend [data-status]').forEach(x => x.setAttribute('aria-pressed', filterState.statuses.has(x.dataset.status)));
+  renderGrid();
+});
+$('#search').addEventListener('input', e => { filterState.q = e.target.value; renderGrid(); });
+renderGrid();
+
+/* Drawer */
+let lastFocus = null;
+function openDrawer(id) {
+  const t = TECH_BY_ID[id]; if (!t) return;
+  lastFocus = document.activeElement;
+  const drawer = $('#drawer');
+  drawer.style.setProperty('--chip', t.color);
+  $('#drawerHead').innerHTML = `${mono(t)}
+    <div><h2 id="drawerTitle">${esc(t.name)}</h2><div class="meta">${catPill(t.cat)}${statusPill(t.status)}</div></div>
+    <button class="icon-btn close" id="drawerClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`;
+  const related = ARCH.flatMap(g => g.row).filter(n => n.techs.includes(t.id));
+  $('#drawerBody').innerHTML = `
+    <p class="tagline">${esc(t.tagline)}</p>
+    <div class="d-section"><h4>In plain English</h4><div class="callout plain"><p>${t.plain}</p></div></div>
+    <div class="d-section"><h4>Where it shows up in this project</h4><ul>${t.project.map(p => `<li>${p}</li>`).join('')}</ul></div>
+    <div class="d-section"><h4>Salesforce twin</h4>
+      <div class="twin">${mono(t)}<span class="eq">≈</span><span class="pill" style="font-size:13.5px;padding:6px 12px">${esc(t.twin)}</span></div></div>
+    <div class="d-section"><h4>See it in code</h4>${codeBlock(t.code.lang, t.code.src)}</div>
+    <div class="d-section"><h4>Level-up mini project</h4><div class="callout"><p>${t.levelUp}</p></div></div>
+    <div class="d-section"><h4>Say it in an interview</h4><div class="callout quote"><p>${esc(t.soundbite)}</p></div></div>
+    ${related.length ? `<div class="d-section"><h4>Related parts of the architecture</h4><div class="chip-row">${related.map(n =>
+      `<a class="tech-chip" href="#your-project" data-arch="${n.id}">${esc(n.title)}</a>`).join('')}</div></div>` : ''}
+    <label class="learn-toggle"><input type="checkbox" id="learnedBox" ${learned.has(t.id) ? 'checked' : ''}>
+      <span><b>I understand ${esc(t.name)}</b><br><span style="color:var(--text-3);font-size:13px">Tracks your progress on the explorer cards</span></span></label>`;
+  $('#learnedBox').addEventListener('change', e => {
+    e.target.checked ? learned.add(t.id) : learned.delete(t.id);
+    store.set('jt-learned', [...learned]);
+    renderGrid();
+    toast(e.target.checked ? `Nice! ${t.name} marked as learned` : `${t.name} unmarked`);
+  });
+  $('#drawerClose').addEventListener('click', closeDrawer);
+  $('#drawerBody').scrollTop = 0;
+  drawer.classList.add('open'); drawer.setAttribute('aria-hidden', 'false');
+  $('#scrim').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => $('#drawerClose').focus(), 50);
+}
+function closeDrawer() {
+  $('#drawer').classList.remove('open'); $('#drawer').setAttribute('aria-hidden', 'true');
+  $('#scrim').classList.remove('open');
+  document.body.style.overflow = '';
+  lastFocus?.focus?.({ preventScroll: true });
+}
+document.addEventListener('click', e => {
+  const opener = e.target.closest('[data-open]');
+  if (opener) { openDrawer(opener.dataset.open); return; }
+  const arch = e.target.closest('[data-arch]');
+  if (arch) { closeDrawer(); showArch(arch.dataset.arch); }
+});
+$('#scrim').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e => {
+  if (!$('#drawer').classList.contains('open')) return;
+  if (e.key === 'Escape') closeDrawer();
+  if (e.key === 'Tab') { // simple focus trap
+    const f = $$('button, a, input', $('#drawer')).filter(el => el.offsetParent !== null);
+    if (!f.length) return;
+    if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+    else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+  }
+});
+
+/* ==========================================================================
+   Rosetta
+   ========================================================================== */
+$('#rosettaTabs').innerHTML = ROSETTA.map((r, i) =>
+  `<button class="tab" role="tab" id="tab-${r.id}" aria-selected="${i === 0}" data-ros="${r.id}">${esc(r.tab)}</button>`).join('');
+function showRosetta(id) {
+  const r = ROSETTA.find(x => x.id === id);
+  $$('#rosettaTabs .tab').forEach(t => t.setAttribute('aria-selected', t.dataset.ros === id));
+  $('#rosettaPanel').setAttribute('aria-labelledby', 'tab-' + id);
+  $('#rosettaPanel').innerHTML = `<div class="fade-swap">
+    <div class="rosetta-pair">
+      <div class="rosetta-side"><h4><span class="dot" style="background:#38bdf8"></span>${esc(r.left.title)}</h4>${codeBlock(r.left.lang, r.left.src)}</div>
+      <div class="rosetta-side"><h4><span class="dot" style="background:#ec4899"></span>${esc(r.right.title)}</h4>${codeBlock(r.right.lang, r.right.src)}</div>
+    </div>
+    <div class="rosetta-notes">
+      <div class="card same"><h5>✓ What's the same</h5><ul>${r.same.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>
+      <div class="card diff"><h5>△ What's different</h5><ul>${r.diff.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>
+    </div>
+    ${r.note ? `<p style="margin-top:12px;color:var(--text-3);font-size:13px">${esc(r.note)}</p>` : ''}</div>`;
+}
+$('#rosettaTabs').addEventListener('click', e => { const b = e.target.closest('[data-ros]'); if (b) showRosetta(b.dataset.ros); });
+$('#rosettaTabs').addEventListener('keydown', e => {
+  if (!['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+  const tabs = $$('#rosettaTabs .tab');
+  const i = tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+  const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length];
+  next.focus(); showRosetta(next.dataset.ros);
+});
+showRosetta(ROSETTA[0].id);
+
+/* ==========================================================================
+   Journey
+   ========================================================================== */
+let jIndex = 0, jTimer = null;
+$('#jTrack').insertAdjacentHTML('beforeend', JOURNEY.map((s, i) => {
+  const t = TECH_BY_ID[s.tech];
+  return `<button class="j-step" data-j="${i}" style="--chip:${t.color}" aria-label="Step ${i + 1}: ${esc(s.title)}">
+    <span class="j-dot">${esc(t.mono)}</span><small>${esc(s.short)}</small></button>`;
+}).join(''));
+function showJourney(i) {
+  jIndex = (i + JOURNEY.length) % JOURNEY.length;
+  const s = JOURNEY[jIndex], t = TECH_BY_ID[s.tech];
+  $$('.j-step').forEach((el, k) => { el.classList.toggle('done', k <= jIndex); el.classList.toggle('current', k === jIndex); });
+  $('#jFill').style.width = (jIndex / (JOURNEY.length - 1) * 92) + '%';
+  $('#jDetail').innerHTML = `<div class="j-detail fade-swap">
+    <div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">${statusPill(s.status)}${catPill(t.cat)}</div>
+      <h3>${esc(s.title)}</h3><p>${esc(s.text)}</p>
+      <button class="btn btn-sm" style="margin-top:18px" data-open="${t.id}">${mono(t)} Deep dive: ${esc(t.name)}</button>
+    </div>
+    <div>${codeBlock(t.code.lang, t.code.src.split('\n').slice(0, 12).join('\n'))}</div></div>`;
+  $('#jCounter').textContent = `Step ${jIndex + 1} of ${JOURNEY.length}`;
+}
+function stopJourney() { clearInterval(jTimer); jTimer = null; $('#jPlay').textContent = '▶ Auto-play'; }
+$('#jTrack').addEventListener('click', e => { const b = e.target.closest('[data-j]'); if (b) { stopJourney(); showJourney(+b.dataset.j); } });
+$('#jPrev').addEventListener('click', () => { stopJourney(); showJourney(jIndex - 1); });
+$('#jNext').addEventListener('click', () => { stopJourney(); showJourney(jIndex + 1); });
+$('#jPlay').addEventListener('click', () => {
+  if (jTimer) return stopJourney();
+  $('#jPlay').textContent = '❚❚ Pause';
+  jTimer = setInterval(() => showJourney(jIndex + 1), 4200);
+});
+showJourney(0);
+
+/* ==========================================================================
+   Quiz
+   ========================================================================== */
+let qIndex = 0, qScore = 0, qAnswered = 0;
+$('#scoreOf').textContent = QUIZ.length;
+function updateScore() {
+  const C = 2 * Math.PI * 50;
+  $('#scoreArc').style.strokeDashoffset = C - C * (qScore / QUIZ.length);
+  $('#scoreNum').textContent = qScore;
+  if (!qAnswered) { $('#rankTitle').textContent = 'Ready when you are'; $('#rankSub').textContent = 'Answer a question to start your score.'; return; }
+  const r = [...RANKS].reverse().find(x => qScore >= x.min);
+  $('#rankTitle').textContent = r.title; $('#rankSub').textContent = r.sub;
+}
+function renderQuestion() {
+  if (qIndex >= QUIZ.length) {
+    const r = [...RANKS].reverse().find(x => qScore >= x.min);
+    $('#quizMain').innerHTML = `<div class="quiz-progress"><i style="width:100%"></i></div>
+      <div class="fade-swap" style="text-align:center;padding:30px 0">
+        <div class="quiz-scn">Quiz complete</div>
+        <div class="quiz-q" style="font-size:34px"><span class="gradient-text">${esc(r.title)}</span></div>
+        <p style="color:var(--text-2);margin:14px auto 26px;max-width:460px">You scored ${qScore} of ${QUIZ.length}. ${esc(r.sub)}</p>
+        <button class="btn btn-primary" id="quizAgain">Try again</button>
+        <a class="btn" href="#roadmap" style="margin-left:8px">See your roadmap →</a>
+      </div>`;
+    $('#quizAgain').addEventListener('click', resetQuiz);
+    return;
+  }
+  const q = QUIZ[qIndex];
+  $('#quizMain').innerHTML = `<div class="quiz-progress"><i style="width:${qIndex / QUIZ.length * 100}%"></i></div>
+    <div class="fade-swap">
+      <div class="quiz-scn">Question ${qIndex + 1} / ${QUIZ.length} · ${esc(q.scn)}</div>
+      <div class="quiz-q">${esc(q.q)}</div>
+      <div class="options">${q.options.map((o, i) => `<button class="option" data-opt="${i}"><span class="key">${'ABCD'[i]}</span>${esc(o)}</button>`).join('')}</div>
+      <div class="explain callout" id="explain"></div>
+    </div>`;
+}
+$('#quizMain').addEventListener('click', e => {
+  const b = e.target.closest('[data-opt]');
+  if (b && !b.disabled) {
+    const q = QUIZ[qIndex], pick = +b.dataset.opt, ok = pick === q.answer;
+    $$('.option', $('#quizMain')).forEach((o, i) => { o.disabled = true; if (i === q.answer) o.classList.add('correct'); else if (i === pick) o.classList.add('wrong'); });
+    if (ok) qScore++;
+    qAnswered++;
+    updateScore();
+    const ex = $('#explain');
+    ex.innerHTML = `<p><b style="color:${ok ? 'var(--c-using)' : '#ef4444'}">${ok ? 'Correct!' : 'Not quite.'}</b> ${esc(q.why)}</p>
+      <button class="btn btn-sm btn-primary" id="quizNext" style="margin-top:14px">${qIndex === QUIZ.length - 1 ? 'See results' : 'Next question →'}</button>`;
+    ex.classList.add('show');
+    $('#quizNext').focus();
+    return;
+  }
+  if (e.target.closest('#quizNext')) { qIndex++; renderQuestion(); }
+});
+function resetQuiz() { qIndex = 0; qScore = 0; qAnswered = 0; updateScore(); renderQuestion(); }
+$('#quizReset').addEventListener('click', resetQuiz);
+resetQuiz();
+
+/* ==========================================================================
+   Soft skills translator
+   ========================================================================== */
+let scenario = SCENARIOS[0].id, mode = 'dev';
+$('#scenarioList').innerHTML = SCENARIOS.map(s =>
+  `<button class="filter" data-scn="${s.id}" style="--fc:#16a34a" aria-pressed="${s.id === scenario}">${esc(s.label)}</button>`).join('');
+function renderBubble() {
+  const s = SCENARIOS.find(x => x.id === scenario);
+  const b = $('#bubble');
+  b.classList.toggle('human', mode === 'human');
+  b.innerHTML = `<span class="fade-swap" style="display:block">${esc(mode === 'dev' ? s.dev : s.human)}</span>`;
+  $('#bubbleWho').innerHTML = mode === 'dev'
+    ? `<span class="dot" style="background:#f59e0b"></span>Accurate, but ${esc(s.who.toLowerCase())} may tune out.`
+    : `<span class="dot" style="background:#22c55e"></span>Tuned for ${esc(s.who.toLowerCase())}: impact first, details on request.`;
+}
+$('#scenarioList').addEventListener('click', e => {
+  const b = e.target.closest('[data-scn]'); if (!b) return;
+  scenario = b.dataset.scn;
+  $$('#scenarioList .filter').forEach(x => x.setAttribute('aria-pressed', x === b));
+  renderBubble();
+});
+const setMode = (m) => { mode = m; $('#modeDev').setAttribute('aria-pressed', m === 'dev'); $('#modeHuman').setAttribute('aria-pressed', m === 'human'); renderBubble(); };
+$('#modeDev').addEventListener('click', () => setMode('dev'));
+$('#modeHuman').addEventListener('click', () => setMode('human'));
+renderBubble();
+$('#softCards').innerHTML = SOFT_CARDS.map(c => { const t = TECH_BY_ID[c.tech];
+  return `<article class="card soft-card"><h3>${mono(t)}${esc(c.title)}</h3><p>${esc(c.text)}</p>
+    <button class="btn btn-sm" style="margin-top:14px" data-open="${t.id}">Open deep dive →</button></article>`; }).join('');
+
+/* ==========================================================================
+   Roadmap
+   ========================================================================== */
+const done = new Set(store.get('jt-roadmap', []));
+function renderRoadmap() {
+  $('#roadmapGrid').innerHTML = ROADMAP.map(p => {
+    const n = p.tasks.filter(t => done.has(t.id)).length, pct = n / p.tasks.length;
+    const C = 2 * Math.PI * 18;
+    return `<article class="card phase">
+      <div class="phase-head"><h3>${esc(p.title)}</h3>
+        <div class="mini-ring" style="--pc:${p.color}"><svg viewBox="0 0 44 44"><circle class="bg" cx="22" cy="22" r="18"/>
+          <circle class="fg" cx="22" cy="22" r="18" stroke-dasharray="${C}" stroke-dashoffset="${C - C * pct}"/></svg><span>${n}/${p.tasks.length}</span></div></div>
+      <div class="when">${esc(p.when)}</div>
+      ${p.tasks.map(t => `<label class="task ${done.has(t.id) ? 'done' : ''}"><input type="checkbox" data-task="${t.id}" ${done.has(t.id) ? 'checked' : ''}>
+        <div><b>${esc(t.title)}</b><span>${esc(t.hint)}</span></div></label>`).join('')}
+    </article>`;
+  }).join('');
+  const total = ROADMAP.reduce((a, p) => a + p.tasks.length, 0);
+  $('#roadmapSummary').textContent = `${done.size} of ${total} missions complete${done.size === total ? '. Legendary! 🎉' : ''}`;
+}
+$('#roadmapGrid').addEventListener('change', e => {
+  const id = e.target.dataset.task; if (!id) return;
+  e.target.checked ? done.add(id) : done.delete(id);
+  store.set('jt-roadmap', [...done]);
+  renderRoadmap();
+  if (e.target.checked) toast('Mission complete. Keep going!');
+});
+$('#roadmapReset').addEventListener('click', () => { done.clear(); store.set('jt-roadmap', []); renderRoadmap(); toast('Roadmap reset'); });
+renderRoadmap();
+
+onScroll();
+})();
+</script>
+</body>
+</html>
