@@ -118,7 +118,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .icon-btn:hover { border-color: var(--border-strong); transform: translateY(-1px); }
 .icon-btn svg { width: 18px; height: 18px; }
 .menu-btn { display: none; }
-@media (max-width: 960px) {
+@media (max-width: 1140px) {
   .nav-links { position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; padding: 12px 20px 18px;
     background: var(--surface-solid); border-bottom: 1px solid var(--border); display: none; }
   .nav-links.open { display: flex; }
@@ -160,7 +160,7 @@ section { padding: 96px 0; position: relative; }
 /* ==========================================================================
    Hero
    ========================================================================== */
-.hero { padding: 72px 0 90px; }
+.hero { padding: 72px 0 90px; overflow-x: clip; }
 .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 50px; align-items: center; }
 .hero h1 { font-size: clamp(40px, 6.6vw, 76px); font-weight: 850; letter-spacing: -.035em; }
 .hero-sub { font-size: clamp(17px, 1.9vw, 20px); color: var(--text-2); margin-top: 22px; max-width: 600px; }
@@ -171,8 +171,8 @@ section { padding: 96px 0; position: relative; }
 .stat span { font-size: 12.5px; color: var(--text-3); }
 .orbit { position: relative; aspect-ratio: 1; width: min(460px, 100%); margin-inline: auto; }
 .orbit-ring { position: absolute; inset: 0; border-radius: 50%; border: 1px dashed var(--border-strong); animation: spin 60s linear infinite; }
-.orbit-ring.r2 { inset: 17%; animation-duration: 42s; animation-direction: reverse; }
-.orbit-ring.r3 { inset: 34%; border-style: solid; border-color: var(--border); animation: none; }
+.orbit-ring.r2 { inset: 22%; animation-duration: 42s; animation-direction: reverse; }
+.orbit-ring.r3 { inset: 35%; border-style: solid; border-color: var(--border); animation: none; }
 .orbit-core { position: absolute; inset: 37%; border-radius: 50%; display: grid; place-items: center; text-align: center;
   background: radial-gradient(circle at 30% 30%, #38bdf8, #0b63c9 70%); color: #fff; box-shadow: 0 0 80px rgba(56,189,248,.5);
   font-weight: 800; font-size: clamp(11px, 1.6vw, 15px); line-height: 1.1; }
@@ -448,6 +448,73 @@ footer { padding: 50px 0 70px; border-top: 1px solid var(--border); color: var(-
   padding: 12px 18px; border-radius: 999px; font-size: 14px; font-weight: 600; opacity: 0; pointer-events: none; transition: .35s var(--ease); z-index: 120; box-shadow: var(--shadow); }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+pre code { background: none; border: 0; padding: 0; border-radius: 0; font-size: inherit; }
+.j-detail > *, .rosetta-pair > *, .quiz > *, .arch > *, .soft-grid > *, .lab > * { min-width: 0; }
+.nav-progress { font-size: 12.5px; font-weight: 700; color: var(--text-2); padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--surface); white-space: nowrap; }
+@media (max-width: 520px) { .nav-progress { display: none; } }
+
+/* Lab */
+.lab { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+.lab-card { padding: 28px; }
+.lab-card h3 { font-size: 20px; margin-bottom: 6px; }
+.lab-card .sub { color: var(--text-2); font-size: 14.5px; margin-bottom: 20px; }
+.lab-note { color: var(--text-3); font-size: 12.5px; margin-top: 16px; }
+.viz { --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; }
+[data-theme="light"] .viz { --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; }
+.salary-big { font-size: 40px; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.salary-big small { font-size: 14px; color: var(--text-3); font-weight: 600; letter-spacing: 0; }
+.slider { width: 100%; accent-color: #8b5cf6; margin: 10px 0 4px; }
+.split { display: flex; gap: 2px; height: 22px; margin: 16px 0 12px; }
+.split i { display: block; height: 100%; min-width: 3px; border-radius: 4px; transition: opacity .2s; }
+.split.dim i:not(.hot) { opacity: .35; }
+.split-rows { display: grid; gap: 2px; }
+.split-row { display: grid; grid-template-columns: 12px 1fr auto 50px; gap: 10px; align-items: center; padding: 8px; border-radius: 8px; font-size: 14.5px; }
+.split-row.hot { background: var(--surface-2); }
+.split-row .sw { width: 12px; height: 12px; border-radius: 3px; }
+.split-row b { font-variant-numeric: tabular-nums; }
+.split-row .pct { color: var(--text-3); text-align: right; font-variant-numeric: tabular-nums; font-size: 13px; }
+.split-total { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 12px 8px 0; border-top: 1px solid var(--border); font-size: 14.5px; }
+.cache-stage { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 8px; align-items: center; margin-bottom: 16px; }
+.cache-box { padding: 12px 8px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface-2); text-align: center; transition: .3s var(--ease); }
+.cache-box.on { border-color: #a78bfa; box-shadow: var(--glow); }
+.cache-box b { display: block; font-size: 13.5px; }
+.cache-box span { font-size: 12px; color: var(--text-3); }
+.cache-arrow { color: var(--text-3); }
+.cache-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.ttl { height: 5px; border-radius: 5px; background: var(--surface-2); overflow: hidden; margin-top: 14px; }
+.ttl i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #8b5cf6, #06b6d4); }
+.ttl-label { font-size: 12.5px; color: var(--text-3); margin-top: 6px; }
+.cache-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+.cache-stats .stat { padding: 12px; }
+.cache-stats .stat b { font-size: 22px; font-variant-numeric: tabular-nums; }
+.cache-log { margin-top: 14px; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; background: var(--code-bg); color: #e3e6ff;
+  border-radius: var(--radius); padding: 12px 14px; height: 124px; overflow: auto; }
+.cache-log div { white-space: nowrap; }
+.cache-log .hit { color: #a5e3a0; } .cache-log .miss { color: #ffb86b; } .cache-log .info { color: #9aa0c3; }
+@media (max-width: 900px) { .lab { grid-template-columns: 1fr; } }
+@media (max-width: 520px) {
+  .salary-big small { display: block; }
+  .cache-stage { grid-template-columns: 1fr; }
+  .cache-arrow { transform: rotate(90deg); justify-self: center; }
+  .lab-card { padding: 22px; }
+}
+
+/* Goal picker */
+.goal { padding: 28px; margin-bottom: 22px; }
+.goal h3 { font-size: 20px; margin-bottom: 6px; }
+.goal p { color: var(--text-2); font-size: 14.5px; }
+.goal .filters { margin-top: 16px; }
+.goal-list { display: grid; gap: 10px; margin-top: 16px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.goal-item { text-align: left; display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: var(--radius);
+  border: 1px solid var(--border); background: var(--surface-2); transition: .2s var(--ease); }
+.goal-item:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.goal-item .n { font-weight: 800; color: var(--text-3); font-size: 13px; }
+.goal-item b { display: block; font-size: 14.5px; }
+.goal-item .why { display: block; font-size: 13px; color: var(--text-3); margin-top: 2px; font-weight: 400; }
+.drawer-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; }
+.explorer-foot { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 24px; color: var(--text-3); font-size: 14px; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
@@ -474,11 +541,13 @@ footer { padding: 50px 0 70px; border-top: 1px solid var(--border); color: var(-
       <a href="#your-project">Your project</a>
       <a href="#explorer">Explorer</a>
       <a href="#rosetta">Rosetta</a>
+      <a href="#lab">Lab</a>
       <a href="#journey">Journey</a>
       <a href="#quiz">Quiz</a>
       <a href="#soft-skills">Soft skills</a>
       <a href="#roadmap">Roadmap</a>
     </nav>
+    <span class="nav-progress" id="navProgress" title="Skills you have marked as learned"></span>
     <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
@@ -578,6 +647,10 @@ footer { padding: 50px 0 70px; border-top: 1px solid var(--border); color: var(-
     <div class="legend reveal" id="statusLegend" role="group" aria-label="Filter by status"></div>
     <div class="tech-grid" id="techGrid"></div>
     <div class="empty" id="emptyState">Nothing matches that search. Try "cache", "mobile" or "test".</div>
+    <div class="explorer-foot">
+      <button class="btn btn-sm" id="cheatBtn">Download interview cheat sheet (.md)</button>
+      <span>All 19 talking points, Salesforce twins and practice projects in one file. Tip: use the left and right arrow keys inside a deep dive.</span>
+    </div>
   </div>
 </section>
 
@@ -600,6 +673,53 @@ footer { padding: 50px 0 70px; border-top: 1px solid var(--border); color: var(-
 <!-- ======================================================================
      JOURNEY
      ====================================================================== -->
+<section id="lab">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Try it live</span>
+      <h2 class="section-title">Two ideas you can <span class="gradient-text">poke with your mouse</span></h2>
+      <p class="section-lead">Reading about a concept is one thing; watching it react is another. Both demos reuse real numbers from this repo.</p>
+    </div>
+    <div class="lab reveal">
+      <div class="card lab-card viz">
+        <h3>Your Apex logic, running in JavaScript</h3>
+        <p class="sub">Drag the salary. This is the tax maths from <code>SalaryCalculationService.cls</code>, ported to JavaScript in your browser. Different language, same answer: that is what "transferable skill" means.</p>
+        <div class="salary-big"><span id="salaryOut"></span> <small>salary per year</small></div>
+        <label class="sr-only" for="salaryRange">Annual salary</label>
+        <input class="slider" id="salaryRange" type="range" min="30000" max="250000" step="1000" value="120000">
+        <div class="split" id="split" aria-hidden="true"></div>
+        <div class="split-rows" id="splitRows"></div>
+        <div class="split-total"><span>Take-home per month</span><b id="monthlyOut"></b></div>
+        <p class="lab-note">Uses the 2023 single-filer brackets, $13,850 standard deduction and $160,200 Social Security wage base written in the service class. A teaching demo, not tax advice.</p>
+      </div>
+      <div class="card lab-card">
+        <h3>Feel what a cache does</h3>
+        <p class="sub">Ask for the same answer several times. The first request does the slow work; the rest are served from memory until the timer runs out. This is <code>PerformanceCacheService.cls</code> (and Redis) in miniature.</p>
+        <div class="cache-stage" aria-hidden="true">
+          <div class="cache-box" id="cbApp"><b>Your app</b><span>asks for take-home pay</span></div>
+          <span class="cache-arrow">&rarr;</span>
+          <div class="cache-box" id="cbCache"><b>Cache</b><span id="cbCacheState">empty</span></div>
+          <span class="cache-arrow">&rarr;</span>
+          <div class="cache-box" id="cbCalc"><b>Slow calculation</b><span>about 1.2 s</span></div>
+        </div>
+        <div class="cache-actions">
+          <button class="btn btn-sm btn-primary" id="cacheReq">Request the answer</button>
+          <button class="btn btn-sm" id="cacheClear">Clear cache</button>
+        </div>
+        <div class="ttl"><i id="ttlBar"></i></div>
+        <div class="ttl-label" id="ttlLabel" aria-live="polite">Nothing cached yet.</div>
+        <div class="cache-stats">
+          <div class="stat"><b id="cHits">0</b><span>cache hits</span></div>
+          <div class="stat"><b id="cMiss">0</b><span>misses</span></div>
+          <div class="stat"><b id="cSaved">0 s</b><span>waiting avoided</span></div>
+        </div>
+        <div class="cache-log" id="cacheLog" aria-live="polite"><div class="info">// press "Request the answer" a few times</div></div>
+        <p class="lab-note">Timings are simulated. The real service keeps salary results for 3,600 seconds; this demo expires after 10 so you can watch it happen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="journey">
   <div class="container">
     <div class="section-head reveal">
@@ -683,6 +803,12 @@ footer { padding: 50px 0 70px; border-top: 1px solid var(--border); color: var(-
       <span class="eyebrow">Your roadmap</span>
       <h2 class="section-title">From "Salesforce dev" to <span class="gradient-text">"platform-fluent engineer"</span></h2>
       <p class="section-lead">Bite-sized missions, each built on this repo. Tick them off. Progress is saved in your browser.</p>
+    </div>
+    <div class="card goal reveal">
+      <h3>Not sure where to start? Pick a destination</h3>
+      <p>Different careers lean on different parts of the stack. Choose one and get the five skills to prioritise, in order. Click any of them for the deep dive.</p>
+      <div class="filters" id="goalTabs" role="group" aria-label="Career goal"></div>
+      <div class="goal-list" id="goalList"></div>
     </div>
     <div class="roadmap reveal" id="roadmapGrid"></div>
     <div class="roadmap-foot">
@@ -1350,7 +1476,7 @@ LIMIT  10;` },
   },
   { id: 'apex', tab: 'Apex → Java',
     left:  { title: 'Apex', lang: 'Apex', src:
-`public inherited sharing class SalaryCalculationService {
+`public with sharing class SalaryCalculationService {
     public static Decimal medicare(Decimal salary) {
         return salary * 0.0145;
     }
@@ -1574,6 +1700,45 @@ const ROADMAP = [
   ]}
 ];
 
+const GOALS = [
+  { id: 'arch', label: 'Salesforce architect', picks: [
+    ['sql', 'Data modelling and query tuning sit under every design decision.'],
+    ['aws', 'Most enterprise orgs integrate with a cloud. Know what lives where.'],
+    ['cicd', 'Architects own how changes reach production safely.'],
+    ['lead', 'The job is mostly decisions, written down and defended.'],
+    ['comm', 'You translate between executives, admins and developers daily.'] ] },
+  { id: 'full', label: 'Full-stack developer', picks: [
+    ['js', 'You already write it in LWC. Go deeper: async, modules, Node.'],
+    ['react', 'The shortest hop from LWC to the wider frontend job market.'],
+    ['sql', 'Every backend you touch will speak it.'],
+    ['git', 'Branching and pull requests are the daily workflow everywhere.'],
+    ['docker', 'How modern apps are run locally and shipped.'] ] },
+  { id: 'integ', label: 'Integration / data engineer', picks: [
+    ['py', 'The default language for moving and cleaning data.'],
+    ['sql', 'Warehouses, reports and pipelines all end in SQL.'],
+    ['nosql', 'APIs hand you nested JSON. Learn to store and query it.'],
+    ['aws', 'Queues, functions and storage are your building blocks.'],
+    ['redis', 'Caching and rate limiting keep integrations fast and polite.'] ] },
+  { id: 'devops', label: 'DevOps / release engineer', picks: [
+    ['git', 'Everything in a pipeline starts from a commit.'],
+    ['cicd', 'Your core craft: automated tests, scans and deployments.'],
+    ['docker', 'Reproducible build environments, on-platform and off.'],
+    ['k8s', 'Where containers run once there are many of them.'],
+    ['aws', 'Pipelines deploy somewhere. Usually here.'] ] },
+  { id: 'lead', label: 'Team lead', picks: [
+    ['comm', 'Clear updates and clear asks are most of leadership.'],
+    ['lead', 'Set conventions, make calls, record the reasons.'],
+    ['mentor', 'Your output becomes other people getting better.'],
+    ['git', 'You will review far more code than you write.'],
+    ['cicd', 'Quality gates let a team move fast without breaking things.'] ] }
+];
+
+/* Mirrors SalaryCalculationService.cls (2023 single-filer values). */
+const TAX = {
+  deduction: 13850, ssRate: 0.062, ssWageBase: 160200, medicareRate: 0.0145,
+  brackets: [[0, 11000, .10], [11000, 44725, .12], [44725, 95375, .22], [95375, 182050, .24], [182050, 231250, .32], [231250, 578125, .35], [578125, 999999999, .37]]
+};
+
 /* ==========================================================================
    Helpers
    ========================================================================== */
@@ -1691,7 +1856,7 @@ $$('.reveal').forEach(el => io.observe(el));
     const ring = $(ringSel, $('#orbit'));
     ids.forEach((id, i) => {
       const t = TECH_BY_ID[id];
-      const angle = (360 / ids.length) * i;
+      const angle = (360 / ids.length) * i + (ringSel.includes('r2') ? 36 : 0);
       const chip = document.createElement('span');
       chip.className = 'orbit-chip';
       chip.style.setProperty('--chip', t.color);
@@ -1772,6 +1937,7 @@ function renderGrid() {
       <div class="foot">${statusPill(t.status, true)}<span class="learned-flag">✓ Learned</span></div>
     </button>`).join('');
   $('#emptyState').style.display = list.length ? 'none' : 'block';
+  $('#navProgress').textContent = `${learned.size}/${TECH.length} learned`;
 }
 $('#catFilters').addEventListener('click', e => {
   const b = e.target.closest('[data-cat]'); if (!b) return;
@@ -1793,8 +1959,11 @@ renderGrid();
 let lastFocus = null;
 function openDrawer(id) {
   const t = TECH_BY_ID[id]; if (!t) return;
-  lastFocus = document.activeElement;
   const drawer = $('#drawer');
+  if (!drawer.classList.contains('open')) lastFocus = document.activeElement;
+  const idx = TECH.indexOf(t), prev = TECH[(idx - 1 + TECH.length) % TECH.length], next = TECH[(idx + 1) % TECH.length];
+  drawer.dataset.current = t.id;
+  try { history.replaceState(null, '', '#skill=' + t.id); } catch { /* file:// in some browsers */ }
   drawer.style.setProperty('--chip', t.color);
   $('#drawerHead').innerHTML = `${mono(t)}
     <div><h2 id="drawerTitle">${esc(t.name)}</h2><div class="meta">${catPill(t.cat)}${statusPill(t.status)}</div></div>
@@ -1812,7 +1981,11 @@ function openDrawer(id) {
     ${related.length ? `<div class="d-section"><h4>Related parts of the architecture</h4><div class="chip-row">${related.map(n =>
       `<a class="tech-chip" href="#your-project" data-arch="${n.id}">${esc(n.title)}</a>`).join('')}</div></div>` : ''}
     <label class="learn-toggle"><input type="checkbox" id="learnedBox" ${learned.has(t.id) ? 'checked' : ''}>
-      <span><b>I understand ${esc(t.name)}</b><br><span style="color:var(--text-3);font-size:13px">Tracks your progress on the explorer cards</span></span></label>`;
+      <span><b>I understand ${esc(t.name)}</b><br><span style="color:var(--text-3);font-size:13px">Tracks your progress on the explorer cards</span></span></label>
+    <div class="drawer-nav">
+      <button class="btn btn-sm" data-open="${prev.id}">&larr; ${esc(prev.name)}</button>
+      <button class="btn btn-sm" data-open="${next.id}">${esc(next.name)} &rarr;</button>
+    </div>`;
   $('#learnedBox').addEventListener('change', e => {
     e.target.checked ? learned.add(t.id) : learned.delete(t.id);
     store.set('jt-learned', [...learned]);
@@ -1830,6 +2003,7 @@ function closeDrawer() {
   $('#drawer').classList.remove('open'); $('#drawer').setAttribute('aria-hidden', 'true');
   $('#scrim').classList.remove('open');
   document.body.style.overflow = '';
+  try { history.replaceState(null, '', location.pathname + location.search); } catch { /* ignore */ }
   lastFocus?.focus?.({ preventScroll: true });
 }
 document.addEventListener('click', e => {
@@ -1842,6 +2016,10 @@ $('#scrim').addEventListener('click', closeDrawer);
 document.addEventListener('keydown', e => {
   if (!$('#drawer').classList.contains('open')) return;
   if (e.key === 'Escape') closeDrawer();
+  if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && e.target.tagName !== 'INPUT') {
+    const i = TECH.findIndex(t => t.id === $('#drawer').dataset.current);
+    openDrawer(TECH[(i + (e.key === 'ArrowRight' ? 1 : -1) + TECH.length) % TECH.length].id);
+  }
   if (e.key === 'Tab') { // simple focus trap
     const f = $$('button, a, input', $('#drawer')).filter(el => el.offsetParent !== null);
     if (!f.length) return;
@@ -1917,19 +2095,20 @@ showJourney(0);
 /* ==========================================================================
    Quiz
    ========================================================================== */
-let qIndex = 0, qScore = 0, qAnswered = 0;
+let qIndex = 0, qScore = 0, qAnswered = 0, qBest = store.get('jt-quiz-best', null);
 $('#scoreOf').textContent = QUIZ.length;
 function updateScore() {
   const C = 2 * Math.PI * 50;
   $('#scoreArc').style.strokeDashoffset = C - C * (qScore / QUIZ.length);
   $('#scoreNum').textContent = qScore;
-  if (!qAnswered) { $('#rankTitle').textContent = 'Ready when you are'; $('#rankSub').textContent = 'Answer a question to start your score.'; return; }
+  if (!qAnswered) { $('#rankTitle').textContent = 'Ready when you are'; $('#rankSub').textContent = qBest === null ? 'Answer a question to start your score.' : `Your best so far: ${qBest} of ${QUIZ.length}.`; return; }
   const r = [...RANKS].reverse().find(x => qScore >= x.min);
   $('#rankTitle').textContent = r.title; $('#rankSub').textContent = r.sub;
 }
 function renderQuestion() {
   if (qIndex >= QUIZ.length) {
     const r = [...RANKS].reverse().find(x => qScore >= x.min);
+    if (qBest === null || qScore > qBest) { qBest = qScore; store.set('jt-quiz-best', qBest); }
     $('#quizMain').innerHTML = `<div class="quiz-progress"><i style="width:100%"></i></div>
       <div class="fade-swap" style="text-align:center;padding:30px 0">
         <div class="quiz-scn">Quiz complete</div>
@@ -2018,7 +2197,7 @@ function renderRoadmap() {
     </article>`;
   }).join('');
   const total = ROADMAP.reduce((a, p) => a + p.tasks.length, 0);
-  $('#roadmapSummary').textContent = `${done.size} of ${total} missions complete${done.size === total ? '. Legendary! 🎉' : ''}`;
+  $('#roadmapSummary').textContent = `${done.size} of ${total} missions complete${done.size === total ? '. Legendary!' : ''}`;
 }
 $('#roadmapGrid').addEventListener('change', e => {
   const id = e.target.dataset.task; if (!id) return;
@@ -2029,6 +2208,132 @@ $('#roadmapGrid').addEventListener('change', e => {
 });
 $('#roadmapReset').addEventListener('click', () => { done.clear(); store.set('jt-roadmap', []); renderRoadmap(); toast('Roadmap reset'); });
 renderRoadmap();
+
+/* ==========================================================================
+   Goal picker
+   ========================================================================== */
+$('#goalTabs').innerHTML = GOALS.map((g, i) =>
+  `<button class="filter" data-goal="${g.id}" aria-pressed="${i === 0}">${esc(g.label)}</button>`).join('');
+function showGoal(id) {
+  const g = GOALS.find(x => x.id === id);
+  $$('#goalTabs .filter').forEach(b => b.setAttribute('aria-pressed', b.dataset.goal === id));
+  $('#goalList').innerHTML = g.picks.map(([tid, why], i) => { const t = TECH_BY_ID[tid];
+    return `<button class="goal-item fade-swap" data-open="${t.id}"><span class="n">${i + 1}</span>${mono(t)}
+      <span><b>${esc(t.name)}${learned.has(t.id) ? ' <span style="color:var(--c-using)">&#10003;</span>' : ''}</b><span class="why">${esc(why)}</span></span></button>`; }).join('');
+  store.set('jt-goal', id);
+}
+$('#goalTabs').addEventListener('click', e => { const b = e.target.closest('[data-goal]'); if (b) showGoal(b.dataset.goal); });
+showGoal(GOALS.some(g => g.id === store.get('jt-goal', '')) ? store.get('jt-goal', '') : GOALS[0].id);
+
+/* ==========================================================================
+   Lab: take-home calculator
+   ========================================================================== */
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
+function federalTax(gross) {
+  const taxable = Math.max(0, gross - TAX.deduction);
+  let remaining = taxable, total = 0;
+  for (const [lower, upper, rate] of TAX.brackets) {
+    if (remaining <= 0) break;
+    const inBracket = Math.min(remaining, upper - lower);
+    if (taxable > lower) { total += inBracket * rate; remaining -= inBracket; }
+  }
+  return total;
+}
+function renderSalary() {
+  const gross = +$('#salaryRange').value;
+  const fed = federalTax(gross), ss = Math.min(gross, TAX.ssWageBase) * TAX.ssRate, med = gross * TAX.medicareRate;
+  const home = gross - fed - ss - med;
+  const parts = [['Take-home pay', home, 's1'], ['Federal income tax', fed, 's2'], ['Social Security (6.2%)', ss, 's3'], ['Medicare (1.45%)', med, 's4']];
+  $('#salaryOut').textContent = money(gross);
+  $('#monthlyOut').textContent = money(home / 12);
+  $('#split').innerHTML = parts.map(([label, v, c], i) =>
+    `<i data-seg="${i}" style="flex:${v} 0 0;background:var(--${c})" title="${label}: ${money(v)}"></i>`).join('');
+  $('#splitRows').innerHTML = parts.map(([label, v, c], i) =>
+    `<div class="split-row" data-seg="${i}"><span class="sw" style="background:var(--${c})"></span><span>${label}</span><b>${money(v)}</b><span class="pct">${(v / gross * 100).toFixed(1)}%</span></div>`).join('');
+}
+function hotSeg(i) {
+  $('#split').classList.toggle('dim', i !== null);
+  $$('#split i, #splitRows .split-row').forEach(el => el.classList.toggle('hot', el.dataset.seg === i));
+}
+['#split', '#splitRows'].forEach(sel => {
+  $(sel).addEventListener('mouseover', e => { const el = e.target.closest('[data-seg]'); if (el) hotSeg(el.dataset.seg); });
+  $(sel).addEventListener('mouseleave', () => hotSeg(null));
+});
+$('#salaryRange').addEventListener('input', renderSalary);
+renderSalary();
+
+/* ==========================================================================
+   Lab: cache simulator
+   ========================================================================== */
+const CACHE_TTL = 10000, CALC_MS = 1200;
+const cache = { expires: 0, hits: 0, misses: 0, busy: false, timer: null };
+const cacheLog = (cls, msg) => { const log = $('#cacheLog'); log.insertAdjacentHTML('beforeend', `<div class="${cls}">${esc(msg)}</div>`); log.scrollTop = log.scrollHeight; };
+const lit = (...ids) => ['cbApp', 'cbCache', 'cbCalc'].forEach(id => $('#' + id).classList.toggle('on', ids.includes(id)));
+function cacheStats() {
+  $('#cHits').textContent = cache.hits; $('#cMiss').textContent = cache.misses;
+  $('#cSaved').textContent = (cache.hits * CALC_MS / 1000).toFixed(1) + ' s';
+}
+function cacheTick() {
+  const left = cache.expires - Date.now();
+  if (left <= 0) {
+    clearInterval(cache.timer); cache.timer = null;
+    $('#ttlBar').style.width = '0'; $('#cbCacheState').textContent = 'empty';
+    if (cache.expires) { cache.expires = 0; $('#ttlLabel').textContent = 'Expired. The next request has to do the slow work again.'; cacheLog('info', '// TTL reached: entry evicted'); }
+    return;
+  }
+  $('#ttlBar').style.width = (left / CACHE_TTL * 100) + '%';
+  $('#ttlLabel').textContent = `Cached answer expires in ${Math.ceil(left / 1000)} s.`;
+}
+$('#cacheReq').addEventListener('click', () => {
+  if (cache.busy) return;
+  if (cache.expires > Date.now()) {
+    cache.hits++; lit('cbApp', 'cbCache'); cacheLog('hit', 'HIT   cache.get("salary:120000")  ->  2 ms'); cacheStats();
+    setTimeout(() => lit(), 500);
+    return;
+  }
+  cache.busy = true; cache.misses++; lit('cbApp', 'cbCache', 'cbCalc'); cacheStats();
+  $('#cacheReq').textContent = 'Calculating...';
+  cacheLog('miss', 'MISS  nothing cached, calculating...');
+  setTimeout(() => {
+    cache.busy = false; cache.expires = Date.now() + CACHE_TTL;
+    $('#cacheReq').textContent = 'Request the answer'; $('#cbCacheState').textContent = 'holds 1 answer';
+    cacheLog('miss', `      cache.put("salary:120000", result, ttl)  ->  ${CALC_MS.toLocaleString('en-US')} ms`);
+    lit(); clearInterval(cache.timer); cache.timer = setInterval(cacheTick, 100); cacheTick();
+  }, CALC_MS);
+});
+$('#cacheClear').addEventListener('click', () => {
+  if (!cache.expires) return;
+  cache.expires = 0; clearInterval(cache.timer); cache.timer = null;
+  $('#ttlBar').style.width = '0'; $('#cbCacheState').textContent = 'empty';
+  $('#ttlLabel').textContent = 'Cache cleared.'; cacheLog('info', '// cache.remove("salary:120000")');
+});
+
+/* ==========================================================================
+   Interview cheat sheet download
+   ========================================================================== */
+const plain = html => html.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+$('#cheatBtn').addEventListener('click', () => {
+  let md = '# Tech Stack Interview Cheat Sheet\n\nJob Application Tracker (Salesforce capstone). Generated from the Tech Stack Explorer.\n';
+  for (const [cid, c] of Object.entries(CATS)) {
+    md += `\n## ${c.label}\n`;
+    for (const t of TECH.filter(x => x.cat === cid)) {
+      md += `\n### ${t.name} (${STATUS[t.status].label.toLowerCase()})\n\n` +
+        `- **Salesforce twin:** ${t.twin}\n- **Say it:** ${t.soundbite}\n- **Evidence in the repo:**\n` +
+        t.project.map(p => '  - ' + plain(p)).join('\n') + `\n- **Practice project:** ${plain(t.levelUp)}\n`;
+    }
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }));
+  a.download = 'tech-stack-cheat-sheet.md';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast('Cheat sheet downloaded');
+});
+
+/* Deep link: #skill=redis opens that deep dive */
+const openFromHash = () => { const m = /^#skill=([a-z0-9]+)$/.exec(location.hash); if (m && TECH_BY_ID[m[1]]) openDrawer(m[1]); };
+window.addEventListener('hashchange', openFromHash);
+openFromHash();
 
 onScroll();
 })();
